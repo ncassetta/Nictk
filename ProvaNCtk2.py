@@ -1,4 +1,4 @@
-from Mtki import *
+from NCtk import *
 
 
 def getFocus(event):
@@ -17,28 +17,28 @@ def toFarenheit(event):
     try:
         print(entryCelsius.get())
         cel = float(entryCelsius.get())
-        far = cel * 1.8 + 32
+        far = "{:.2f}".format(cel * 1.8 + 32)
         entryFarenheit.delete(0, END)
-        entryFarenheit.insert(0, str(far))
+        entryFarenheit.insert(0, far)
     except:
         entryFarenheit.delete(0, END)
         
 def toCelsius(event):
     try:
         far = float(entryFarenheit.get())
-        cel = (far - 32) / 1.8 
+        cel = "{:.2f}".format((far - 32) / 1.8)
         entryCelsius.delete(0, END)
-        entryCelsius.insert(0, str(cel))
+        entryCelsius.insert(0, cel)
     except:
         entryCelsius.delete(0, END)
 
 
-mainWindow = MtkiWindow(400, 300, 100, 100, "Prova")
-labCelsius = MtkiLabel(mainWindow, 100, 20, 20, 20, "Celsius")
-entryCelsius = MtkiEntry(mainWindow, 100, 20, 130, 20)
+mainWindow = NCtkWindow(100, 100, 300, 150, "Prova")
+labCelsius = NCtkLabel(mainWindow, 20, 20, 100, 40, "Celsius")
+entryCelsius = NCtkEntry(mainWindow, 140, 20, 140, 40)
 entryCelsius.bind("<FocusIn>", getFocus)
-labFarenheit = MtkiLabel(mainWindow, 100, 20, 20, 50, "Farenheit")
-entryFarenheit = MtkiEntry(mainWindow, 100, 20, 130, 50)
+labFarenheit = NCtkLabel(mainWindow, 20, 70, 100, 40, "Farenheit")
+entryFarenheit = NCtkEntry(mainWindow, 140, 70, 140, 40)
 entryFarenheit.bind("<FocusIn>", getFocus)
 
 mainWindow.mainloop()

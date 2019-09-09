@@ -1,4 +1,4 @@
-from Mtki import *
+from NCtk import *
 from time import *
 
 strings = ["aaaa", "bbbb", "cccc", "dddd", "eeee"]
@@ -22,10 +22,10 @@ def change(event):
 
 stringind = 0
 colorind = 0
-winMain = MtkiWindow(400, 300, 200, 150, "App prova")
-labText = MtkiLabel(winMain, "fill", 60, 10, 10, strings[0])
-buttText = MtkiButton(winMain, "50%", 30, 10, 80, "Cambia Testo", change)
+winMain = NCtkWindow(200, 150, 400, 300, "App prova")
+labText = NCtkLabel(winMain, 10, 10, "fill", 60, strings[0])
+buttText = NCtkButton(winMain, 10, 80, "50%", 30, "Cambia Testo", change)
 buttText.configure(highlightcolor="#ABCDEF")
-buttColor = MtkiButton(winMain, "50%", 30, 120, 80, "Cambia Colori", change)
-entryText = MtkiEntry(winMain, 120, 30, 10, 120, "", change)
+buttColor = NCtkButton(winMain, 120, 80, "50%", 30, "Cambia Colori", change)
+entryText = NCtkEntry(winMain, 10, 120, 120, 30, "", change)
 mainloop()

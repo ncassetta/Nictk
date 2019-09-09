@@ -52,6 +52,13 @@ EXCEPTION = _tkinter.EXCEPTION
 _magic_re = re.compile(r'([\\{}])')
 _space_re = re.compile(r'([\s])', re.ASCII)
 
+
+######################################################################
+## INTERNAL FUNCTIONS
+## (already in tkinter, delete)
+######################################################################
+
+
 def _join(value):
     """Internal function."""
     return ' '.join(map(_stringify, value))
@@ -133,6 +140,11 @@ def _splitdict(tk, v, cut_minus=True, conv=None):
         dict[key] = value
     return dict
 
+
+######################################################################
+## classes EventType and Event
+##
+######################################################################
 
 class EventType(str, enum.Enum):
     KeyPress = '2'
@@ -260,6 +272,13 @@ class Event:
 _support_default_root = 1
 _default_root = None
 
+
+######################################################################
+## Other internal functions
+## 
+######################################################################
+
+
 def NoDefaultRoot():
     """Inhibit setting of default root window.
 
@@ -283,6 +302,13 @@ def _exit(code=0):
     except ValueError:
         pass
     raise SystemExit(code)
+
+
+######################################################################
+## Variables classes
+## (to be hidden to user?)
+######################################################################
+
 
 _varnum = 0
 class Variable:
@@ -461,6 +487,7 @@ class Variable:
         return self.__class__.__name__ == other.__class__.__name__ \
             and self._name == other._name
 
+
 class StringVar(Variable):
     """Value holder for strings variables."""
     _default = ""
@@ -482,6 +509,7 @@ class StringVar(Variable):
         if isinstance(value, str):
             return value
         return str(value)
+
 
 class IntVar(Variable):
     """Value holder for integer variables."""
@@ -506,6 +534,7 @@ class IntVar(Variable):
         except (TypeError, TclError):
             return int(self._tk.getdouble(value))
 
+
 class DoubleVar(Variable):
     """Value holder for float variables."""
     _default = 0.0
@@ -524,6 +553,7 @@ class DoubleVar(Variable):
     def get(self):
         """Return the value of the variable as a float."""
         return self._tk.getdouble(self._tk.globalgetvar(self._name))
+
 
 class BooleanVar(Variable):
     """Value holder for boolean variables."""
@@ -552,12 +582,20 @@ class BooleanVar(Variable):
         except TclError:
             raise ValueError("invalid literal for getboolean()")
 
+
+######################################################################
+## Function mainloop()
+##
+######################################################################
+        
+        
 def mainloop(n=0):
     """Run the main loop of Tcl."""
     _default_root.tk.mainloop(n)
 
+### ???
+    
 getint = int
-
 getdouble = float
 
 def getboolean(s):
@@ -566,6 +604,13 @@ def getboolean(s):
         return _default_root.tk.getboolean(s)
     except TclError:
         raise ValueError("invalid literal for getboolean()")
+
+
+######################################################################
+## Class Misc 
+## manages widgets methods ???
+######################################################################
+
 
 # Methods defined on both toplevel and interior widgets
 class Misc:
@@ -1683,6 +1728,12 @@ class Misc:
         return self.tk.splitlist(self.tk.call('image', 'types'))
 
 
+######################################################################
+## Some other classes
+##
+######################################################################
+    
+    
 class CallWrapper:
     """Internal class. Stores function to call when some user
     defined Tcl function is called e.g. after an event occurred."""
@@ -1744,7 +1795,13 @@ class YView:
         "units" or "pages" (WHAT)."""
         self.tk.call(self._w, 'yview', 'scroll', number, what)
 
-
+        
+######################################################################
+## class Wm
+## communicates with the window manager (probably leave unchanged)
+######################################################################
+        
+        
 class Wm:
     """Provides functions for the communication with the window manager."""
 
@@ -1990,6 +2047,12 @@ class Wm:
     withdraw = wm_withdraw
 
 
+######################################################################
+## Class Tk
+## (the main window)
+######################################################################
+
+
 class Tk(Misc, Wm):
     """Toplevel widget of Tk which represents mostly the main window
     of an application. It has an associated Tcl interpreter."""
@@ -2111,6 +2174,13 @@ class Tk(Misc, Wm):
 
 def Tcl(screenName=None, baseName=None, className='Tk', useTk=0):
     return Tk(screenName, baseName, className, useTk)
+
+
+######################################################################
+## Geometry managers
+## (leave only Pack)
+######################################################################
+
 
 class Pack:
     """Geometry manager Pack.
@@ -2241,6 +2311,13 @@ class Grid:
     rowconfigure = grid_rowconfigure = Misc.grid_rowconfigure
     size = grid_size = Misc.grid_size
     slaves = grid_slaves = Misc.grid_slaves
+    
+
+######################################################################
+## W I D G E T S
+##
+######################################################################
+
 
 class BaseWidget(Misc):
     """Internal class."""

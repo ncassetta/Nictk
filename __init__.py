@@ -2178,7 +2178,7 @@ def Tcl(screenName=None, baseName=None, className='Tk', useTk=0):
 
 ######################################################################
 ## Geometry managers
-## (leave only Pack)
+## (leave Pack Place)
 ######################################################################
 
 

@@ -4,14 +4,14 @@ from NCtk import *
 def getFocus(event):
     if event.widget == entryCelsius:
         entryCelsius.bind("<Return>", toFarenheit)
-        entryCelsius.configure(bg="white")
+        entryCelsius.config(bcolor="white")
         entryFarenheit.bind("<FocusIn>", getFocus)
-        entryFarenheit.configure(bg="light grey")
+        entryFarenheit.config(bcolor="light grey")
     else:
         entryCelsius.bind("<FocusIn>", getFocus)
-        entryCelsius.configure(bg="light grey")
+        entryCelsius.config(bcolor="light grey")
         entryFarenheit.bind("<Return>", toCelsius)    
-        entryFarenheit.configure(bg="white")
+        entryFarenheit.config(bcolor="white")
 
 def toFarenheit(event):
     try:

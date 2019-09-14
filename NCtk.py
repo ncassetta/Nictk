@@ -1,20 +1,7 @@
 from tkinter import *
 
 ['bd', 'borderwidth', 'class', 'menu', 'relief', 'screen', 'use', 'background', 'bg', 'colormap', 'container', 'cursor', 'height', 'highlightbackground', 'highlightcolor', 'highlightthickness', 'padx', 'pady', 'takefocus', 'visual', 'width']
-trans_opt =  { "abcolor":"activebackground", "afcolor":"activeforeground",
-               "anchor":"anchor", "bcolor":"background",
-               "bitmap":"bitmap", "borderwidth":"borderwidth", 
-               "compound":"compound", "cursor":"cursor",
-               "dfcolor":"disabledforeground",
-               "font":"font", "fcolor":"foreground",
-               "height":"height", "hbcolor":"highlightbackground",
-               "hcolor":"highlightcolor", "hborderwidth":"highlightthickness",
-               "image":"image", "justify":"justify",
-               "padx":"padx", "pady":"pady",
-               "relief":"relief", "state":"state",
-               "takefocus":"takefocus", "text":"text",
-               "textvar":"textvariable", "underline":"underline",
-               "width":"width", "wraplength":"wraplength"}
+
 
 def calc_dimensions(parent, x, y, w, h, padx, pady):
     parent.update()
@@ -59,6 +46,10 @@ def calc_dimensions(parent, x, y, w, h, padx, pady):
 # To set a widget property use w.config(name=val)
 
 
+#####################################################################
+###############****    M A I N   W I N D O W
+#####################################################################
+
 class NCtkWindow(Tk):
     def __init__(self, x, y, w, h, title=""):
         Tk.__init__(self)
@@ -66,26 +57,85 @@ class NCtkWindow(Tk):
         self.resizable(width=FALSE, height=FALSE)
         if len(title):
             self.title(title)
-        
+            
+    def config_all(self, widget=None, **kw):
+        prefix = "*" + widget[4:] + "." if widget else "*"
+        for k, v in kw.items():
+            self.option_add(prefix + k, v)    
 
-class NCtkHorFrame(Frame):
+
+#####################################################################
+###############    W I D G E T   W R A P P E R
+#####################################################################
+
+# Added by me to override tkinter Widget methods
+
+class NCtkWidget(Widget):
+    # call to base class ctor done by other classes
+    def __init__(self):
+        pass
+    
+    trans_opt =  { "abcolor":"activebackground", "afcolor":"activeforeground",
+                   "bcolor":"background", "dfcolor":"disabledforeground",
+                   "fcolor":"foreground", "hbcolor":"highlightbackground",
+                   "hcolor":"highlightcolor", "hborderwidth":"highlightthickness",
+                   "textvar":"textvariable"}    
+    
+    def hide(self):
+        if self.extFrame.winfo_ismapped():
+            self.extFrame.place_forget()
+    
+    def show(self):
+        if not self.extFrame.winfo_ismapped(): 
+            self.extFrame.place(x=self.extFrame.winfo_x(), y=self.extFrame.winfo_y())
+            
+    def visible(self):
+        return self.extFrame.winfo_ismapped()
+        
+    def settext(self, t):
+        self.config(text=t)
+    
+    def gettext(self):
+        return self.cget("text")
+    
+    def config(self, cnf=None, **kw):
+        trans_kw = {}
+        for k, v in kw.items():
+            if k in NCtkWidget.trans_opt:
+                trans_kw[NCtkWidget.trans_opt[k]] = v
+            else:
+                trans_kw[k] = v
+        return self._configure('configure', cnf, trans_kw)
+        
+    
+
+#####################################################################
+#######################     F R A M E S
+#####################################################################
+
+class NCtkHorFrame(Frame, NCtkWidget):
+    def __init__(self, parent, x, y, w, h, padx=0, pady=0):
+        x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
+        Frame.__init__(self, parent, width=w, height=h)
+        self.place(x=x, y=y)
+ 
+ 
+class NCtkVerFrame(Frame, NCtkWidget):
     def __init__(self, parent, x, y, w, h, padx=0, pady=0):
         x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
         Frame.__init__(self, parent, width=w, height=h)
         self.place(x=x, y=y)
         
 
-class NCtkVerFrame(Frame):
-    def __init__(self, parent, x, y, w, h, padx=0, pady=0):
-        x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
-        Frame.__init__(self, parent, width=w, height=h)
-        self.place(x=x, y=y)
-        
+#####################################################################
+############       tkinter WIDGETS SUPERCLASSES
+#####################################################################
+
 # We must enclose all widgets in an external Frame to obtain their width and
 # height in pixels, because otherwise the silly Tk would assume them in
 # characters        
 
-class NCtkButton(Button):
+class NCtkButton(Button, NCtkWidget):
     """Button widget
 
     STANDARD OPTIONS
@@ -105,6 +155,7 @@ class NCtkButton(Button):
         overrelief, state, width
     """    
     def __init__(self, parent, x, y, w, h, content=None, command=None, padx=0, pady=0):
+        NCtkWidget.__init__(self)
         x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
         self.extFrame = Frame(parent, width=w, height=h)
         self.extFrame.place(x=x, y=y)
@@ -120,21 +171,6 @@ class NCtkButton(Button):
             self.config(image=content)
         if command:
             self.bind("<Button-1>", command)
-        
-    def hide(self):
-        self.place_forget()
-        self.visible = 0
-    
-    def show(self):
-        #x = int(self.intFrame.cget("x"))
-        #y = int(self.intFrame.cget("y"))
-        self.intFrame.place()
-        
-    def settext(self, t):
-        self.config(text=t)
-    
-    def gettext(self):
-        return self.get()
 
 
 class NCTkCanvas(Canvas):
@@ -146,7 +182,8 @@ class NCTkCanvas(Canvas):
     insertofftime, insertontime, insertwidth, offset, relief,
     scrollregion, selectbackground, selectborderwidth, selectforeground,
     state, takefocus, width, xscrollcommand, xscrollincrement,
-    yscrollcommand, yscrollincrement."""    
+    yscrollcommand, yscrollincrement.
+    """    
     def __init__(self, parent, x, y, w, h, content=None, padx=0, pady=0):
         pass
 
@@ -160,12 +197,28 @@ class NCtkCheckbutton(Checkbutton):
     indicatoron, justify, offvalue, onvalue, padx, pady, relief,
     selectcolor, selectimage, state, takefocus, text, textvariable,
     underline, variable, width, wraplength."""    
-    def __init__(self, parent, x, y, w, h, content=None, padx=0, pady=0):
-        #Checkbutton.__init__(self, master=None, cnf={}, **kw):
-        pass
+    #def __init__(self, parent, x, y, w, h, content=None, padx=0, pady=0):
+    
+    def __init__(self, parent, x, y, w, h, content=None, command=None, padx=0, pady=0):
+        x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
+        self.extFrame = Frame(parent, width=w, height=h)
+        self.extFrame.place(x=x, y=y)
+        self.extFrame.pack_propagate(False)
+        Checkbutton.__init__(self, self.extFrame, text="Button")
+        self.pack(fill=BOTH, expand=True)
+        self.config(anchor=N, wraplength=w,justify=LEFT)
+        #if isinstance(content, str):
+            #self.config(text=content)
+        #elif isinstance(content, StringVar):
+            #self.config(textvariable=content)
+        #elif isinstance(content, PhotoImage) or isinstance(content, BitmapImage):
+            #self.config(image=content)
+        #if command:
+            #self.bind("<Button-1>", command)    
+        ##Checkbutton.__init__(self, master=None, cnf={}, **kw):
 
 
-class NCtkEntry(Entry):
+class NCtkEntry(Entry, NCtkWidget):
     """Entry widget which allows displaying simple text.
     
     Valid resource names: background, bd, bg, borderwidth, cursor,
@@ -177,6 +230,7 @@ class NCtkEntry(Entry):
     textvariable, validate, validatecommand, vcmd, width,
     xscrollcommand."""    
     def __init__(self, parent, x, y, w, h, content=None, command=None, padx=0, pady=0):
+        NCtkWidget.__init__(self)
         x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
         self.extFrame = Frame(parent, width=w, height=h)
         self.extFrame.place(x=x, y=y)
@@ -191,27 +245,15 @@ class NCtkEntry(Entry):
         if command:
             self.bind("<Return>", command)
         self.config(textvariable=self.intStr)
-        self.data = []
-
-    def hide(self):
-        self.place_forget()
-        self.visible = 0
-    
-    def show(self):
-        #x = int(self.intFrame.cget("x"))
-        #y = int(self.intFrame.cget("y"))
-        self.intFrame.place()
         
-    def settext(self, t):
-        self.config(text=t)
-    
+    # overrides NCtkWidget method!
     def gettext(self):
-        return self.get()
+        return self.get()        
 
 
 # class Frame substituted by NCtkHorFrame, NCtkVerFrame   
     
-class NCtkLabel(Label):
+class NCtkLabel(Label, NCtkWidget):
     """Label widget which can display text and bitmaps.
 
        STANDARD OPTIONS
@@ -230,6 +272,7 @@ class NCtkLabel(Label):
 
         """    
     def __init__(self, parent, x, y, w, h, content=None, padx=0, pady=0):
+        NCtkWidget.__init__(self)
         x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
         self.extFrame = Frame(parent, width=w, height=h)
         self.extFrame.place(x=x, y=y)
@@ -241,25 +284,8 @@ class NCtkLabel(Label):
             self.config(text=content)
         elif isinstance(content, StringVar):
             self.config(textvariable=content)
-        elif isinstance(content, PhotoImage) or isinstance(content, BitmapImage):
+        elif isinstance(content, (PhotoImage, BitmapImage)):
             self.config(image=content)
-        
-    def hide(self):
-        if self.extFrame.winfo_ismapped():
-            self.extFrame.place_forget()
-    
-    def show(self):
-        if not self.extFrame.winfo_ismapped(): 
-            self.extFrame.place(x=self.extFrame.winfo_x(), y=self.extFrame.winfo_y())
-            
-    def visible(self):
-        return self.extFrame.winfo_ismapped()
-        
-    def settext(self, t):
-        self.config(text=t)
-    
-    def gettext(self):
-        return self.cget("text")
     
     
 class NCtkListbox(Listbox):
@@ -270,7 +296,7 @@ class NCtkListbox(Listbox):
         highlightcolor, highlightthickness, relief, selectbackground,
         selectborderwidth, selectforeground, selectmode, setgrid, takefocus,
         width, xscrollcommand, yscrollcommand, listvariable."""
-    def __init__(self, master, cnf, kw):
+    def __init__(self, master, cnf={}, **kw):
         pass
         
         
@@ -281,8 +307,14 @@ class NCtkMenu(Menu):
         activeforeground, background, bd, bg, borderwidth, cursor,
         disabledforeground, fg, font, foreground, postcommand, relief,
         selectcolor, takefocus, tearoff, tearoffcommand, title, type."""
-    def __init__(self, master, cnf, kw):
-        pass
+    def __init__(self, parent):
+        #x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
+        #self.extFrame = Frame(parent, width=w, height=h)
+        #self.extFrame.place(x=x, y=y)
+        #self.extFrame.pack_propagate(False)
+        Menu.__init__(self, parent, tearoff=0)
+        #self.place(x=x, y=y, width=w, height=h)
+        #self.pack(fill=BOTH, expand=True)        
     
 # MenuButton and Message obsolete in tkinter
 
@@ -356,3 +388,4 @@ class NCtkText(Text):
     
 # Copied widgets from __init__ until Text (line 3172 of __init__)
 # I don't know if others are to be modified
+

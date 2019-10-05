@@ -47,7 +47,7 @@ def calc_dimensions(parent, x, y, w, h, padx, pady):
 
 
 #####################################################################
-###############****    M A I N   W I N D O W
+###################    M A I N   W I N D O W
 #####################################################################
 
 class NCtkWindow(Tk):
@@ -61,7 +61,11 @@ class NCtkWindow(Tk):
     def config_all(self, widget=None, **kw):
         prefix = "*" + widget[4:] + "." if widget else "*"
         for k, v in kw.items():
-            self.option_add(prefix + k, v)    
+            self.option_add(prefix + k, v)
+    
+    def getwinfo(self, key, *kw):
+        function = "winfo_" + key
+        return getattr(Widget, function)(self, *kw)    
 
 
 #####################################################################
@@ -74,11 +78,13 @@ class NCtkWidget(Widget):
     # call to base class ctor done by other classes
     def __init__(self):
         pass
+        #self.event_add("<<CHANGEDVAR>>")
     
     trans_opt =  { "abcolor":"activebackground", "afcolor":"activeforeground",
                    "bcolor":"background", "dfcolor":"disabledforeground",
                    "fcolor":"foreground", "hbcolor":"highlightbackground",
                    "hcolor":"highlightcolor", "hborderwidth":"highlightthickness",
+                   "sbcolor":"selectbackground", "sfcolor":"selectforeground",
                    "textvar":"textvariable"}    
     
     def hide(self):
@@ -106,6 +112,13 @@ class NCtkWidget(Widget):
             else:
                 trans_kw[k] = v
         return self._configure('configure', cnf, trans_kw)
+    
+    def getconfig(self, key):
+        return cget(self, key)
+    
+    def getwinfo(self, key, *kw):
+        function = "winfo_" + key
+        return getattr(Widget, function)(self, *kw)
         
     
 
@@ -155,7 +168,6 @@ class NCtkButton(Button, NCtkWidget):
         overrelief, state, width
     """    
     def __init__(self, parent, x, y, w, h, content=None, command=None, padx=0, pady=0):
-        NCtkWidget.__init__(self)
         x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
         self.extFrame = Frame(parent, width=w, height=h)
         self.extFrame.place(x=x, y=y)
@@ -228,9 +240,12 @@ class NCtkEntry(Entry, NCtkWidget):
     invalidcommand, invcmd, justify, relief, selectbackground,
     selectborderwidth, selectforeground, show, state, takefocus,
     textvariable, validate, validatecommand, vcmd, width,
-    xscrollcommand."""    
+    xscrollcommand."""
+    
+    def trace_text(self, *args):
+        self.event_generate("<<CHANGEDVAR>>")
+        
     def __init__(self, parent, x, y, w, h, content=None, command=None, padx=0, pady=0):
-        NCtkWidget.__init__(self)
         x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
         self.extFrame = Frame(parent, width=w, height=h)
         self.extFrame.place(x=x, y=y)
@@ -238,13 +253,13 @@ class NCtkEntry(Entry, NCtkWidget):
         self.extFrame.pack_propagate(False)
         self.pack(fill=BOTH, expand=1)
         self.config(relief=SUNKEN)
-        if content and isinstance(content, StringVar):
-            self.intStr = content
-        else:
-            self.intStr = StringVar()
+        self.intStr = StringVar()
+        if content:
+            self.intStr.set(str(content))
+        self.intStr.trace("w", self.trace_text)
+        self.config(textvariable=self.intStr)
         if command:
             self.bind("<Return>", command)
-        self.config(textvariable=self.intStr)
         
     # overrides NCtkWidget method!
     def gettext(self):
@@ -272,14 +287,15 @@ class NCtkLabel(Label, NCtkWidget):
 
         """    
     def __init__(self, parent, x, y, w, h, content=None, padx=0, pady=0):
-        NCtkWidget.__init__(self)
         x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
         self.extFrame = Frame(parent, width=w, height=h)
         self.extFrame.place(x=x, y=y)
         self.extFrame.pack_propagate(False)
         Label.__init__(self, self.extFrame, text="Label")
         self.pack(fill=BOTH, expand=True)
-        self.config(anchor=W, wraplength=w,justify=LEFT, relief=SUNKEN)
+        self.update()
+        realw = self.winfo_width() - 1  ### FIX IT!!!
+        self.config(anchor=W, wraplength=realw, justify=LEFT, relief=SUNKEN)
         if isinstance(content, str):
             self.config(text=content)
         elif isinstance(content, StringVar):
@@ -288,7 +304,7 @@ class NCtkLabel(Label, NCtkWidget):
             self.config(image=content)
     
     
-class NCtkListbox(Listbox):
+class NCtkListbox(Listbox, NCtkWidget):
     """Listbox widget which can display a list of strings.
 
         Valid resource names: background, bd, bg, borderwidth, cursor,
@@ -296,8 +312,51 @@ class NCtkListbox(Listbox):
         highlightcolor, highlightthickness, relief, selectbackground,
         selectborderwidth, selectforeground, selectmode, setgrid, takefocus,
         width, xscrollcommand, yscrollcommand, listvariable."""
-    def __init__(self, master, cnf={}, **kw):
-        pass
+    # and activestyle ???
+    def __init__(self, parent, x, y, w, h, command=None, items=None, padx=0, pady=0):
+        x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
+        self.extFrame = Frame(parent, width=w, height=h)
+        self.extFrame.place(x=x, y=y)
+        self.extFrame.pack_propagate(False)
+        Listbox.__init__(self, self.extFrame)
+        self.pack(fill=BOTH, expand=True)
+        self.config(justify=LEFT, relief=SUNKEN, activestyle="none")
+        self.vscroll = Scrollbar(self.extFrame, orient=VERTICAL)
+        self.config(yscrollcommand=self.vscroll.set)
+        self.vscroll.config(command=self.yview)
+        if command:
+            self.bind("<<ListboxSelect>>", command)
+        if items:
+            for i in items:
+                self.insert(END, i)
+            
+    
+    def insert(self, index, *elements):
+        self.update()
+        Listbox.insert(self, index, *elements)
+        offs, size = self.yview()
+        if size - offs < 1.0:
+            if not self.vscroll.winfo_ismapped():
+                self.pack_forget()
+                self.vscroll.pack(side=RIGHT, fill=Y)
+                self.pack(side=LEFT, fill=BOTH, expand=True)                
+            self.see(index)
+            
+    def delete(self, first, last=None):
+        Listbox.delete(self, first, last=None)
+        offs, size = self.yview()
+        if size - offs == 1.0:        
+            if self.vscroll.winfo_ismapped():
+                self.vscroll.pack_forget()
+                self.pack(fill=BOTH, expand=True)
+                
+    def getselected(self):
+        if self.curselection() == "":
+            return ()
+        else:
+            return self.curselection()
+
+
         
         
 class NCtkMenu(Menu):
@@ -329,11 +388,26 @@ class NCtkRadiobutton(Radiobutton):
         indicatoron, justify, padx, pady, relief, selectcolor, selectimage,
         state, takefocus, text, textvariable, underline, value, variable,
         width, wraplength."""
-    def __init__(self, master, cnf={}, **kw):
-        pass
+    def __init__(self, parent, x, y, w, h, content=None, command=None, padx=0, pady=0):
+        x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
+        self.extFrame = Frame(parent, width=w, height=h)
+        self.extFrame.place(x=x, y=y)
+        self.extFrame.pack_propagate(False)
+        Radiobutton.__init__(self, self.extFrame, text="Button")
+        self.pack(fill=BOTH, expand=True)
+        self.config(anchor=N, wraplength=w,justify=LEFT)
+        #if isinstance(content, str):
+            #self.config(text=content)
+        #elif isinstance(content, StringVar):
+            #self.config(textvariable=content)
+        #elif isinstance(content, PhotoImage) or isinstance(content, BitmapImage):
+            #self.config(image=content)
+        #if command:
+            #self.bind("<Button-1>", command)    
+        ##Checkbutton.__init__(self, master=None, cnf={}, **kw):
 
 
-class NCtkScale(Scale):
+class NCtkScale(Scale, NCtkWidget):
     """Scale widget which can display a numerical scale.
 
         Valid resource names: activebackground, background, bigincrement, bd,
@@ -342,8 +416,14 @@ class NCtkScale(Scale):
         length, orient, relief, repeatdelay, repeatinterval, resolution,
         showvalue, sliderlength, sliderrelief, state, takefocus,
         tickinterval, to, troughcolor, variable, width."""
-    def __init__(self, master=None, cnf={}, **kw):
-        pass
+    def __init__(self, parent, x, y, w, h, content=None, command=None, padx=0, pady=0):
+        x, y, w, h = calc_dimensions(parent, x, y, w, h, padx, pady)
+        self.extFrame = Frame(parent, width=w, height=h)
+        self.extFrame.place(x=x, y=y)
+        self.extFrame.pack_propagate(False)
+        hv = HORIZONTAL if w >= h else VERTICAL
+        Scale.__init__(self, self.extFrame, orient=hv)
+        self.pack(fill=BOTH, expand=True)  
 
 
 class NCtkScrollbar(Scrollbar):

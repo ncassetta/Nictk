@@ -44,6 +44,7 @@ stringind = 0
 colorind = 0
 winMain = NCtkWindow(200, 150, 400, 300, "App prova")
 labText = NCtkLabel(winMain, 10, 10, "fill", 60, strings[0])
+labText.config(dfcolor="red", abcolor="gold")
 hfr1 = NCtkHorFrame(winMain, 0, "pack", "fill", 50)
 butText = NCtkButton(hfr1, 10, 5, "20%", "fill", "Cambia Testo", change)
 butText.config(hcolor="#ABCDEF")

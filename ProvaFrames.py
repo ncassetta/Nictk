@@ -9,6 +9,6 @@ hfr3 = NCtkHorFrame(hfr1, "40%", "pack", 50, 30,)
 hfr3.config(bcolor="#2060C0")
 hfr4 = NCtkHorFrame(hfr1, "pack", "pack", 50, 30,)
 hfr4.config(bcolor="#A000C0")
-print(winMain.winfo_children(), "\n", hfr1.winfo_children())
+print(winMain.getwinfo("children"), "\n", hfr1.getwinfo("children"))
 
 mainloop()

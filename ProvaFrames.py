@@ -3,6 +3,7 @@ from NCtk import *
 winMain = NCtkWindow(200, 150, 400, 300, "App prova")
 hfr1 = NCtkHorFrame(winMain, "20%", 10, "fill", 60)
 hfr1.config(bcolor="#C04080")
+opt1 = hfr1.getconfig("relief")
 hfr2 = NCtkHorFrame(winMain, "25%", "pack", "50%", "fill")
 hfr2.config(bcolor="#40C080")
 hfr3 = NCtkHorFrame(hfr1, "40%", "pack", 50, 30,)

@@ -63,41 +63,42 @@ def changeCursor(event):
     labCursor.config(text="Cursor: " + c)
 
 winMain = NCtkWindow(200, 180, 640, 480, "Widget attributes")
-labSample = NCtkLabel(winMain, 10, 10, "fill", 60, "This is a sample, because\nit demonstrates widget options")
+labSample = NCtkLabel(winMain, 0, 0, "fill", 80, "This is a sample, because\nit demonstrates widget options",
+                      (10, 10))
 # you must have an already created window to get fonts
 FONTS = font.families()[:min(15, len(font.families()))]
 winMain.config_all("NCtkLabel", background="white", relief=RIDGE)
 
-hfr1 = NCtkHorFrame(winMain, 10, 80, "fill", 30)
-butBgcolor = NCtkButton(hfr1, "pack", "pack", "15%", "fill", "BackgColor", changeBgcolor)
+hfr1 = NCtkHorFrame(winMain, "pack", "pack", "fill", 30)
+butBgcolor = NCtkButton(hfr1, "pack", "pack", "15%", "fill", "BackgColor", changeBgcolor, (2, 3, 2, 1))
 butBgcolor.index = 0
-labBgcolor = NCtkLabel(hfr1, "pack", "pack", "35%", "fill", "")
-butFgcolor = NCtkButton(hfr1, "pack", "pack", "15%", "fill", "ForegColor", changeFgcolor)
+labBgcolor = NCtkLabel(hfr1, "pack", "pack", "35%", "fill", "", 2)
+butFgcolor = NCtkButton(hfr1, "pack", "pack", "15%", "fill", "ForegColor", changeFgcolor, 2)
 butFgcolor.index = 0
-labFgcolor = NCtkLabel(hfr1, "pack", "pack", "35%", "fill", "")
+labFgcolor = NCtkLabel(hfr1, "pack", "pack", "35%", "fill", "", 2)
 
-hfr2 = NCtkHorFrame(winMain, 10, "pack", "fill", 30)
-butRelief = NCtkButton(hfr2, "pack", "pack", "15%", "fill", "Relief", changeRelief)
+hfr2 = NCtkHorFrame(winMain, "pack", "pack", "fill", 30)
+butRelief = NCtkButton(hfr2, "pack", "pack", "15%", "fill", "Relief", changeRelief, 2)
 butRelief.index = 0
-labRelief = NCtkLabel(hfr2, "pack", "pack", "35%", "fill", "")
-butBorder = NCtkButton(hfr2, "pack", "pack", "15%", "fill", "Border", changeBorder)
+labRelief = NCtkLabel(hfr2, "pack", "pack", "35%", "fill", "", 2)
+butBorder = NCtkButton(hfr2, "pack", "pack", "15%", "fill", "Border", changeBorder, 2)
 butBorder.index = 0
-labBorder = NCtkLabel(hfr2, "pack", "pack", "35%", "fill", "")
+labBorder = NCtkLabel(hfr2, "pack", "pack", "35%", "fill", "", 2)
 
-hfr3 = NCtkHorFrame(winMain, 10, "pack", "fill", 30)
-butAnchor = NCtkButton(hfr3, "pack", "pack", "15%", "fill", "Anchor", changeAnchor)
+hfr3 = NCtkHorFrame(winMain, "pack", "pack", "fill", 30)
+butAnchor = NCtkButton(hfr3, "pack", "pack", "15%", "fill", "Anchor", changeAnchor, 2)
 butAnchor.index = 0
-labAnchor = NCtkLabel(hfr3, "pack", "pack", "35%", "fill", "")
-butJustify = NCtkButton(hfr3, "pack", "pack", "15%", "fill", "Justify", changeJustify)
+labAnchor = NCtkLabel(hfr3, "pack", "pack", "35%", "fill", "", 2)
+butJustify = NCtkButton(hfr3, "pack", "pack", "15%", "fill", "Justify", changeJustify, 2)
 butJustify.index = 0
-labJustify = NCtkLabel(hfr3, "pack", "pack", "35%", "fill", "")
+labJustify = NCtkLabel(hfr3, "pack", "pack", "35%", "fill", "", 2)
 
-hfr4 = NCtkHorFrame(winMain, 10, "pack", "fill", 30)
-butFont = NCtkButton(hfr4, "pack", "pack", "15%", "fill", "Font", changeFont)
+hfr4 = NCtkHorFrame(winMain, "pack", "pack", "fill", 30)
+butFont = NCtkButton(hfr4, "pack", "pack", "15%", "fill", "Font", changeFont, 2)
 butFont.index = 0
-labFont = NCtkLabel(hfr4, "pack", "pack", "35%", "fill", "")
-butCursor = NCtkButton(hfr4, "pack", "pack", "15%", "fill", "Cursor", changeCursor)
+labFont = NCtkLabel(hfr4, "pack", "pack", "35%", "fill", "", 2)
+butCursor = NCtkButton(hfr4, "pack", "pack", "15%", "fill", "Cursor", changeCursor, 2)
 butCursor.index = 0
-labCursor = NCtkLabel(hfr4, "pack", "pack", "35%", "fill", "")
+labCursor = NCtkLabel(hfr4, "pack", "pack", "35%", "fill", "", 2)
 
 mainloop()

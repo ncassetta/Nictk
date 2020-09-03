@@ -2,6 +2,12 @@ from NCtk import *
 
 def hitmenu(item):
     labText.settext("You have chosen '" + item + "' from the menu in the menubar")
+    
+def hitcolors(item):
+    labText.config(bcolor=item)
+    
+def exit(item):
+    winMain.destroy()
 
 def hitpopup(item):
     labText.settext("You have chosen '" + item + "' from the popup menu")
@@ -22,14 +28,21 @@ menuFile.add_command(label="Open", command=hitmenu)
 menuFile.add_command(label="Save", command=hitmenu)
 menuFile.add_command(label="Save as ...", command=hitmenu)
 menuFile.add_separator()
-menuFile.add_command(label="Quit", command=hitmenu)
-menuFile.entryconfig(34, fcolor="red")
+menuFile.add_command(label="Quit", command=exit)
 menuBar.add_cascade(label="File", menu=menuFile)
-winMain.config(menu=menuBar)
 menuEdit = NCtkMenu(menuBar)
 menuEdit.add_checkbutton(label="Edit on", command=hitmenu)
-menuBar.add_cascade(label="Edit", command=menuEdit)
+menuBar.add_cascade(label="Edit", menu=menuEdit)
 opt = menuFile.entrygetconfig("Open", "state")
+menuColors = NCtkMenu(menuBar)
+menuColors.add_command(label="Change to green", command=hitcolors, arg="light green")
+menuColors.add_command(label="Change to red", command=hitcolors, arg="pink")
+menuColors.add_command(label="Change to blue", command=hitcolors, arg="light blue")
+menuColors.entryconfig(0, bcolor="light green")
+menuColors.entryconfig(1, bcolor="pink")
+menuColors.entryconfig(2, bcolor="light blue")
+menuBar.add_cascade(label="Colors", menu=menuColors)
+winMain.config(menu=menuBar)
 
 menuPopup = NCtkMenu(winMain)
 menuPopup.add_command(label="Cut", command=hitpopup)

@@ -1,4 +1,4 @@
-from Mtki import *
+from NCtk import *
 
 
 COLORS = ("red", "yellow", "cyan", "green", "purple", "blue", "orange",
@@ -16,6 +16,11 @@ you_results = []
 comp_results = []
 game_status = ""
 moves = 0
+
+class TryLine(NCtkLabel):
+    def __init__(self, parent, x, y, w, h, content=None, pad=0):
+        NCtkLabel.__init__(self, parent, x, y, w, h, content, pad)
+        self.data = []
 
 def getColor(w):
     return w.data[2]
@@ -44,7 +49,7 @@ def changeBlackWhite(event):
 
 def createLines():
     for j in range(4):
-        lab = MtkiLabel(mainWindow, 25, 25, XCOMP_BASE + 30 * j, Y_BASE - 40, "")
+        lab = TryLine(mainWindow, XCOMP_BASE + 30 * j, Y_BASE - 40, 25, 25, "")
         lab.data.extend([0, 0, -1])
         lab.bind("<Button-1>", changeColor)
         you_pattern.append(lab)
@@ -52,23 +57,23 @@ def createLines():
         y = Y_BASE + i * 40
         you_tries.append([])
         for j in range(4):
-            lab = MtkiLabel(mainWindow, 25, 25, XYOU_BASE + 30 * j, y, "")
+            lab = TryLine(mainWindow, XYOU_BASE + 30 * j, y, 25, 25, "")
             lab.data.extend([i, j, -1])
             lab.bind("<Button-1>", changeColor)
             you_tries[i].append(lab)
         you_results.append([])
         for j in range(4):
-            lab = MtkiLabel(mainWindow, 15, 15, XYOU_BASE + 125 + 20 * j, y + 5, "")
+            lab = TryLine(mainWindow, XYOU_BASE + 125 + 20 * j, y + 5, 15, 15, "")
             lab.data.extend([i, j, -1])
             you_results[i].append(lab)
         comp_tries.append([])
         for j in range(4):
-            lab = MtkiLabel(mainWindow, 25, 25, XCOMP_BASE + 30 * j, y, "")
+            lab = TryLine(mainWindow, XCOMP_BASE + 30 * j, y,  25, 25, "")
             lab.data.extend([i, j, -1])
             comp_tries[i].append(lab)
         comp_results.append([])
         for j in range(4):
-            lab = MtkiLabel(mainWindow, 15, 15, XCOMP_BASE + 125 + 20 * j, y + 5, "")
+            lab = TryLine(mainWindow, XCOMP_BASE + 125 + 20 * j, y + 5, 15, 15, "")
             lab.data.extend([i, j, -1])
             lab.bind("<Button-1>", changeBlackWhite)
             comp_results[i].append(lab)
@@ -128,17 +133,17 @@ def game():
         moves += 1
 
 
-mainWindow = MtkiWindow(800, 600, 100, 100, "Mtki Mastermind")
+mainWindow = NCtkWindow(100, 100, 800, 600, "NCtk Mastermind")
 BGCOLOR = mainWindow.cget("bg")
-youLabel = MtkiLabel(mainWindow, 200, 30, XYOU_BASE, 10, "you")
+youLabel = NCtkLabel(mainWindow, XYOU_BASE, 10, 200, 30, "you")
 youLabel.configure(bg="light blue", fg="dark blue", anchor="center",
                    font=("Arial", 16, "bold"))
-compLabel = MtkiLabel(mainWindow, 200, 30, XCOMP_BASE, 10, "the computer")
+compLabel = NCtkLabel(mainWindow, XCOMP_BASE, 10, 200, 30, "the computer")
 compLabel.configure(bg="light green", fg="dark green", anchor="center",
                    font=("Arial", 16, "bold"))
-startButton = MtkiButton(mainWindow, 50, 30, 560, 100, "Start", start)
-tryButton = MtkiButton(mainWindow, 50, 30, 560, 140, "Try", trypattern)
-ansButton = MtkiButton(mainWindow, 50, 30, 560, 180, "Answer")
+startButton = NCtkButton(mainWindow, 560, 100, 50, 30, "Start", start)
+tryButton = NCtkButton(mainWindow, 560, 140, 50, 30, "Try", trypattern)
+ansButton = NCtkButton(mainWindow, 560, 180, 50, 30, "Answer")
 createLines()
 resetGame()
 

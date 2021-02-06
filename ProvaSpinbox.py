@@ -7,10 +7,10 @@ def changelabel(event):
     w = event.widget
     if w == spb1:
         lab1.config(fcolor="dark blue")
-        lab1.settext("Selected city: " + w.gettext())
+        lab1.setcontent("Selected city: " + w.gettext())
     else:
         lab1.config(fcolor="brown")
-        lab1.settext("Selected number: " + w.gettext())
+        lab1.setcontent("Selected number: " + w.gettext())
 
 
 winMain = NCtkWindow(200, 150, 640, 480, "Spinbox")

@@ -47,7 +47,19 @@ class NCtkWindow(Tk):
                     w._update_dimensions()
                 else:
                     for w1 in w.winfo_children():
-                        w1._update_dimensions()            
+                        w1._update_dimensions()
+                    
+class NCtkToplevel(Toplevel):
+    def __init__(self, parent, x, y, w, h, title="", modal=False):
+        Toplevel.__init__(self, master=parent)
+        xp = parent.winfo_x()
+        yp = parent.winfo_y()
+        self.geometry(str(w) + "x" + str(h) + "+" + str(x+xp) + "+" + str(y+yp))
+        self.title(title)
+        if modal:
+            focus_set()
+            grab_set()
+            transient(parent)            
 
 
 #####################################################################
@@ -84,8 +96,13 @@ class NCtkWidget(Widget):
         """Returns True if the widget is visible."""
         return self._extFrame.winfo_ismapped()
         
-    def settext(self, t):
-        self.config(text=t)
+    def setcontent(self, content):
+        if isinstance(content, str):
+            self.config(text=content, textvariable=None, image="")
+        elif isinstance(content, StringVar):
+            self.config(text=content, textvariable=content, image='')
+        elif isinstance(content, PhotoImage) or isinstance(content, BitmapImage):
+            self.config(text='', textvariable=None, image=content)        
     
     def gettext(self):
         return self.cget("text")
@@ -182,13 +199,21 @@ class NCtkWidget(Widget):
                 w = round(parent.winfo_width() * int(w[:-1]) / 100)
             else:
                 raise TypeError
+        elif w < 0:
+            w = parent.winfo_width() - x + w
+            if w < 0:
+                raise ValueError
         if isinstance(h, str):
             if h == "fill":
                 h = parent.winfo_height() - y
             elif h.endswith("%"):
                 h = round(parent.winfo_height() * int(h[:-1]) / 100)
             else:
-                raise TypeError    
+                raise TypeError
+        elif h < 0:
+            h = parent.winfo_height() - y + h
+            if h < 0:
+                raise ValueError        
         return x, y, w, h, padx, pady
     
     def _place_widget(self, x, y, w, h, padx, pady):
@@ -209,12 +234,18 @@ class NCtkWidget(Widget):
             self.place(x=x, y=y)
         else:
             self._place_widget(x, y, w, h, padx, pady)
+        if isinstance(self, (NCtkLabel, NCtkCheckbutton, NCtkRadiobutton)):
+            self.config(wraplength=self._calc_wrap(self) - 20)    ### FIX IT!!! AS IN NCtkLabel
         for w in self.winfo_children():
             if hasattr(w, "_update_dimensions"):
                 w._update_dimensions()
             else:
                 for w1 in w.winfo_children():
-                    w1._update_dimensions()
+                    if isinstance(w1, Scrollbar):
+                        w.config(yscrollcommand=w1.set)
+                        w1.config(command=w.yview)                        
+                    if hasattr(w1, "_update_dimensions"):       ### Otherwise error with Scrollbar
+                        w1._update_dimensions()
             
 
 #####################################################################
@@ -227,6 +258,7 @@ class NCtkHorFrame(Frame, NCtkWidget):
         x, y, w, h, padx, pady = self._calc_dimensions(parent, x, y, w, h, pad)
         Frame.__init__(self, parent, width=w, height=h)
         self.place(x=x, y=y)
+        self.config(background=parent.cget("background"))
  
  
 class NCtkVerFrame(Frame, NCtkWidget):
@@ -235,6 +267,7 @@ class NCtkVerFrame(Frame, NCtkWidget):
         x, y, w, h, padx, pady = self._calc_dimensions(parent, x, y, w, h, pad)
         Frame.__init__(self, parent, width=w, height=h)
         self.place(x=x, y=y)
+        self.config(background=parent.cget("background"))
         
 
 #####################################################################
@@ -272,12 +305,7 @@ class NCtkButton(Button, NCtkWidget):
         Button.__init__(self, self._extFrame, text="Button")
         self._place_widget(x, y, w, h, padx, pady)
         #self.config(anchor=W, wraplength=w,justify=LEFT)
-        if isinstance(content, str):
-            self.config(text=content)
-        elif isinstance(content, StringVar):
-            self.config(textvariable=content)
-        elif isinstance(content, PhotoImage) or isinstance(content, BitmapImage):
-            self.config(image=content)
+        self.setcontent(content)
         if command:
             self.bind("<Button-1>", command)
 
@@ -296,7 +324,8 @@ class NCTkCanvas(Canvas):
     def __init__(self, parent, x, y, w, h, content=None, padx=0, pady=0):
         pass
 
-class NCtkCheckbutton(Checkbutton):
+
+class NCtkCheckbutton(Checkbutton, NCtkWidget):
     """Checkbutton widget which is either in on- or off-state.
 
     Valid resource names: activebackground, activeforeground, anchor,
@@ -309,20 +338,26 @@ class NCtkCheckbutton(Checkbutton):
     #def __init__(self, parent, x, y, w, h, content=None, padx=0, pady=0):
     
     def __init__(self, parent, x, y, w, h, content=None, command=None, pad=0):
-        x, y, w, h, padx, pady = NCtkWidget.calc_dimensions(parent, x, y, w, h, pad)
-        Checkbutton.__init__(self, self._extFrame, text="Button")
-        place_widget(x, y, w, h, padx, pady)
-        self.config(anchor=N, wraplength=w,justify=LEFT)
-        #if isinstance(content, str):
-            #self.config(text=content)
-        #elif isinstance(content, StringVar):
-            #self.config(textvariable=content)
-        #elif isinstance(content, PhotoImage) or isinstance(content, BitmapImage):
-            #self.config(image=content)
-        #if command:
-            #self.bind("<Button-1>", command)    
-        ##Checkbutton.__init__(self, master=None, cnf={}, **kw):
-
+        NCtkWidget.__init__(self, x, y, w, h, pad)
+        x, y, w, h, padx, pady = self._calc_dimensions(parent, x, y, w, h, pad)
+        self._extFrame = Frame(parent, width=w, height=h)
+        self._extFrame.config(background=parent.cget("background"))        
+        Checkbutton.__init__(self, self._extFrame, text="")
+        self._place_widget(x, y, w, h, padx, pady)
+        self._calc_wrap = lambda self: self.winfo_width() - 20  # Used to calculate text wraplength when resized
+        self.config(anchor=W, justify=LEFT)
+        self.setcontent(content)
+        if command:
+            self.bind("<Button-1>", command)
+            
+    def setvariable(self, variable=None, offvalue=None, onvalue=None):
+        if variable:
+            self.config(variable=variable)
+        if offvalue:
+            self.config(offvalue=offvalue)
+        if onvalue:
+            self.config(onvalue=onvalue)
+            
 
 class NCtkEntry(Entry, NCtkWidget):
     """Entry widget which allows displaying simple text.
@@ -355,7 +390,10 @@ class NCtkEntry(Entry, NCtkWidget):
         if command:
             self.bind("<Return>", command)
         
-    # overrides NCtkWidget method!
+    # overrides NCtkWidget methods!
+    def setcontent(self, content):
+        self.intStr.set(str(content))
+        
     def gettext(self):
         return self.get()        
 
@@ -387,16 +425,10 @@ class NCtkLabel(Label, NCtkWidget):
         self._extFrame.config(background=parent.cget("background"))
         Label.__init__(self, self._extFrame, text="Label")
         self._place_widget(x, y, w, h, padx, pady)
-        #self.update()                   ### WHY??? I DON'T REMEMBER!!!
-        realw = self.winfo_width() - 1  ### FIX IT!!!
-        self.config(anchor=W, wraplength=realw, justify=LEFT, relief=SUNKEN)
-        if isinstance(content, str):
-            self.config(text=content)
-        elif isinstance(content, StringVar):
-            self.config(textvariable=content)
-        elif isinstance(content, (PhotoImage, BitmapImage)):
-            self.config(image=content)
-    
+        self._calc_wrap = lambda self: self.winfo_width() - 1  # Used to calculate text wraplength when resized
+        self.config(anchor=W, justify=LEFT, relief=SUNKEN)
+        self.setcontent(content)
+        
     
 class NCtkListbox(Listbox, NCtkWidget):
     """Listbox widget which can display a list of strings.
@@ -514,7 +546,7 @@ class NCtkMenu(Menu):
 # MenuButton and Message obsolete in tkinter
 
 
-class NCtkRadiobutton(Radiobutton):
+class NCtkRadiobutton(Radiobutton, NCtkWidget):
     """Radiobutton widget which shows only one of several buttons in on-state.
 
         Valid resource names: activebackground, activeforeground, anchor,
@@ -524,14 +556,15 @@ class NCtkRadiobutton(Radiobutton):
         indicatoron, justify, padx, pady, relief, selectcolor, selectimage,
         state, takefocus, text, textvariable, underline, value, variable,
         width, wraplength."""
-    def __init__(self, parent, x, y, w, h, content=None, command=None, padx=0, pady=0):
-        x, y, w, h = NCtkWidget.calc_dimensions(parent, x, y, w, h, padx, pady)
+    def __init__(self, parent, x, y, w, h, content=None, command=None, pad=0):
+        NCtkWidget.__init__(self, x, y, w, h, pad)
+        x, y, w, h, padx, pady = self._calc_dimensions(parent, x, y, w, h, pad)
         self._extFrame = Frame(parent, width=w, height=h)
-        self._extFrame.place(x=x, y=y)
-        self._extFrame.pack_propagate(False)
+        self._extFrame.config(background=parent.cget("background"))
         Radiobutton.__init__(self, self._extFrame, text="Button")
-        self.pack(fill=BOTH, expand=True)
-        self.config(anchor=N, wraplength=w,justify=LEFT)
+        self._place_widget(x, y, w, h, padx, pady)
+        self._calc_wrap = lambda self: self.winfo_width() - 20  # Used to calculate text wraplength when resized
+        self.config(anchor=W, justify=LEFT)
         #self.master=parent
         #if isinstance(content, str):
             #self.config(text=content)
@@ -606,8 +639,8 @@ class NCtkText(Text, NCtkWidget):
         self._extFrame.config(background=parent.cget("background"))
         Text.__init__(self, self._extFrame)
         self._place_widget(x, y, w, h, padx, pady)
-        #self.update()                   ### WHY??? I DON'T REMEMBER!!!
-        realw = self.winfo_width() - 1  ### FIX IT!!!
+        #self.update()                   ### These were used in ther widgets for wrapping
+        #realw = self.winfo_width() - 1  ### TODO: see if these are needed here (see NCtkLabel for example)
         self.config(relief=SUNKEN)
         
     def settext(self, t):
@@ -660,6 +693,7 @@ class NCtkCombobox(OptionMenu, NCtkWidget):
         the resource textvariable set to VARIABLE, the initially selected
         value VALUE, the other menu values VALUES and an additional
         keyword argument command."""
+        
         NCtkWidget.__init__(self, x, y, w, h, pad)
         x, y, w, h, padx, pady = self._calc_dimensions(parent, x, y, w, h, pad)
         self._extFrame = Frame(parent, width=w, height=h)
@@ -783,7 +817,7 @@ class NCtkSpinbox(Spinbox, NCtkWidget, XView):
             width, wrap,
         """
             
-    def __init__(self, parent, x, y, w, h, content=None, command=None, pad=0):
+    def __init__(self, parent, x, y, w, h, limits=None, command=None, pad=0):
         NCtkWidget.__init__(self, x, y, w, h, pad)
         x, y, w, h, padx, pady = self._calc_dimensions(parent, x, y, w, h, pad)
         self._extFrame = Frame(parent, width=w, height=h)
@@ -792,21 +826,24 @@ class NCtkSpinbox(Spinbox, NCtkWidget, XView):
         self._place_widget(x, y, w, h, padx, pady)
         self.config(relief=SUNKEN)
         self.intStr = StringVar()
-        if isinstance(content, (list, tuple)):
-            if isinstance(content[0], str):
-                self.config(values=content)
-            elif isinstance(content[0], (int, float)):
-                self.config(from_=content[0], to=content[1])
-                if len(content) == 3:
-                    self.config(increment=content[2])
+        if isinstance(limits, (list, tuple)):
+            if isinstance(limits[0], str):
+                self.config(values=limits)
+            elif isinstance(limits[0], (int, float)):
+                self.config(from_=limits[0], to=limits[1])
+                if len(limits) == 3:
+                    self.config(increment=limits[2])
                 
-        self.intStr.set(str(content[0]))
+        self.intStr.set(str(limits[0]))
         self.intStr.trace("w", self.trace_text)
         self.config(textvariable=self.intStr)
         if command:
             self.bind("<<CHANGEDVAR>>", command)
             
     # overrides NCtkWidget method!
+    def setcontent(self, content):
+        pass  # TODO
+    
     def gettext(self):
         return self.get()
 
@@ -822,5 +859,5 @@ class NCtkNotebook(ttk.Notebook, NCtkWidget):
         self._extFrame.config(background=parent.cget("background"))
         ttk.Notebook.__init__(self, self._extFrame)
         self._place_widget(x, y, w, h, padx, pady)
-        self.update()                   ### WHY??? I DON'T REMEMBER!!!
-        realw = self.winfo_width() - 1  ### FIX IT!!!
+        #self.update()                   ### These were used in ther widgets for wrapping
+        #realw = self.winfo_width() - 1  ### TODO: see if these are needed here (see NCtkLabel for example)

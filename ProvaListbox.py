@@ -22,19 +22,24 @@ def delfromlbox(event):
 
 def selchanged(event):
     lstMode.update()
-    labExplain.settext(explmodes[lstMode.getselected()[0]])
+    labExplain.setcontent(explmodes[lstMode.getselected()[0]])
     
 
-winMain = NCtkWindow(200, 150, 400, 300, "App prova")
-lstTest = NCtkListbox(winMain, 10, 10, 170, 200)
+winMain = NCtkWindow(200, 150, 400, 300, "NCtkListbox widget sample")
+hfr1 = NCtkHorFrame(winMain, 0, 0, "fill", -50)
+lstTest = NCtkListbox(hfr1, 0, 0, "50%", "fill", pad=(5, 5))
 lstTest.config(bcolor="blue", fcolor="yellow", font=("TkDefaultFont", 12))
-labMode = NCtkLabel(winMain, 200, 10, 150, 20, "Listbox Mode")
+vfr1 = NCtkVerFrame(hfr1, "pack", 0,"50%", "fill")
+labMode = NCtkLabel(vfr1, 0, 0, "fill", 30, "Listbox Mode", pad=5)
 labMode.config(bcolor="light green", fcolor="brown", relief=FLAT, anchor=CENTER)
-lstMode = NCtkListbox(winMain, 200, 40, 150, 100, command=selchanged, items=modes)
+lstMode = NCtkListbox(vfr1, 0, "pack", "fill", 80, command=selchanged, items=modes)
 lstMode.config(font=("TkDefaultFont", 12), relief=FLAT)
-butAdd = NCtkButton(winMain, 10, 240, 80, 50, "Add item", addtolbox) 
-butDel = NCtkButton(winMain, 100, 240, 80, 50, "Del item", delfromlbox)
-labExplain=NCtkLabel(winMain, 200, 150, 150, 140, explmodes[0])
+hfr1 = NCtkHorFrame(winMain, 0, "pack", "50%", 50)
+butAdd = NCtkButton(hfr1, 0, "pack", 80, 40, "Add item", addtolbox, pad=(5,5)) 
+butDel = NCtkButton(hfr1, "pack", "pack", 80, 40, "Del item", delfromlbox, pad=(5,5))
+
+
+labExplain=NCtkLabel(vfr1, 0, "pack", "fill", "fill", explmodes[0])
 labExplain.config(anchor=NW)
 print (labExplain.getwinfo("fpixels", 20))
 

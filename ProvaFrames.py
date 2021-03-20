@@ -1,6 +1,6 @@
 from NCtk import *
 
-winMain = NCtkWindow(200, 150, 400, 300, "App prova")
+winMain = NCtkMain(200, 150, 400, 300, "App prova")
 hfr1 = NCtkHorFrame(winMain, "20%", 10, "fill", 60)
 hfr1.config(bcolor="#C04080")
 opt1 = hfr1.getconfig("relief")

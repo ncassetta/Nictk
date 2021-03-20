@@ -7,7 +7,7 @@ lines = ("Uno", "Due", "Tre", "Quattro", "Cinque", "Sei", "Sette", "Otto",
 
 
 
-winMain = NCtkWindow(200, 150, 400, 300, "App prova")
+winMain = NCtkMain(200, 150, 400, 300, "App prova")
 frmTest = LabelFrame(winMain, width=200, height=100)
 frmTest.pack()
 frmTest.config(labelanchor=N, relief=RIDGE, text="Prova")

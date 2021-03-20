@@ -30,13 +30,13 @@ def toCelsius(event):
     entCelsius.insert(0, cel)
     
 
-winMain = NCtkWindow(100, 100, 300, 150, "Conversione C-F")
+winMain = NCtkMain(100, 100, 300, 150, "Conversione C-F")
 winMain.config_all(font=("Arial", 12))
-labCelsius = NCtkLabel(winMain, 20, 20, 100, 40, "Celsius")
+labCelsius = NCtkLabel(winMain, 20, 20, 100, 40, content="Celsius")
 entCelsius = NCtkEntry(winMain, 140, 20, 140, 40)
 entCelsius.config(bcolor="light grey", fcolor="red", sbcolor="red", sfcolor="white")
 entCelsius.bind("<FocusIn>", getFocus)
-labFarenheit = NCtkLabel(winMain, 20, 70, 100, 40, "Farenheit")
+labFarenheit = NCtkLabel(winMain, 20, 70, 100, 40, content="Farenheit")
 entFarenheit = NCtkEntry(winMain, 140, 70, 140, 40)
 entFarenheit.config(bcolor="light grey", fcolor="green", sbcolor="green", sfcolor="white")
 entFarenheit.bind("<FocusIn>", getFocus)

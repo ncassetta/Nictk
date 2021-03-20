@@ -10,14 +10,14 @@ def change(event):
     global stringind, colorind
     if event.widget == butText:
         stringind = (stringind + 1) % len(strings)
-        labText.settext(strings[stringind])
+        labText.setcontent(strings[stringind])
     elif event.widget == butColor:
         colorind = (colorind + 1) % 5
         labText.config(bcolor = bcolors[colorind], fcolor = fcolors[colorind])
     else:
         strings.append(entText.gettext())
         stringind = len(strings) - 1
-        labText.settext(strings[stringind])
+        labText.setcontent(strings[stringind])
         
 def changelabstatus(event):
     txt = butHideShow.gettext()
@@ -37,20 +37,21 @@ def changelabstatus(event):
         labText.config(state=NORMAL)
         entText.config(state=NORMAL)
         newind = 0
-    butHideShow.settext(butHideShow.captions[newind])    
+    butHideShow.setcontent(butHideShow.captions[newind])    
 
 
 stringind = 0
 colorind = 0
-winMain = NCtkWindow(200, 150, 400, 300, "App prova")
-labText = NCtkLabel(winMain, 10, 10, "fill", 60, strings[0])
+winMain = NCtkMain(200, 150, 400, 300, "App prova")
+labText = NCtkLabel(winMain, 0, 0, "fill", 70, pad=(10,10,10,5), content=strings[0])
 labText.config(dfcolor="red", abcolor="gold")
-hfr1 = NCtkHorFrame(winMain, 0, "pack", "fill", 50)
-butText = NCtkButton(hfr1, 10, 5, "20%", "fill", "Cambia Testo", change)
+hfr1 = NCtkHorFrame(winMain, 0, "pack", "fill", 60)
+butText = NCtkButton(hfr1, 0, 0, "20%", "fill", pad=(10, 5, 5, 5), content="Cambia Testo", command=change)
 butText.config(hcolor="#ABCDEF")
-butColor = NCtkButton(hfr1, "pack", 5, "20%", "fill", "Cambia Colori", change)
-entText = NCtkEntry(winMain, 10, 130, 120, 30, "", change)
-butHideShow = NCtkButton(winMain, 10, 200, "15%", 40, "", changelabstatus)
+butColor = NCtkButton(hfr1, "pack", 0, "20%", "fill", pad=5,
+                      content="Cambia Colori", command=change)
+entText = NCtkEntry(winMain, 10, 130, 120, 30,  command=change)
+butHideShow = NCtkButton(winMain, 10, 200, "15%", 40, command=changelabstatus)
 butHideShow.captions = ("Disabilita", "Nascondi", "Mostra", "Abilita")
 butHideShow.config(text=butHideShow.captions[0])
 mainloop()

@@ -1,8 +1,8 @@
 from NCtk import *
 
-winMain = NCtkMain(200, 150, 400, 300, "App prova")
+winMain = NCtkMain(200, 150, 400, 300, "Frame Sample")
 hfr1 = NCtkHorFrame(winMain, "20%", 10, "fill", 60)
-hfr1.config(bcolor="#C04080")
+hfr1.config(bcolor="#C04080", text="HorFrame 1", relief=RIDGE)
 opt1 = hfr1.getconfig("relief")
 hfr2 = NCtkHorFrame(winMain, "25%", "pack", "50%", "fill")
 hfr2.config(bcolor="#40C080")

@@ -48,20 +48,23 @@ def selchanged(event):
 
 winMain = NCtkMain(200, 150, 600, 450, "NCtkListbox widget sample")
 hfr1 = NCtkHorFrame(winMain, 0, 0, "fill", "fill")
-vfr1 = NCtkVerFrame(hfr1, 0, 0, "50%", "fill")
+rfr1 = NCtkRowFrame(hfr1, 0, 0, "50%", "fill")
 vfr2 = NCtkVerFrame(hfr1, "pack", 0, "fill", "fill")
-labTest = NCtkLabel(vfr1, 0, 0, "fill", 40, pad=(10, 10, 10, 5), content="Try to select items")
+rfr1.add_row(40)
+labTest = NCtkLabel(rfr1, 0, 0, "fill", "fill", pad=(10, 10, 10, 5), content="Try to select items")
 labTest.config(bcolor="light green", fcolor="blue", relief=SOLID, borderwidth=1, anchor=CENTER)
-lstTest = NCtkListbox(vfr1, 0, "pack", "fill", -80, pad=(10, 5, 10, 40), command=testchanged)
+rfr1.add_row(-80)
+lstTest = NCtkListbox(rfr1, 0, 0, "fill", "fill", pad=(10, 5, 10, 40), command=testchanged)
 lstTest.config(bcolor="blue", fcolor="yellow", sfcolor="maroon", sbcolor="light blue", 
                relief=RIDGE, font=("TkDefaultFont", 14))
-labSel = NCtkLabel(vfr1, 0, "pack", "fill", 40, pad=(10, 5))
+rfr1.add_row(40)
+labSel = NCtkLabel(rfr1, 0, 0, "fill", "fill", pad=(10, 5))
 labSel.config(bcolor="light green", fcolor="blue", relief=SOLID, borderwidth=1)
 testchanged(None)
-hfr2 = NCtkHorFrame(vfr1, "center", "pack", "80%", "fill")
-butAdd = NCtkButton(hfr2, "15%", 0, "35%", "fill", pad=(5,5, 5, 10), content="Add item",
+rfr1.add_row("fill")
+butAdd = NCtkButton(rfr1, "15%", 0, "35%", "fill", pad=(5,5, 5, 10), content="Add item",
                     command=addtolbox) 
-butDel = NCtkButton(hfr2, "pack", "pack", "35%", "fill", pad=(5, 5, 5, 10), content="Del item",
+butDel = NCtkButton(rfr1, "pack", "pack", "35%", "fill", pad=(5, 5, 5, 10), content="Del item",
                     command =delfromlbox)
 labMode = NCtkLabel(vfr2, 0, 0, "fill", 40, pad=(10, 10, 10, 5), content="Listbox Mode")
 labMode.config(bcolor="light green", fcolor="blue", relief=SOLID, borderwidth=1, anchor=CENTER)

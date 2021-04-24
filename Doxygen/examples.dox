@@ -1,0 +1,60 @@
+/// \example WidgetPosition.py
+///  An example of the various modes to position a widget inside a parent container (remember that a NCtkMain or NCtkWindow behave as vertical frames, i.e. pack widgets vertically). You can try to maximize, iconize and resize the window (dragging its borders with the mouse) to see the various behavior when parent is resized.
+
+
+/// \example NCtkRowFrame.py
+/// An example of the use of the NCtkRowFrame. You can add to it rows (with the add_row() method) which behave as horizontal frames (i.e. you can pack widget horizontally). You can set rows height as absolute or relative (percentual) values.
+
+
+/// \example NCtkEntry.py
+/// Example of the use of NCtkEntry, with binding to various events.
+
+
+/// \example test_midiports.cpp
+/// A simple progran which enumerates the MIDI IN and OUT ports present on your system.
+
+
+/// \example test_recorder.cpp
+/// A command line example of the features of the MIDIRecorder class. You can record MIDI content through a MIDI in port
+/// in your system and store the recorded content in an AdvancedSequencer.
+///
+/// Requires functions.cpp, which contains command line I/O functions.
+
+
+/// \example test_sequencer.cpp
+/// A command line example of the features of the MIDISequencer class. It creates an instance of the class and allows
+/// the user to interact with it. You can load MIDI files and play them changing some parameters (it has more limited
+/// features than the AdvancedSequencer).
+///
+/// Requires functions.cpp, which contains command line I/O functions.
+
+
+/// \example test_stepsequencer.cpp
+/// A very basic, and not comfortable, command line step sequencer, made for demonstrating editing capabilities
+/// of the NiCMidi library. It creates an AdvancedSequencer class instance, gets it MultiTrack, and allows the user
+/// to edit it. You can load and save MIDI files, play them, view the file content, edit the file. You can insert,
+/// delete or change these MIDI events: note, control (in particular volume and pan), program and tempo. For changing
+/// an event, insert a new event (same note, control, program, tempo) at same time position.
+///
+/// Requires functions.cpp, which contains command line I/O functions.
+
+
+/// \example test_thru.cpp
+/// A command line example of the features of the MIDIThru class. It creates an instance of the class and allows the user
+/// to interact with it. You can set the in and out ports and channels and the program change in the out channel; moreover
+/// you can print the passing MIDI messages with a MIDIrocessorPrinter.
+///
+/// Requires functions.cpp, which contains command line I/O functions.
+
+
+/// \example test_writefile.cpp
+/// A  nice little example demonstrating how to edit the %MIDIMultitrack embedded in an AdvancedSequencer, play its content
+/// and then save it in a MIDI file.
+
+
+/// \example test_win32_player.cpp
+/// A MS Windows GUI example of the usage of the AdvancedSequencer class together with a MIDISequencerGUINotifierWin32 and
+/// a SMPTE. It is a basic MIDI file player with a responsive GUI showing the file parameters while the song is playing.
+/// It uses standard Windows API for creating the GUI.
+
+

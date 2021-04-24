@@ -1,9 +1,13 @@
+import _setup           # allows import from parent folder
 from NCtk import *
 
 
+# items to be added to the listbox (italian numbers)
 lines = ("Uno", "Due", "Tre", "Quattro", "Cinque", "Sei", "Sette", "Otto",
          "Nove", "Dieci", "Undici", "Dodici", "Tredici", "Quattordici")
+# selection modes
 modes = ("single", "browse", "multiple", "extended")
+# explanations of selection modes
 explmodes = ("single mode : you can select only one item at once, clicking on it in the listbox",
              "browse mode : you can select only an item at once, clicking on it or dragging with the mouse",
              "multiple mode : you can select multiple items, clicking on them; clicking on a selected item " +
@@ -13,19 +17,22 @@ explmodes = ("single mode : you can select only one item at once, clicking on it
 
 
 def addtolbox(event):
+    """Adds an item to the left listbox."""
     nitems = lstTest.size()
     if nitems < len(lines):
         lstTest.insert(nitems, lines[nitems])
         
 def delfromlbox(event):
+    """ Deletes an item from the left listbox."""
     if lstTest.size() > 0:
         lstTest.delete(END)
         testchanged(None)
         
         
 def testchanged(event):
+    """Callback called when you select one or more item in the left listbox."""
     sel = lstTest.getselected()
-    print("testchanged with index", sel)
+    #print("testchanged with index", sel)
     if len(sel) == 0:
         s = "none"
     else:
@@ -33,14 +40,14 @@ def testchanged(event):
         for i in sel:
             s += "{}, ".format(i)
         s = s[:-2]
-    labSel.setcontent("Selected: " + s) 
+    labSel.setcontent("Selected index: " + s if len(sel) <= 1 else "Selected indexes: " + s) 
 
 def selchanged(event):
-    #lstMode.update()
-    lstTest.select_clear(0, END)
+    """Callback called when the user modifies the selection mode."""
+    #lstTest.select_clear(0, END)
     testchanged(None)
     sel = lstMode.getselected()
-    print("selchanged() called with index", sel)
+    #print("selchanged() called with index", sel)
     if len(sel):
         labExplain.setcontent(explmodes[sel[0]])
         lstTest.config(selectmode=modes[sel[0]])

@@ -1,8 +1,9 @@
+import _setup           # allows import from parent folder
 from NCtk import *
 
 
 def changecolor(event):
-    R, G, B = sclRed.get(), sclGreen.get(), sclBlue.get()
+    R, G, B = int(sclRed.get()), int(sclGreen.get()), int(sclBlue.get())
     deccolor = "({:3d}, {:3d}, {:3d})".format(R, G, B)
     hexcolor = "#{:02X}{:02X}{:02X}".format(R, G, B)
     labColor.config(bcolor=hexcolor)

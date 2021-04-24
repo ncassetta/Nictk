@@ -1,3 +1,4 @@
+import _setup
 from NCtk import *
 from time import *
 
@@ -20,7 +21,7 @@ def change(event):
         labText.setcontent(strings[stringind])
         
 def changelabstatus(event):
-    txt = butHideShow.gettext()
+    txt = butHideShow.getcontent()
     if txt == "Disabilita":
         labText.config(state=DISABLED)
         k = entText.config(state=DISABLED)
@@ -47,10 +48,10 @@ labText = NCtkLabel(winMain, 0, 0, "fill", 70, pad=(10,10,10,5), content=strings
 labText.config(dfcolor="red", abcolor="gold")
 hfr1 = NCtkHorFrame(winMain, 0, "pack", "fill", 60)
 butText = NCtkButton(hfr1, 0, 0, "30%", "fill", pad=(10, 5, 5, 5), content="Cambia Testo", command=change)
-butText.config(hcolor="#ABCDEF")
 butColor = NCtkButton(hfr1, "pack", 0, "30%", "fill", pad=5,
                       content="Cambia Colori", command=change)
 entText = NCtkEntry(winMain, 10, 130, 120, 30,  command=change)
+butText.config(abcolor="#ABCDEF")
 butHideShow = NCtkButton(winMain, 10, 200, "30%", 40, command=changelabstatus)
 butHideShow.captions = ("Disabilita", "Nascondi", "Mostra", "Abilita")
 butHideShow.config(text=butHideShow.captions[0])

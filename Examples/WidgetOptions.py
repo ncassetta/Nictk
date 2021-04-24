@@ -1,3 +1,4 @@
+import _setup           # allows import from parent folder
 from NCtk import *
 from tkinter import font
 from random import randrange
@@ -14,39 +15,49 @@ CURSORS = ("arrow", "circle", "clock", "cross", "dotbox", "exchange",
 
 
 def changeBgcolor(event):
-    labSample.config(bcolor=spbBgcolor.get())
+    labSample.config(bcolor=spbBgcolor.getcontent())
     
 def changeFgcolor(event):
-    labSample.config(fcolor=spbFgcolor.get())
+    labSample.config(fcolor=spbFgcolor.getcontent())
 
 def changeRelief(event):
-    labSample.config(relief=spbRelief.get())
+    labSample.config(relief=spbRelief.getcontent())
 
 def changeBorder(event):
-    labSample.config(borderwidth=int(spbBorder.get()))
+    labSample.config(borderwidth=int(spbBorder.getcontent()))
 
 def changeAnchor(event):
-    labSample.config(anchor=spbAnchor.get())
+    labSample.config(anchor=spbAnchor.getcontent())
     
 def changeJustify(event):
-    labSample.config(justify=spbJustify.get())
+    labSample.config(justify=spbJustify.getcontent())
 
 def changeFont(event):
     fsize = randrange(12, 25)
-    labSample.config(font=(spbFont.get(), fsize))
+    labSample.config(font=(spbFont.getcontent(), fsize))
     
 def changeCursor(event):
-    labSample.config(cursor=spbCursor.get())
+    labSample.config(cursor=spbCursor.getcontent())
     
 
+# create the main window
 winMain = NCtkMain(200, 180, 640, 480, "Widget attributes")
+
+# fill it with a rowframe\
 rfr1 = NCtkRowFrame(winMain, 0, 0, "fill", "fill")
+
+# main label with the sample phrase
 rfr1.add_row(120)
 labSample = NCtkLabel(rfr1, 0, 0, "fill", "fill", pad=10, content="This is a sample, because\nit demonstrates widget options")
+
 # you must have an already created window to get fonts
 FONTS = font.families()[:min(15, len(font.families()))]
+
+# config other children widgets
 rfr1.config_children("NCtkLabel", bcolor="#E0F0C0", relief=SOLID, border=1)
-rfr1.config_children("NCtkSpinbox", bcolor="#A0C0D0", relief=RIDGE)
+rfr1.config_children("NCtkSpinbox", readonlybackground="#A0C0D0", relief=RIDGE, state="readonly")
+
+# other widgets
 rfr1.add_row(16)
 rfr1.add_row(34)
 labBgcolor = NCtkLabel(rfr1, 0, 0, "20%", "fill", pad=(10,2,2,2), content="bcolor")
@@ -73,7 +84,7 @@ changeAnchor(None)
 changeBgcolor(None)
 spbBorder.setcontent(1)
 changeCursor(None)
-spbFgcolor.setcontent("green")
+spbFgcolor.invoke("buttonup")
 changeFont(None)
 changeJustify(None)
 changeRelief(None)

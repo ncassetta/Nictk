@@ -1,3 +1,4 @@
+import _setup           # allows import from parent folder
 from NCtk import *
 
 def hitmenu(item):
@@ -20,7 +21,7 @@ def popup(event):
     
 
 
-winMain = NCtkWindow(200, 180, 640, 480, "Menu example")
+winMain = NCtkMain(200, 180, 640, 480, "Menu example")
 #winMain.config(bcolor="pink")
 menuBar = NCtkMenu(winMain)
 menuFile = NCtkMenu(menuBar)
@@ -49,7 +50,7 @@ menuPopup.add_command(label="Cut", command=hitpopup)
 menuPopup.add_command(label="Copy", command=hitpopup)
 menuPopup.add_command(label="Paste", command=hitpopup)
 
-labPopup=NCtkLabel(winMain, 0, "10%", "fill", 100, "Double click to open a popup", (10, 10 , 20, 5))
+labPopup=NCtkLabel(winMain, 0, "10%", "fill", 100, pad=(10, 10 , 20, 5), content="Double click to open a popup", )
 labPopup.bind("<Double-Button-1>", popup)
 labPopup.config(bcolor="pink", anchor=CENTER, relief=FLAT, font=("Arial", 12, "bold"))
 

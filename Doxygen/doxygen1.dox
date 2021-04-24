@@ -1,0 +1,594 @@
+/// \package NCtk
+///
+/// \mainpage
+/// NCtk is a wrapper for **tkinter** written by Nicola Cassetta with the aim of simplifying its use for building graphical interfaces for Python users.
+/// As is known, tkinter is the standard Python library already included in the language distribution; it derives from Tcl/Tk and maintains its nomenclature and conventions in the name and parameters of the functions. It also has three different geometry managers (pack, grid and place) for placing widgets, which can be confusing.
+///- All widgets have a similar constructor, which enable the user to easily position them, always with sizes specified in pixels.
+///- Widgets can change their position and ssize when the main window is resized, without some "strange" behaviours which often happen in tkinter (for example, stretching an Entry when we type in it, with the side effect of moving all widgets packed to its right).
+///- Some tkinter options for widget config() have been renamed in a more coherent manner, so it is easier to remember them. Also the almost infinite serie of winfo_ methods have been packed into the getwinfo() method, with a parameter.
+///
+///You can start learning it by reading the \ref OVERVIEW section.
+///
+
+
+/// \page OVERVIEW Overview
+///
+/// Getting started with NCtk.
+///
+/// + \subpage SIMPLE_EXAMPLE
+/// + \subpage CONSTRUCTORS
+/// + \subpage WIDGETS
+/// + \subpage PLACING_WIDGETS
+/// + \subpage ATTRIBUTES
+/// + \subpage WIDGET_INFO
+/// + \subpage EVENTS
+/// + \subpage SPECIAL_VARIABLES
+///
+
+
+/// \page SIMPLE_EXAMPLE A simple example
+///
+/// Here is a simple example of the usage of NCtk:
+/// \code
+///from NCtk import *
+///
+///# Creates the main window (400x300 with left upper in (100, 100)
+///winMain = NCtkMain(100, 100, 400, 300, title="First Sample")
+///# Create a label in it (first argument of children widgets always is the parent)
+///labHello = NCtkLabel(winMain, CENTER, 10, "50%", 40
+///# Create a button
+///btnShow = NCtkButton(winMain, 
+///
+/// \endcode
+///
+/// Here is a more complex example using some of the class features (in a real environment you could do these commands interactively) while the sequencer is playing:
+///
+/// \code
+///#include "advancedsequencer.h"
+///#include "timer.h"                      // for Wait()
+///
+///int main() {
+///   AdvancedSequencer seq;               // creates the AdvancedSequencer
+///   seq.Load("twinkle.mid");             // loads a MIDI file into it
+///   seq.Play();                          // plays the file
+///   while(seq.GetCurrentMeasure() < 4)   // waits until measure 4
+///      MIDITimer::Wait(10);              // 10 msecs
+///   seq.SetTrackTranspose(1, 12);        // transposes track 1 by one octave up
+///   while(seq.GetCurrentMeasure() < 8)
+///      MIDITimer::Wait(10);
+///   seq.SetTrackMute(1, true);	       // mutes track 1
+///   while(seq.GetCurrentMeasure() < 12)
+///      MIDITimer::Wait(10);
+///   seq.SetTrackSolo(2);                 // soloes track 2 ...
+///   seq.SetTempoScale(200);              // ... and doubles the tempo
+///   while(seq.IsPlaying()                // waits until the end
+///      MIDITimer::Wait(10);
+///   return 0;
+///}
+/// \endcode
+///
+/// You can see two more elaborated examples that let you interact with the class:
+/// + \ref test_advancedsequencer.cpp command line based, for all platforms, demonstrates all the main features of the class.
+/// + \ref test_win32_player.cpp GUI based, for Windows only, demonstrates the use of a MIDISequencerGUINotifier and a SMPTE together with the AdvancedSequencer.
+///
+
+
+/// \page CONSTRUCTORS Constructors
+///
+/// All NCtk widgets have a common scheme for their constructor:
+///
+/// \code
+///
+///Widget_name(parent, x, y, w, h, pad=0, **kw)
+///
+/// \endcode
+/// Where:
+/// + **parent** is the parent widget which contains the widget to be constructed
+/// + **x**, **y** determine the position of the widget
+/// + **w**, **h** determine the width and height of the widget
+/// + **pad** is the padding with respect to **w** and **h**
+/// + ** **kw** are other named parameters specific for the widget
+///
+/// The constructor allows to create and place the widget with a single instruction. There are no separate instructions for creating and placing (and no different geometry managers) like in tkinter. Parameters x, y, w, h are always relative to parent widget, and you have however many options to indicate the position and the size: you can set them to absolute or relative values, or pack the widget with respect to previously constructed. Moreover you can determine if the widget dimension are updated when the parent is resized. For details see \ref PLACING_WIDGETS.
+/// The constructor, on the other hand, generally allows you to set only a few fundamental properties of the widget. The setting of the various attributes is generally left to the config () method (but this can be abbreviated for containers with the config_children () method which acts on all children).
+///
+
+
+/// \page WIDGETS Available widgets
+///
+/// These are the available widgets:
+///
+/// Windows
+/// =======
+///
+/// class NCtkMain(BaseWindow, tk.Tk)
+/// ---------------------------------
+///
+/// This is the main window of the app.
+///
+///    This is the main window (derived from the tkinter Tk class).
+///    It has an associated Tcl interpreter"""
+///    def __init__(self, x, y, w, h, title=""):
+///
+/// class NCtkWindow(BaseWindow, tk.Toplevel)
+/// -----------------------------------------
+///
+/// A window (derived from the tkinter Toplevel class).
+///    
+///    You can use this for dialogs""
+///    def __init__(self, parent, x, y, w, h, title="", modal=False):
+///
+///
+///
+/// Frames
+/// ======
+///
+/// Frames are another tyoe of container.
+///
+/// class NCtkHorFrame(NCtkWidget, NCtkContainer, tk.LabelFrame)
+/// ------------------------------------------------------------
+///
+/// A frame in which you can stack children widgets horizontally.
+///
+/// This is done by using PACK as the x parameter in their constructor. The
+/// frame is initialized with the same color of its parent and no border,
+/// being so invisible. However you can set a border and also a label to be
+/// shown on it.
+///    
+///    def __init__(self, parent, x, y, w, h, pad=0):
+///        
+/// class NCtkVerFrame(NCtkWidget, NCtkContainer, tk.LabelFrame)
+/// ------------------------------------------------------------
+///
+/// A frame in which you can stack children widgets vertically.
+///    
+/// This is done by using PACK as the y parameter in their constructor. The
+/// frame is initialized with the same color of its parent and no border,
+/// being so invisible. However you can set a border and also a label to be
+/// shown on it.
+/// def __init__(self, parent, x, y, w, h, pad=0):
+///    
+/// 
+/// class NCtkRowFrame(NCtkWidget, NCtkContainer, tk.LabelFrame)
+/// ------------------------------------------------------------
+/// A container in which you can stack rows vertically.
+///
+/// Each row behaves like a NCtkHorFrame, allowing to stack children
+/// widgets horizontally (using PACK as the x parameter in their constructor).
+/// You can add rows to the frame, obtaining thus a disposition similar
+/// to a matrix.
+/// The frame is initialized with the same color of its parent and no border,
+/// being so invisible. However you can set a border and also a label to be
+/// shown on it.
+/// def __init__(self, parent, x, y, w, h, pad=0):
+///
+///                    
+///    
+/// class NCtkColFrame(NCtkWidget, NCtkContainer, tk.LabelFrame):
+///     def __init__(self, parent, x, y, w, h, pad=0):
+///     NCtkWidget.__init__(self, parent, x, y, w, h, 0,
+///                         tk.LabelFrame.__init__)         # pad argument is ignored
+///
+///  
+///
+/// Widgets
+/// =======
+///
+/// These are other widgets defined in NCtk.
+///
+/// class NCtkButton(NCtkWidget, tk.Button)
+/// ---------------------------------------
+/// Button widget.
+///
+/// In the constructor you can associate to it a command callback to be executed when the button is pressed.
+/// \code
+///def __init__(self, parent, x, y, w, h, pad=0, content=None, command=None)
+/// \endcode
+///    STANDARD OPTIONS
+///
+///        activebackground, activeforeground, anchor,
+///        background, bitmap, borderwidth, cursor,
+///        disabledforeground, font, foreground
+///        highlightbackground, highlightcolor,
+///        highlightthickness, image, justify,
+///        padx, pady, relief, repeatdelay,
+///        repeatinterval, takefocus, text,
+///        textvariable, underline, wraplength
+///
+///    WIDGET-SPECIFIC OPTIONS
+///
+///        command, compound, default, height,
+///        overrelief, state, width
+///    """       
+///
+///
+///class NCTkCanvas(tk.Canvas):
+///    """Canvas widget to display graphical elements like lines or text.
+///
+///    Valid resource names: background, bd, bg, borderwidth, closeenough,
+///    confine, cursor, height, highlightbackground, highlightcolor,
+///    highlightthickness, insertbackground, insertborderwidth,
+///    insertofftime, insertontime, insertwidth, offset, relief,
+///    scrollregion, selectbackground, selectborderwidth, selectforeground,
+///    state, takefocus, width, xscrollcommand, xscrollincrement,
+///    yscrollcommand, yscrollincrement.
+///    """    
+///    def __init__(self, parent, x, y, w, h, content=None, padx=0, pady=0):
+///        pass
+///
+///
+/// class NCtkCheckbutton(NCtkWidget, tk.Checkbutton)
+/// -------------------------------------------------
+/// Checkbutton widget which is either in on- or off-state.
+///
+///    Valid resource names: activebackground, activeforeground, anchor,
+///    background, bd, bg, bitmap, borderwidth, command, cursor,
+///    disabledforeground, fg, font, foreground, height,
+///    highlightbackground, highlightcolor, highlightthickness, image,
+///    indicatoron, justify, offvalue, onvalue, padx, pady, relief,
+///    selectcolor, selectimage, state, takefocus, text, textvariable,
+///    underline, variable, width, wraplength."""    
+///    #def __init__(self, parent, x, y, w, h, content=None, padx=0, pady=0):
+///    
+///    def __init__(self, parent, x, y, w, h, pad=0, content=None, command=None):
+///        
+///
+/// class NCtkEntry(NCtkWidget, tk.Entry)
+/// -------------------------------------
+/// Entry widget which allows displaying simple text.
+///    
+///    Valid resource names: background, bd, bg, borderwidth, cursor,
+///    exportselection, fg, font, foreground, highlightbackground,
+///    highlightcolor, highlightthickness, insertbackground,
+///    insertborderwidth, insertofftime, insertontime, insertwidth,
+///    invalidcommand, invcmd, justify, relief, selectbackground,
+///    selectborderwidth, selectforeground, show, state, takefocus,
+///    textvariable, validate, validatecommand, vcmd, width,
+///    xscrollcommand."""
+///    
+///        
+///    def __init__(self, parent, x, y, w, h, pad=0, content=None, command=None):
+///        NCtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Entry.__init__) 
+///    
+/// class NCtkLabel(NCtkWidget, tk.Label)
+/// -------------------------------------
+/// Label widget which can display text and bitmaps.
+///
+///       STANDARD OPTIONS
+///
+///            activebackground, activeforeground, anchor,
+///            background, bitmap, borderwidth, cursor,
+///            disabledforeground, font, foreground,
+///            highlightbackground, highlightcolor,
+///            highlightthickness, image, justify,
+///            padx, pady, relief, takefocus, text,
+///            textvariable, underline, wraplength
+///
+///       WIDGET-SPECIFIC OPTIONS
+///
+///            height, state, width
+///
+///        """    
+///    def __init__(self, parent, x, y, w, h, pad=0, content=None):
+///        
+///    
+/// class NCtkListbox(NCtkWidget, tk.Listbox)
+/// -----------------------------------------
+/// Listbox widget which can display a list of strings.
+///
+///        Valid resource names: background, bd, bg, borderwidth, cursor,
+///        exportselection, fg, font, foreground, height, highlightbackground,
+///        highlightcolor, highlightthickness, relief, selectbackground,
+///        selectborderwidth, selectforeground, selectmode, setgrid, takefocus,
+///        width, xscrollcommand, yscrollcommand, listvariable."""
+///    # and activestyle ???
+///    def __init__(self, parent, x, y, w, h, pad=0, command=None, items=None) :
+///           
+///        
+/// class NCtkMenu(tk.Menu)
+/// -----------------------
+///    """Menu widget which allows displaying menu bars, pull-down menus and pop-up menus.
+///        
+///        Valid resource names: activebackground, activeborderwidth,
+///        activeforeground, background, bd, bg, borderwidth, cursor,
+///        disabledforeground, fg, font, foreground, postcommand, relief,
+///        selectcolor, takefocus, tearoff, tearoffcommand, title, type."""
+///    def __init__(self, parent):
+///
+///
+/// class NCtkRadiobutton(NCtkWidget, tk.Radiobutton)
+/// -------------------------------------------------
+/// Radiobutton widget which shows only one of several buttons in on-state.
+///
+///        Valid resource names: activebackground, activeforeground, anchor,
+///        background, bd, bg, bitmap, borderwidth, command, cursor,
+///        disabledforeground, fg, font, foreground, height,
+///        highlightbackground, highlightcolor, highlightthickness, image,
+///        indicatoron, justify, padx, pady, relief, selectcolor, selectimage,
+///        state, takefocus, text, textvariable, underline, value, variable,
+///        width, wraplength."""
+///    def __init__(self, parent, x, y, w, h, pad=0, content=None, command=None):
+///
+/// class NCtkScale(NCtkWidget, tk.Scale)
+/// -------------------------------------
+/// Scale widget which can display a numerical scale.
+///
+///        Valid resource names: activebackground, background, bigincrement, bd,
+///        bg, borderwidth, command, cursor, digits, fg, font, foreground, from,
+///        highlightbackground, highlightcolor, highlightthickness, label,
+///        length, orient, relief, repeatdelay, repeatinterval, resolution,
+///        showvalue, sliderlength, sliderrelief, state, takefocus,
+///        tickinterval, to, troughcolor, variable, width."""
+///    def __init__(self, parent, x, y, w, h,  pad=0, limits= None, command=None):
+///                
+///
+///
+/// class NCtkScrollbar(tk.Scrollbar):
+///    """Scrollbar widget which displays a slider at a certain position.
+///
+///        Valid resource names: activebackground, activerelief,
+///        background, bd, bg, borderwidth, command, cursor,
+///        elementborderwidth, highlightbackground,
+///        highlightcolor, highlightthickness, jump, orient,
+///        relief, repeatdelay, repeatinterval, takefocus,
+///        troughcolor, width."""
+///    def __init__(self, master=None, cnf={}, **kw):
+///        tk:Scrollbar.__init_(self, master, cnf, kw)
+///
+///
+/// class NCtkSpinbox(NCtkWidget, tk.Spinbox)
+/// -----------------------------------------
+/// Spinbox widget.
+///
+///        STANDARD OPTIONS
+///
+///            activebackground, background, borderwidth,
+///            cursor, exportselection, font, foreground,
+///            highlightbackground, highlightcolor,
+///            highlightthickness, insertbackground,
+///            insertborderwidth, insertofftime,
+///            insertontime, insertwidth, justify, relief,
+///            repeatdelay, repeatinterval,
+///            selectbackground, selectborderwidth
+///            selectforeground, takefocus, textvariable
+///            xscrollcommand.
+///
+///        WIDGET-SPECIFIC OPTIONS
+///
+///            buttonbackground, buttoncursor,
+///            buttondownrelief, buttonuprelief,
+///            command, disabledbackground,
+///            disabledforeground, format, from,
+///            invalidcommand, increment,
+///            readonlybackground, state, to,
+///            validate, validatecommand values,
+///            width, wrap,
+///        """
+///    def __init__(self, parent, x, y, w, h, pad=0, limits=None, command=None):
+///
+///
+///
+/// class NCtkText(NCtkWidget, tk.Text)
+/// -----------------------------------
+/// Text widget which can display text in various forms.
+///
+///        STANDARD OPTIONS
+///
+///            background, borderwidth, cursor,
+///            exportselection, font, foreground,
+///            highlightbackground, highlightcolor,
+///            highlightthickness, insertbackground,
+///            insertborderwidth, insertofftime,
+///            insertontime, insertwidth, padx, pady,
+///            relief, selectbackground,
+///            selectborderwidth, selectforeground,
+///            setgrid, takefocus,
+///            xscrollcommand, yscrollcommand,
+///
+///        WIDGET-SPECIFIC OPTIONS
+///
+///            autoseparators, height, maxundo,
+///            spacing1, spacing2, spacing3,
+///            state, tabs, undo, width, wrap,
+///
+///        """
+///    def __init__(self, parent, x, y, w, h, pad=0):
+///
+/// class NCtkCombobox(NCtkWidget, tk.OptionMenu)
+/// ---------------------------------------------
+/// Combobox which allows the user to select a value from a menu.
+/// It is the equivalent (renamed) of the OptionMenu class in tkinter
+///       
+///
+///        Valid resource names: activebackground, activeborderwidth,
+///        activeforeground, background, bd, bg, borderwidth, cursor,
+///        disabledforeground, fg, font, foreground, postcommand, relief,
+///        selectcolor, takefocus, tearoff, tearoffcommand, title, type.
+///    """  
+///    def __init__(self, parent, x, y, w, h, pad=0, items=[], command=None,):
+///        """Construct an optionmenu widget with the parent MASTER, with
+///        the resource textvariable set to VARIABLE, the initially selected
+///        value VALUE, the other menu values VALUES and an additional
+///        keyword argument command."""
+///
+///
+/// class NCtkNotebook(NCtkWidget, ttk.Notebook)
+/// --------------------------------------------
+/// Notebook widget manages a collection of windows and displays
+/// a single one at a time. Each child window is associated with a tab,
+/// which the user may select to change the currently-displayed window."""
+///    def __init__(self, parent, x, y, w, h, pad=0):
+///        NCtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Notebook.__init__)
+///        self._get_parent_config()
+///        
+///
+///
+
+
+/// \page PLACING_WIDGETS Placing the widgets
+///
+/// As we have seen the widget constructor always has the form
+/// \code
+///Widget_name(parent, x, y, w, h, pad=0, **kw)
+/// \endcode
+/// where **parent** is the parent widget, **x**, **y** determine its position and **w**, **h** its size.
+/// We emphasize that:
+/// + The position and size always are relative to the parent widget and (when numeric) expressed in pixels;
+/// + The parameters you provide are relative to the **bounding box** of the widget, which coincides with it if the pad parameter is set to 0. The pad can be set to a value other than zero, thus leaving some space for left, right up and down. **However, this reduces the actual size of the widget**;
+/// + The library provides some containers that facilitate the placement of widgets, making it possible to obtain complex layouts with few code lines.
+///
+/// These are the various options you have to indicate the position and size of the widget.
+///
+/// Values for x, y
+/// ---------------
+///
+/// As said above, these determine the position of the topleft corner of the widget bounding box, which doesn not coincide with the widget corner unless you leave the default parameter pad=0.
+///
+/// <table>
+///   <tr >
+///     <th>Value</th>
+///     <th>Meaning</th>
+///     <th>Notes</th>
+///   </tr><tr>
+///     <td>positive int</td>
+///     <td>Absolute positioning from left/top</td>
+///     <td>The topleft will placed in the exact position x or y with respect to parent widget left (or top). If the parent is resized the coordinate will not change</td>
+///   </tr><tr>
+///     <td>negative int</td>
+///     <td>Absolute positioning from right/bottom</td>
+///     <td>The topleft will be placed in the exact position x or y before the parent widget right (or bottom). If the parent is resized the coordinate will be updated</td>
+///   </tr><tr>
+///     <td>string as "20%"</td>
+///     <td>Relative positioning from left/top</td>
+///     <td>The topleft will be placed in the relative (in percent) position x or y with respect to parent widget left (or top). If the parent is resized the coordinate will be updated</td>
+///   </tr><tr>
+///     <td>"pack" (or constant PACK)</td>
+///     <td>Relative positioning respect a widget</td>
+///     <td>The widget box will be stacked after the last widget already placed. For details see. If the adiacent widget is resized the coordinate will be updated. See <a href="#packuse">Note on the use of PACK</a> for details.</td>
+///   </tr><tr>
+///     <td>"center" (or constant CENTER)</td>
+///     <td>Widget centered</td>
+///     <td>The widget box will be centered (horizontally or vertically) in the parent widget</td>
+///   </tr>
+/// </table>
+///
+/// Values for w, h
+/// ---------------
+/// These also determine the dimensions of the widget bounding box, which may not coincide with the widget coordinates.
+///
+/// <table>
+///   <tr >
+///     <th>Value</th>
+///     <th>Meaning</th>
+///     <th>Notes</th>
+///   </tr><tr>
+///     <td>positive int</td>
+///     <td>Absolute size</td>
+///     <td>The widget box has fixed width/height. If the parent is resized it will not change.</td>
+///   </tr><tr>
+///     <td>negative int</td>
+///     <td>Absolute size respect to right/bottom</td>
+///     <td>The widget box width/height will be adjusted so that its right/bottom side is w/h pixels far from the right/bottom side of the parent widget. If the parent is resized the size will be updated.</td>
+///   </tr><tr>
+///     <td>string as "20%"</td>
+///     <td>Relative width/height</td>
+///     <td>The widget box has relative (in percent) width/height with respect to parent widget. If the parent is resized the size will be updated.</td>
+///   </tr><tr>
+///     <td>"fill" (or constant FILL)</td>
+///     <td></td>
+///     <td>The widget box width/height is the same of the parent widget. If the parent is resized the size will be updated.</td>
+///   </tr>
+/// </table>
+///
+/// Values for pad
+/// ---------------
+///
+/// The pad parameter allows to leave some space between the widget bounding box and the actual widget.
+/// <table>
+///   <tr >
+///     <th>Value</th>
+///     <th>Meaning</th>
+///     <th>Notes</th>
+///   </tr><tr>
+///     <td>0</td>
+///     <td>No padding</td>
+///     <td>The widget has same dimensions as its bounding box.</td>
+///   </tr><tr>
+///     <td>positive int</td>
+///     <td>Same padding in all directions</td>
+///     <td>The given value is the padding amount for left, right, up and down.</td>
+///   </tr><tr>
+///     <td>Two duples of positive int</td>
+///     <td>Same padding for left/right and for up/down/td>
+///     <td>The first duple is the padding amount for left and right, the second the padding amount for up and down.</td>
+///   </tr><tr>
+///     <td>A quadruple of positive int</td>
+///     <td>Different padding for the four directions</td>
+///     <td>The provided numbers are the amounts respectively for left, up, right, down directions.</td>
+///   </tr>
+/// </table>
+///
+/// Here are some examples
+/// \code
+///  .  .  .
+///
+///# absolute positioning (x=10, y=10, w=80, h=30), no padding
+///w = NCtkEntry(10, 10, 80, 30)
+///
+///# absolute positioning, pad of 5 pixel left/right and 10 pixels up/down
+///w = NCtkEntry(10, 10, 80, 20, pad=(5, 10))
+///
+///# right side is 10 pixels far from parent one, pad of 5 pixel in all directions
+///w = NCtkEntry(0, 0, -10, 30, pad=5)
+///   
+///# the widget width is 80 pixels and it is centered horizontally, the widget
+///# height fills the parent, different pad for each directions
+///# left = 5, up = 10, right = 0, down = 5)
+///w = NCtkEntry(CENTER, 0, 80, FILL, pad=(5, 10, 0, 5))
+///
+/// \endcode
+///
+/// Note on the use of PACK
+/// -----------------------
+///
+/// <a name="packuse">The meaning of the "pack" parameter (alias from PACK) differs depending on the type of container in which the widget will be placed.
+/// In an NCtkVerFrame, NCtkMain, or NCtkWindow the widgets are stacked from top to bottom and the parent keeps track of the last widget placed on the stack. So PACK is effective only for the y coordinate, while for the x you will always get a widget positioned to the left (i.e. with x coordinate = 0). Conversely, in an NCtkHorFrame or in a row of an NCtkRowFrame the widgets are stacked from left to right, so you can use the PACK for the x, while for the y you will get a widget positioned at the top (y = 0).
+/// Here are two example you can try:
+///
+/// \code
+///from NCtk import *
+///
+///winMain = NCtkMain(100, 100, 400, 300)
+///
+///# NCtkEntry(PACK, PACK, 90 40, pad=5) would be equivalent
+///ent1 = NCtkEntry(0, 0, 90, 40, pad=5)
+///# ent2 will be placed below ent1
+///ent2 = NCtkEntry(0, PACK, 90, 40, pad=5)
+///#ent3 will be placed below ent1. PACK for the x is the same for 0
+///ent3 = NCtkEntry(PACK, PACK, 90, 40, pad=5)
+///#ent4 is below ent3, but displaced horizontally
+///ent4 = NCtkEntry(40, PACK, 90, 40, pad=5)
+///
+///mainloop()
+/// \endcode
+///
+/// \code
+///from NCtk import *
+///
+///winMain = NCtkMain(100, 100, 400, 300)
+///
+///# we fill the window with an horizontal frame
+///hfr1 = NCtkHorFrame(0, 0, FILL, FILL)
+///# lab1 will be placed on the left
+///lab1 = NCtkLabel(0, CENTER, 90, 40, pad=5)
+///#ent1 will be placed right to  lab1.
+///ent1 = NCtkEntry(PACK, CENTER, 90, 40, pad=5)
+///#ent2 is right to ent1, but displaced vertically
+///(at the bottom of the window)
+///ent2 = NCtkEntry(PACk, -40, 90, 40, pad=5)
+///
+///mainloop()
+/// \endcode
+///
+/// See also the example files \ref WidgetPosition.py and \ref NCtkRowFrame.py.
+///

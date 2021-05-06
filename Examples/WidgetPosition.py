@@ -6,9 +6,9 @@ from NCtk import *
 STR_LAB1 = """Label 1 has absolute position:
 x=0, y=0, w=400, h=50, pad=(10,5)"""
 STR_LAB2 = """Label 2 is packed under Label 1 and has relative width:
-x=0, y=PACK, w="50%", h=50, pad=(10, 5)"""
+x=0, y=PACK, w="75%", h=50, pad=(10, 5)"""
 STR_LAB3="""Label 3 has absolute (from right) width and relative height:
-x=0, y=PACK, w=-100, h="10%", pad=(10, 5)"""
+x=0, y=PACK, w=-200, h="10%", pad=(10, 5)"""
 STR_HOR1 = "Hor Frame 1 is PACKed under Label 3. It fills parent width: x=0, y=PACK, w =FILL, h=180"
 STR_LAB4 = """Label 4 is a child of the frame:
 x="10%", y=CENTER, w="40%", h=50, pad=(5,0)"""
@@ -21,7 +21,7 @@ x=-400, h=PACK, w=-50, h=60, pad=(0,10)"""
 # create the main window
 winMain = NCtkMain(50, 50, 800, 600, "NCtk widget positioning example")
 # set the font for all children
-winMain.config_children("NCtkLabel", relief=RIDGE, font=("Arial", 11))
+winMain.config_children("NCtkLabel", relief=RIDGE, font=("Arial", 10))
 
 # create the children
 lab1 = NCtkLabel(winMain, 0, 0, 600, 50, pad=(10, 5), content=STR_LAB1)
@@ -34,7 +34,7 @@ lab3 = NCtkLabel(winMain, 0, PACK, -200, "10%", pad=(10, 5), content=STR_LAB3)
 lab3.config(bcolor="#C090E0")
 
 hfr1 = NCtkHorFrame(winMain, 0, PACK, FILL, 180)
-hfr1.config(bcolor="#C0C070", font=("Arial", 11), text=STR_HOR1)
+hfr1.config(bcolor="#C0C070", text=STR_HOR1)
 
 lab4 = NCtkLabel(hfr1, "10%", CENTER, "40%", 80, pad=(5,0), content=STR_LAB4)
 lab4.config(bcolor="#E07080")

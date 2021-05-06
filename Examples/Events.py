@@ -4,6 +4,7 @@ from NCtk import *
 COL1 = "#A0C0E0"
 COL2 = "#B0D0F0"
 COL3 = "#F0B0D0"
+COL4 = "#FFC0E0"
     
 STR0 = "My Window"
 STR1 = "Ouch! I'm stretching!"
@@ -12,6 +13,7 @@ STR3 = "The mouse is over me"
 STR4 = "The mouse has left me"
 STR5 = "I've got the focus"
 STR6 = "I've lost the focus"
+STR7 = "You clicked on me!"
 
 class MyMain(NCtkMain):
     def __init__(self, x, y, w, h, title=""):
@@ -21,9 +23,9 @@ class MyMain(NCtkMain):
         self.oldw, self.oldh = self.getwinfo("width"), self.getwinfo("height")
         self.bind("<Configure>", self.change_title)
         self.lab1 = NCtkLabel(self, 0, 0, "fill", "40%", pad=(20, 10))
-        self.lab1.config(bcolor=COL1, takefocus=True)
+        self.lab1.config(bcolor=COL1, font=("Arial", 12), takefocus=True)
         self.lab2 = NCtkLabel(self, 0, PACK, FILL, "40%", pad=(20, 10))
-        self.lab2.config(bcolor=COL1, takefocus=True)
+        self.lab2.config(bcolor=COL1, font=("Arial", 12), takefocus=True)
         self.lab3 = NCtkLabel(self, 0, PACK, FILL, FILL, pad=(20, 10))
         self.lab3.setcontent("Click on the labels above and move the focus with the TAB key")
 
@@ -33,7 +35,11 @@ class MyMain(NCtkMain):
         self.bind_class("Label", "<Leave>", self.change_label)
         self.bind_class("Label", "<FocusIn>", self.change_label)
         self.bind_class("Label", "<FocusOut>", self.change_label)
+        self.bind_class("Label", "<Button>", self.change_label)
 
+        # afterid is a function identifier for the callback
+        # if you want to delete the callback you must use it in
+        # after_cancel()
         self.afterid = self.after(100, self.default_title)
     
         
@@ -68,15 +74,20 @@ class MyMain(NCtkMain):
         if t == tk.EventType.Enter:
             w.config(bcolor=COL2)
             w.setcontent(STR3)
+            w.resize(pad=(17, 7))
         elif t == tk.EventType.Leave:
             w.config(bcolor=COL1)
             w.setcontent(STR4)
+            w.resize(pad=(20, 10))
         elif t == tk.EventType.FocusIn:
             w.config(bcolor=COL3)
             w.setcontent(STR5)
         elif t == tk.EventType.FocusOut:
             w.config(bcolor=COL1)
             w.setcontent(STR6)
+        elif t == tk.EventType.Button:
+            w.config(bcolor=COL4)
+            w.setcontent(STR7)
             
                 
 winMain = MyMain(100, 100, 400, 300)

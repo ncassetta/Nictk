@@ -205,8 +205,8 @@ class NCtkWidget(NCtkMisc):
 
 The widget will not be displayed, but its data remain managed; use show()
 to newly display the widget. if the widget was already hidden it does nothing."""
-        if self.winfo_ismapped():
-            self.place_forget()
+        #if self.winfo_ismapped():
+        self.place_forget()
     
     def show(self):
         """Shows a previously hidden widget.
@@ -248,7 +248,7 @@ If the widget was already shown it does nothing."""
     def _calc_dimensions(self):                 #TODO: implement "rpack"
         """Internal function.
         Translates the coordinates given by the user into numerical values."""
-        self.update_idletasks()
+        #parent.update_idletasks()
         
         x, y, w, h, pad = self._orig_dim
         if not pad:                             # transform pad into a quadruple (ENWS)
@@ -300,7 +300,7 @@ If the widget was already shown it does nothing."""
                         tempw = round(parent.winfo_width() * int(tempw[:-1]) / 100)
                     else:
                         raise TypeError
-                x = round((parent.winfo_width() - tempw) / 2)
+                x = round((parent.winfo_bwidth() - tempw) / 2)
             elif x.endswith("%"):
                 x = round(parent.winfo_width() * int(x[:-1]) / 100)
         elif x < 0:
@@ -378,13 +378,13 @@ user coordinates into numerical values"""
             
     def _auto_yscroll(self):
         if hasattr(self, "_vscroll"):
-            self.update_idletasks()             # needed for updating the yview
+            self.update_idletasks()
             offs, size = self.yview()
             if size - offs < 1.0 and not self._vscroll.winfo_ismapped():                
                 self._vscroll.pack(side=RIGHT, fill=BOTH)                 
             elif size - offs == 1.0 and self._vscroll.winfo_ismapped():
                 self._vscroll.pack_forget()
-            self._vscroll.update()              # needed for drawing the scrollbar
+            self.update_idletasks()         # needed for drawing the scrollbar
     
     def _get_parent_config(self):
         cl = "NCtk" + self.winfo_class()
@@ -575,15 +575,19 @@ shown on it.
 class _framerow():
     """! Internal class."""
     def __init__(self, parent, h):
-        self.master = parent
+        self._master = parent
         self.num = len(parent._rows)
         self.children = []
-        self._calc_dimensions(parent, h)
+        self._orig_h = h
+        self._calc_dimensions()
 
-    def __str__(self):
-        return str({"master":self.master,"num":self.num, "y":self.y,
-                    "origh":self.orig_h, "h":self.h, "toth":self.tot_h })
+    #def __str__(self):
+    #    return str({"master":self.master,"num":self.num, "y":self.y,
+    #                "origh":self.orig_h, "h":self.h, "toth":self.tot_h })
         
+    def parent(self):
+        return self._master
+    
     def winfo_children(self):
         """Returns the list of the row children."""
         return self.children
@@ -593,55 +597,70 @@ class _framerow():
         Actually it is always 0."""
         return 0
 
+    winfo_bx = winfo_x
+
     def winfo_y(self):
-        return self.y
+        """Returns the y coordinate of the row topleft with respect to parent."""
+        return self._curr_dim[1]
+
+    winfo_by = winfo_y
+    
+    def winfo_width(self):
+        """Returns width of the row. Actually it is the same of the parent."""
+        return self._curr_dim[2]
+
+    winfo_bwidth = winfo_width
 
     def winfo_height(self):
-        return self.h
-
-    def winfo_width(self):
-        return self.master.winfo_width()
-
+        """Returns the height of the row."""
+        return self._curr_dim[3]
     
+    winfo_bheight = winfo_height
+
     def winfo_name(self):
         return "_framerow"
         
-    def _calc_dimensions(self, parent, h):
-        parent.update_idletasks()
-        n = self.num
+    def _calc_dimensions(self):
+        """Internal function.
+        Translates the coordinates given by the user into numerical values."""
+        #parent.update_idletasks()
+        n, h = self.num, self._orig_h
+        parent = self.parent()
         if n == len(parent._rows):                  # we are placing a new row
-            self.y = 0 if not len(parent._rows) else parent._rows[-1].tot_h
+            y = 0 if not len(parent._rows) else parent._rows[-1].tot_h
         else:                                       # already placed row
-            self.y = 0 if n == 0 else parent._rows[n - 1].tot_h
-        self.orig_h = h
+            y = 0 if n == 0 else parent._rows[n - 1].tot_h
         if isinstance(h, str):
             if h.endswith("%"):
-                self.h = round(parent.winfo_height() * int(h[:-1]) / 100)
+                h = round(parent.winfo_height() * int(h[:-1]) / 100)
             elif h == "fill":
                 if n == len(parent._rows):
-                    self.h = parent.winfo_height() if not len(parent._rows) else \
-                             parent.winfo_height() - parent._rows[-1].tot_h
+                    h = parent.winfo_height() if not len(parent._rows) else \
+                        parent.winfo_height() - parent._rows[-1].tot_h
                 else:
-                    self.h = parent.winfo_height() if n == 0 else \
-                             parent.winfo_height() - parent._rows[n - 1].tot_h
+                    h = parent.winfo_height() if n == 0 else \
+                        parent.winfo_height() - parent._rows[n - 1].tot_h
         elif isinstance(h, int):
             if h < 0:
-                self.h = parent.winfo_height() - self.y + h
-                if self.h < 0:
+                h = parent.winfo_height() - y + h
+                if h < 0:
                     raise ValueError
-            else:
-                self.h = h
         else:
             raise TypeError
-        self.tot_h =self.y + self.h
+        self._curr_dim = (0, y, parent.winfo_width(), h)
+        self.tot_h = y + h
         #print(self) 
         
-    def _resize_children(self):
+    def _resize_children(self, event=None):
+        """Internal function. Resizes all children when the container is resized."""
+        oldactivenum = self.parent().get_active().num
+        self.parent().set_active(self.num)
         for w in self.winfo_children():
             if hasattr(w, "_update_dimensions"):
                 w._update_dimensions()
                 if hasattr(w, "_resize_children"):
-                    w._resize_children()             
+                    w._resize_children(event)
+        self.parent().set_active(oldactivenum)
 
 
 class _framecol:
@@ -694,22 +713,11 @@ to this row.
         if self._active is None:
             raise ValueError
         return self._rows[self._active]
-    
-    def resize_row(self, n, h):
-        row = self._rows[n]
-        self._rows[n]._calc_dimensions(self, h)
-        self._rows[n]._resize_children()
-        for i in range(n + 1, len(self._rows)):
-            self._rows[i]._calc_dimensions(self, self._rows[i].orig_h)
-            self._rows[i]._resize_children()
-            
+        
     def _resize_children(self, event=None):
-        oldactive =self._active
         for row in self._rows:
-            self._active = row.num
-            self.resize_row(row.num, row.orig_h)
+            row._calc_dimensions()        
             row._resize_children()
-        self._active = oldactive
                     
     
 class NCtkColFrame(NCtkWidget, NCtkContainer, ttk.LabelFrame):
@@ -900,7 +908,7 @@ class NCtkLabel(NCtkWidget, ttk.Label):
         self.setcontent(content)
         
     def _calc_wrap(self):               # Used to calculate text wraplength when resized 
-        self.update_idletasks()         # sets correct sizes
+        #self.update_idletasks()         # sets correct sizes
         return self.winfo_width() - 1  
         
     

@@ -493,6 +493,7 @@ butAns = NCtkButton(winMain, "80%", 180, 80, 40, pad=(10,5), content="Answer", c
 labStat = NCtkLabel(winMain, "80%", 220, -20, 60, pad=(10,5))
 labStat.config(bcolor="white", font=("Arial", 10))
 
+winMain.update_idletasks()
 Game.reset() 
 
 mainloop()

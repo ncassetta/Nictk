@@ -81,4 +81,6 @@ labExplain=NCtkLabel(vfr2, 0, "pack", "fill", "fill", pad=(10, 10), content=expl
 labExplain.config(anchor=NW)
 #print (labExplain.getwinfo("fpixels", 20))
 
+#winMain._draw_children()
+
 mainloop()

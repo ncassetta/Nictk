@@ -3,11 +3,13 @@
 /// You can set the widget attributes with the config() method.It takes a dictionary
 /// of named parameters, one for every attribute. tkinter has many attributes
 /// 
-/// Colors
-/// ======
+/// ## Colors ##
 ///
-///   You can set many color for widgets 
-///   msg1.SetNoteOn(0, 60, 100);       // msg1 becomes a Note On, channel 1, note 60, velocity 100
+/// You can set many color for widgets; a color can be indicated:
+/// + by a string *"#RRGGBB"* where RR, GG, BB are the hexadecimal values for Red, Green, Blue;
+/// + with his name in the following table
+///
+/// These are the color attributes (someone is specific for only certain widgets):
 /// <table>
 ///   <tr >
 ///     <th>Option</th>
@@ -15,19 +17,19 @@
 ///     <th>Applies to</th>
 ///   </tr><tr>
 ///     <td>abcolor</td>
-///     <td>Active background</td>
-///     <td>The topleft will placed in the exact position x or y with respect to parent widget left (or top). If the parent is resized the coordinate will not change</td>
+///     <td>Active background: the color of the backgrouhd when the mouse, This property seems to be OS dependent: it doesn't work for Windows and MacOS. However you can get the same result by binding </td>
+///     <td>All widgets</td>
 ///   </tr><tr>
 ///     <td>afcolor</td>
-///     <td>Active foreground</td>
-///     <td>The topleft will be placed in the exact position x or y before the parent widget right (or bottom). If the parent is resized the coordinate will be updated</td>
+///     <td>Active foreground: see above</td>
+///     <td>All widgets</td>
 ///   </tr><tr>
 ///     <td>bcolor</td>
-///     <td>bcolor</td>
-///     <td>The topleft will be placed in the relative (in percent) position x or y with respect to parent widget left (or top). If the parent is resized the coordinate will be updated</td>
+///     <td>Background</td>
+///     <td>All widgets</td>
 ///   </tr><tr>
 ///     <td>dfcolor</td>
-///     <td>Disabled foreground</td>
+///     <td>Disabled foreground: the color of the b</td>
 ///     <td>The widget box will be stacked after the last widget already placed. For details see. If the adiacent widget is resized the coordinate will be updated. See <a href="#packuse">Note on the use of PACK</a> for details.</td>
 ///   </tr><tr>
 ///     <td>hbcolor</td>
@@ -52,6 +54,59 @@
 ///   </tr>
 /// </table>
 ///
+///
+/// /// ## Other attributes ##
+///
+/// You can set many color for widgets; a color can be indicated:
+/// + by a string *"#RRGGBB"* where RR, GG, BB are the hexadecimal values for Red, Green, Blue;
+/// + with his name in the following table
+///
+///
+/// These are the color properties (someone is specific for only certain widgets):
+/// <table>
+///   <tr >
+///     <th>Option</th>
+///     <th>Meaning</th>
+///     <th>Applies to</th>
+///   </tr><tr>
+///     <td>relief</td>
+///     <td>The border shape of the widget. You can choose between  color of the backgrouhd when the mouse, This property seems to be OS dependent: it doesn't work for Windows and MacOS. However you can get the same result by binding </td>
+///     <td>All widgets</td>
+///   </tr><tr>
+///     <td>borderwidth</td>
+///     <td>The depth of the border in pixels: default is 2</td>
+///     <td>All widgets</td>
+///   </tr><tr>
+///     <td>font</td>
+///     <td>You can indicate a font for widget text with a duple ("Name", size). For a list fo allowed names see</td>
+///     <td>All widgets</td>
+///   </tr><tr>
+///     <td>anchor</td>
+///     <td>Disabled foreground: the color of the b</td>
+///     <td>The widget box will be stacked after the last widget already placed. For details see. If the adiacent widget is resized the coordinate will be updated. See <a href="#packuse">Note on the use of PACK</a> for details.</td>
+///   </tr><tr>
+///     <td>justify</td>
+///     <td>This option is for widgets which allow multiline text: you can set </td>
+///     <td>The widget box will be centered (horizontally or vertically) in the parent widget</td>
+///   </tr><tr>
+///     <td>hfcolor</td>
+///     <td>Highlight Foreground</td>
+///     <td>The topleft will be placed in the relative (in percent) position x or y with respect to parent widget left (or top). If the parent is resized the coordinate will be updated</td>
+///   </tr><tr>
+///     <td>cursor</td>
+///     <td>The cursor shape when the mouse is over the widget</td>
+///     <td>The widget box will be stacked after the last widget already placed. For details see. If the adiacent widget is resized the coordinate will be updated. See <a href="#packuse">Note on the use of PACK</a> for details.</td>
+///   </tr><tr>
+///     <td>sbcolor</td>
+///     <td>Select background</td>
+///     <td>The widget box will be centered (horizontally or vertically) in the parent widget</td>
+///   </tr><tr>
+///     <td>sfcolor</td>
+///     <td>Select foreground</td>
+///     <td>The widget box will be centered (horizontally or vertically) in the parent widget</td>
+///   </tr>
+/// </table>
+
 /// MIDIMessage objects can be sent to an hardware MIDI port by the MIDIOutDriver::OutputMessage() method (this will be treated in detail in the \ref HOW_PLAYS section).
 /// \code
 ///#include "msg.h"

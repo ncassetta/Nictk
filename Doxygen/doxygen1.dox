@@ -2,9 +2,11 @@
 ///
 /// \mainpage
 /// NCtk is a wrapper for **tkinter** written by Nicola Cassetta with the aim of simplifying its use for building graphical interfaces for Python users.
-/// As is known, tkinter is the standard Python library already included in the language distribution; it derives from Tcl/Tk and maintains its nomenclature and conventions in the name and parameters of the functions. It also has three different geometry managers (pack, grid and place) for placing widgets, which can be confusing.
-///- All widgets have a similar constructor, which enable the user to easily position them, always with sizes specified in pixels.
-///- Widgets can change their position and ssize when the main window is resized, without some "strange" behaviours which often happen in tkinter (for example, stretching an Entry when we type in it, with the side effect of moving all widgets packed to its right).
+/// As is known, tkinter is the Python standard library already included in the language distribution; it derives from Tcl/Tk and maintains its nomenclature and conventions in the name and parameters of the functions, so they are often difficult to remember. It also has three different geometry managers (pack, grid and place) for placing widgets, which can be confusing. One of the most popular features is its ability to easily resize widgets when the main window is resized, but it often leads to weird behavior. For example, the standard behavior of an Entry object (the text field widget) is to  to grow larger as we type text into it. If we have packed other widgets to its right all of them will move.
+///
+/// So I tried to simplify these problems by adopting some general principles: 
+///- All widgets have a similar constructor, which enable the user to easily position them, with sizes always specified in pixels.
+///- As in tkinter, widgets can change their position and size when the main window is resized.
 ///- Some tkinter options for widget config() have been renamed in a more coherent manner, so it is easier to remember them. Also the almost infinite serie of winfo_ methods have been packed into the getwinfo() method, with a parameter.
 ///
 ///You can start learning it by reading the \ref OVERVIEW section.
@@ -29,55 +31,40 @@
 /// \page SIMPLE_EXAMPLE A simple example
 ///
 /// Here is a simple example of the usage of NCtk:
-/// \code
+/// \code{.py}
 ///from NCtk import *
+///
+///#callback for the button
+///def hideshow(event):
+///    if labHello.visible():
+///        labHello.hide()
+///        btnShow.setcontent("Show label")
+///    else:
+///        labHello.show()
+///        btnShow.setcontent("Hide label")
 ///
 ///# Creates the main window (400x300 with left upper in (100, 100)
 ///winMain = NCtkMain(100, 100, 400, 300, title="First Sample")
-///# Creates a label in it (first argument of children widgets always is the parent)
-///labHello = NCtkLabel(winMain, CENTER, 10, "50%", 40, pad=0, content="Hello world!")
-///# Creates a button
-///btnShow = NCtkButton(winMain, 
+///# Creates a label in it (first argument of children widgets always is the parent,
+///# subsequent four its dimensions, then other widget specific)
+///labHello = NCtkLabel(winMain, CENTER, 40, "80%", 60, content="Hello world!")
+///# Changes label properties: background color, foreground color, font, centered text
+///labHello.config(bcolor="yellow", fcolor="blue", font=("Arial", 18), anchor=CENTER)
+///# Creates a button, assigning a callback to it
+///btnShow = NCtkButton(winMain, CENTER, 120, 80, 30, content="Hide label", command=hideshow) 
 ///
+///#enter the control loop
+///mainloop()
 /// \endcode
 ///
-/// Here is a more complex example using some of the class features (in a real environment you could do these commands interactively) while the sequencer is playing:
-///
-/// \code
-///#include "advancedsequencer.h"
-///#include "timer.h"                      // for Wait()
-///
-///int main() {
-///   AdvancedSequencer seq;               // creates the AdvancedSequencer
-///   seq.Load("twinkle.mid");             // loads a MIDI file into it
-///   seq.Play();                          // plays the file
-///   while(seq.GetCurrentMeasure() < 4)   // waits until measure 4
-///      MIDITimer::Wait(10);              // 10 msecs
-///   seq.SetTrackTranspose(1, 12);        // transposes track 1 by one octave up
-///   while(seq.GetCurrentMeasure() < 8)
-///      MIDITimer::Wait(10);
-///   seq.SetTrackMute(1, true);	       // mutes track 1
-///   while(seq.GetCurrentMeasure() < 12)
-///      MIDITimer::Wait(10);
-///   seq.SetTrackSolo(2);                 // soloes track 2 ...
-///   seq.SetTempoScale(200);              // ... and doubles the tempo
-///   while(seq.IsPlaying()                // waits until the end
-///      MIDITimer::Wait(10);
-///   return 0;
-///}
-/// \endcode
-///
-/// You can see two more elaborated examples that let you interact with the class:
-/// + \ref test_advancedsequencer.cpp command line based, for all platforms, demonstrates all the main features of the class.
-/// + \ref test_win32_player.cpp GUI based, for Windows only, demonstrates the use of a MIDISequencerGUINotifier and a SMPTE together with the AdvancedSequencer.
-///
+/// This creates a label and a button which hides and shows it. In a widget constructor the first argument is the parent widget, then follow its dimensions (x position, y, position, width and height), and other arguments specific for the widget (for button and label the text, for the button the callback associated). For the various modes in which you can position a widget see \ref PLACING_WIDGETS.
 
 
 /// \page CONSTRUCTORS Constructors
 ///
 /// All NCtk widgets have a common scheme for their constructor:
 ///
-/// \code
+/// \code{.py}
 ///
 ///Widget_name(parent, x, y, w, h, pad=0, **kw)
 ///
@@ -427,31 +414,31 @@
 /// Values for x, y
 /// ---------------
 ///
-/// As said above, these determine the position of the topleft corner of the widget bounding box, which doesn not coincide with the widget corner unless you leave the default parameter pad=0.
+/// As said above, these determine the position of the topleft corner of the widget bounding box.
 ///
 /// <table>
-///   <tr >
+///   <tr>
 ///     <th>Value</th>
 ///     <th>Meaning</th>
 ///     <th>Notes</th>
 ///   </tr><tr>
-///     <td>positive int</td>
+///     <td>**positive int**</td>
 ///     <td>Absolute positioning from left/top</td>
 ///     <td>The topleft will placed in the exact position x or y with respect to parent widget left (or top). If the parent is resized the coordinate will not change</td>
 ///   </tr><tr>
-///     <td>negative int</td>
+///     <td>**negative int**</td>
 ///     <td>Absolute positioning from right/bottom</td>
 ///     <td>The topleft will be placed in the exact position x or y before the parent widget right (or bottom). If the parent is resized the coordinate will be updated</td>
 ///   </tr><tr>
-///     <td>string as "20%"</td>
+///     <td>**string as "20%"**</td>
 ///     <td>Relative positioning from left/top</td>
 ///     <td>The topleft will be placed in the relative (in percent) position x or y with respect to parent widget left (or top). If the parent is resized the coordinate will be updated</td>
 ///   </tr><tr>
-///     <td>"pack" (or constant PACK)</td>
+///     <td><b>"pack" (or constant PACK)</b></td>
 ///     <td>Relative positioning respect a widget</td>
 ///     <td>The widget box will be stacked after the last widget already placed. For details see. If the adiacent widget is resized the coordinate will be updated. See <a href="#packuse">Note on the use of PACK</a> for details.</td>
 ///   </tr><tr>
-///     <td>"center" (or constant CENTER)</td>
+///     <td><b>"center" (or constant CENTER)</b></td>
 ///     <td>Widget centered</td>
 ///     <td>The widget box will be centered (horizontally or vertically) in the parent widget</td>
 ///   </tr>
@@ -462,24 +449,24 @@
 /// These also determine the dimensions of the widget bounding box, which may not coincide with the widget coordinates.
 ///
 /// <table>
-///   <tr >
+///   <tr>
 ///     <th>Value</th>
 ///     <th>Meaning</th>
 ///     <th>Notes</th>
 ///   </tr><tr>
-///     <td>positive int</td>
+///     <td>**positive int**</td>
 ///     <td>Absolute size</td>
 ///     <td>The widget box has fixed width/height. If the parent is resized it will not change.</td>
 ///   </tr><tr>
-///     <td>negative int</td>
+///     <td>**negative int**</td>
 ///     <td>Absolute size respect to right/bottom</td>
 ///     <td>The widget box width/height will be adjusted so that its right/bottom side is w/h pixels far from the right/bottom side of the parent widget. If the parent is resized the size will be updated.</td>
 ///   </tr><tr>
-///     <td>string as "20%"</td>
+///     <td>**string as "20%"**</td>
 ///     <td>Relative width/height</td>
 ///     <td>The widget box has relative (in percent) width/height with respect to parent widget. If the parent is resized the size will be updated.</td>
 ///   </tr><tr>
-///     <td>"fill" (or constant FILL)</td>
+///     <td><b>"fill" (or constant FILL)</b></td>
 ///     <td>Fill the parent</td>
 ///     <td>The widget box width/height is the same of the parent widget. If the parent is resized the size will be updated.</td>
 ///   </tr>
@@ -490,57 +477,57 @@
 ///
 /// The pad parameter allows to leave some space between the widget bounding box and the actual widget.
 /// <table>
-///   <tr >
+///   <tr>
 ///     <th>Value</th>
 ///     <th>Meaning</th>
 ///     <th>Notes</th>
 ///   </tr><tr>
-///     <td>0</td>
+///     <td>**0 (default)**</td>
 ///     <td>No padding</td>
 ///     <td>The widget has same dimensions as its bounding box.</td>
 ///   </tr><tr>
-///     <td>positive int</td>
+///     <td>**positive int**</td>
 ///     <td>Same padding in all directions</td>
 ///     <td>The given value is the padding amount for left, right, up and down.</td>
 ///   </tr><tr>
-///     <td>Two duples of positive int</td>
+///     <td>**A duple of positive int**</td>
 ///     <td>Same padding for left/right and for up/down</td>
-///     <td>The first duple is the padding amount for left and right, the second the padding amount for up and down.</td>
+///     <td>The first int is the padding amount for left and right, the second for up and down.</td>
 ///   </tr><tr>
-///     <td>A quadruple of positive int</td>
+///     <td>**A quadruple of positive int**</td>
 ///     <td>Different padding for the four directions</td>
 ///     <td>The provided numbers are the amounts respectively for left, up, right, down directions.</td>
 ///   </tr>
 /// </table>
 ///
 /// Here are some examples
-/// \code
+/// \code{.py}
 ///  .  .  .
 ///
 ///# absolute positioning (x=10, y=10, w=80, h=30), no padding
-///w = NCtkEntry(10, 10, 80, 30)
+///w = NCtkEntry(parent, 10, 10, 80, 30)
 ///
 ///# absolute positioning, pad of 5 pixel left/right and 10 pixels up/down
-///w = NCtkEntry(10, 10, 80, 20, pad=(5, 10))
+///w = NCtkEntry(parent, 10, 10, 80, 20, pad=(5, 10))
 ///
 ///# right side is 10 pixels far from parent one, pad of 5 pixel in all directions
-///w = NCtkEntry(0, 0, -10, 30, pad=5)
+///w = NCtkEntry(parent, 0, 0, -10, 30, pad=5)
 ///   
 ///# the widget width is 80 pixels and it is centered horizontally, the widget
 ///# height fills the parent, different pad for each directions
 ///# left = 5, up = 10, right = 0, down = 5)
-///w = NCtkEntry(CENTER, 0, 80, FILL, pad=(5, 10, 0, 5))
+///w = NCtkEntry(parent, CENTER, 0, 80, FILL, pad=(5, 10, 0, 5))
 ///
 /// \endcode
 ///
 /// Note on the use of PACK
 /// -----------------------
 ///
-/// <a name="packuse">The meaning of the "pack" parameter (alias from PACK) differs depending on the type of container in which the widget will be placed.
+/// <a name="packuse">The meaning of the "pack" parameter (aliased by PACK) differs depending on the type of container in which the widget will be placed.
 /// In an NCtkVerFrame, NCtkMain, or NCtkWindow the widgets are stacked from top to bottom and the parent keeps track of the last widget placed on the stack. So PACK is effective only for the y coordinate, while for the x you will always get a widget positioned to the left (i.e. with x coordinate = 0). Conversely, in an NCtkHorFrame or in a row of an NCtkRowFrame the widgets are stacked from left to right, so you can use the PACK for the x, while for the y you will get a widget positioned at the top (y = 0).
 /// Here are two example you can try:
 ///
-/// \code
+/// \code{.py}
 ///from NCtk import *
 ///
 ///winMain = NCtkMain(100, 100, 400, 300)
@@ -557,7 +544,9 @@
 ///mainloop()
 /// \endcode
 ///
-/// \code
+/// Second example
+///
+/// \code{.py}
 ///from NCtk import *
 ///
 ///winMain = NCtkMain(100, 100, 400, 300)
@@ -574,6 +563,46 @@
 ///
 ///mainloop()
 /// \endcode
+///
+/// Retrieving widgets dimensions
+/// -----------------------------
+///
+/// In tkinter we can use the functions winfo_x (), winfo_y () etc. to find the dimensions of a widget, but these often create confusion, because they return the correct values only when the widget has been placed by the geometry manager.
+/// In NCtk we have the general method NCtkMisc.getwinfo (option) (inherited from all widgets and windows) to get information about widgets. Some of these options concern the position and size of the widget, **and always report the value in pixels (with respect to the parent) calculated by the library** (starting from the parameters provided in the constructor). These options are:
+///
+/// <table>
+///   <tr>
+///     <th>Value</th>
+///     <th>Meaning</th>
+///     <th>Notes</th>
+///   </tr><tr>
+///     <td><b>"bx"</b></td>
+///     <td>The bounding box topleft corner x</td>
+///     <td rowspan="4">These are the dimensions of the bounding box of the widget (before applying the pad to it). They are used by the library when packing widgets (i.e. the bounding boxes, not the real widgets, are packed).</td>
+///   </tr><tr>
+///     <td><b>"by"</b></td>
+///     <td>The bounding box topleft corner y</td>
+///   </tr><tr>
+///     <td><b>"bwidth"</b></td>
+///     <td>The bounding box width</td>
+///   </tr><tr>
+///     <td><b>"bheight"</b></td>
+///     <td>The bounding box height</td>
+///   </tr><tr>
+///     <td><b>"x"</b></td>
+///     <td>The widget topleft corner x</td>
+///     <td rowspan="4">These are the real widget dimensions, after aplying the pad to the bounding box.</td>
+///   </tr><tr>
+///     <td><b>"y"</b></td>
+///     <td>The widget topleft corner y</td>
+///   </tr><tr>
+///     <td><b>"width"</b></td>
+///     <td>The widget width</td>
+///   </tr><tr>
+///     <td><b>"height"</b></td>
+///     <td>The widget height</td>
+///   </tr>
+/// </table>
 ///
 /// See also the example files \ref WidgetPosition.py and \ref NCtkRowFrame.py.
 ///

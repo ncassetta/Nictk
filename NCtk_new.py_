@@ -205,8 +205,8 @@ class NCtkWidget(NCtkMisc):
 
 The widget will not be displayed, but its data remain managed; use show()
 to newly display the widget. if the widget was already hidden it does nothing."""
-        #if self.winfo_ismapped():
-        self.place_forget()
+        if self.visible():
+            self.place_forget()
     
     def show(self):
         """Shows a previously hidden widget.
@@ -378,13 +378,13 @@ user coordinates into numerical values"""
             
     def _auto_yscroll(self):
         if hasattr(self, "_vscroll"):
-            self.update_idletasks()
+            self.update_idletasks()             # needed for updating the yview
             offs, size = self.yview()
             if size - offs < 1.0 and not self._vscroll.winfo_ismapped():                
                 self._vscroll.pack(side=RIGHT, fill=BOTH)                 
             elif size - offs == 1.0 and self._vscroll.winfo_ismapped():
                 self._vscroll.pack_forget()
-            self.update_idletasks()         # needed for drawing the scrollbar
+            self._vscroll.update()              # needed for drawing the scrollbar
     
     def _get_parent_config(self):
         cl = "NCtk" + self.winfo_class()

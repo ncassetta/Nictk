@@ -1,14 +1,15 @@
+/// \example Hello.py
+/// A basic example: the classic 'Hello, world!' with a button which hides and shows it.
+///
 /// \example WidgetPosition.py
 ///  An example of the various modes to position a widget inside a parent container (remember that a NCtkMain or NCtkWindow behave as vertical frames, i.e. pack widgets vertically). You can try to maximize, iconize and resize the window (dragging its borders with the mouse) to see the various behavior when parent is resized.
-
-
+///
 /// \example WidgetOptions.py
 /// An example of the most common widget options.
-
+///
 /// \example NCtkRowFrame.py
 /// An example of the use of the NCtkRowFrame. You can add to it rows (with the add_row() method) which behave as horizontal frames (i.e. you can pack widget horizontally). You can set rows height as absolute or relative (percentual) values.
-
-
+///
 /// \example NCtkEntry.py
 /// Example of the use of NCtkEntry, with binding to various events.
 

@@ -48,7 +48,8 @@ rfr1 = NCtkRowFrame(winMain, 0, 0, "fill", "fill")
 
 # main label with the sample phrase
 rfr1.add_row(120)
-labSample = NCtkLabel(rfr1, 0, 0, "fill", "fill", pad=10, content="This is a sample, because\nit demonstrates widget options")
+labSample = NCtkLabel(rfr1, 0, 0, "fill", "fill", pad=10,
+                      content="This is a sample, because\nit demonstrates widget options")
 
 # you must have an already created window to get fonts
 FONTS = font.families()[:min(15, len(font.families()))]

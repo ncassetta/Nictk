@@ -1,3 +1,4 @@
+import _setup           # allows import from parent folder
 from NCtk import *
 
 CITTA = ("Bari", "Bologna", "Firenze", "Milano", "Napoli", "Palermo",
@@ -11,8 +12,7 @@ def changeLabel(event):
 
 winMain = NCtkMain(200, 150, 400, 300, "Combobox sample")
 #winMain.config(bcolor="yellow")
-cmb = NCtkCombobox(winMain, 0, 0, "fill", 60, pad=10, items=CITTA, command=changeLabel)
-cmb1 = StringVar()
+cmb = NCtkCombobox(winMain, 0, 0, FILL, 60, pad=10, items=CITTA, command=changeLabel)
 lab1 = NCtkLabel(winMain, 0, "pack", "fill", 80, pad=10)
 lab1.config(bcolor="#D0B0F0", font = ("Arial", 16), relief=RIDGE)
 #chk1 = NCtkCheckbutton(frm1, 0, 0, "30%", "fill", pad=(10, 5),

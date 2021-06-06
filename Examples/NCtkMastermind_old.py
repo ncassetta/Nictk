@@ -284,8 +284,6 @@ class HumanPlayer:
 
 
 class CompPlayer:
-    
-    numAnalyzed = (0, 0, 5, 5, 10, 10, 20, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100)
     def __init__(self, moves1, moves2):
         self.your_moves = moves1
         self.other_moves = moves2
@@ -304,7 +302,7 @@ class CompPlayer:
     def move(self):
         self.your_moves[Game.nmoves].show(MM_ALL)
         self.your_moves[Game.nmoves].setLock(MM_COLOR)
-        your_move = self.bestChoice(self.numAnalyzed[Game.nmoves - 1])
+        your_move = choice(self.bestChoices())
         self.your_moves[Game.nmoves].setMove(your_move)
         return your_move
     
@@ -335,16 +333,21 @@ class CompPlayer:
             tstrike, tball = Game.evaluate(patt, move)
             if (tstrike, tball) != (strike, ball) and random() < prob:
                 choices.remove(patt)
+                      
+    TOO_BIG = 1000
+    MAX_MOVES = 100
             
-    def bestChoice(self, max_analyzed):
+    def bestChoices(self):
+        if len(self.choices) > self.TOO_BIG:
+            sleep(1.0)
+            return self.choices
         labStat.setcontent("Thinking in Python!\nPlease be patient")
-        analyzed = min(len(self.choices), max_analyzed)
-        offset = randrange(len(self.choices))
-        better_move = self.choices[offset]
-        better = 10000000
-        for num in range(analyzed):
-            move = self.choices[(offset + num) % len(self.choices)]
-            print("Evaluating", num + 1, "of", analyzed, "moves; better number =", better)
+        betterChoices = []
+        better = 100000
+        num = 0
+        for move in self.choices:
+            num += 1
+            print("Evaluating", num, "of", len(self.choices), "; better number =", better)
             temp_better = 0
             for patt in self.choices:
                 if patt == move:
@@ -359,10 +362,19 @@ class CompPlayer:
                 if temp_better > better:
                     break
             if temp_better < better:
-                better_move = move
+                betterChoices.clear()
                 better = temp_better
+                betterChoices.append(move)
+            elif temp_better == better:
+                betterChoices.append(move)
+            if num > self.MAX_MOVES:
+                print("Max analysis limit reached")
+                break
             winMain.update()
-        return better_move
+        if len(betterChoices) == 0:
+            return self.choices
+        else:
+            return betterChoices
                             
             
             

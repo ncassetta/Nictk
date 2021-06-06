@@ -1,7 +1,6 @@
 /// \page ATTRIBUTES Widgets properties
 ///
-/// You can set the widget attributes with the config() method.It takes a dictionary
-/// of named parameters, one for every attribute. tkinter has many attributes
+/// You can set the widget attributes with the NCtkMisc.config() method.It takes a dictionary of named parameters, one for every attribute. In NCtk some attribute has been renamed for a better  
 /// 
 /// ## Colors ##
 ///
@@ -55,14 +54,9 @@
 /// </table>
 ///
 ///
-/// /// ## Other attributes ##
+/// ## Other common attributes ##
 ///
-/// You can set many color for widgets; a color can be indicated:
-/// + by a string *"#RRGGBB"* where RR, GG, BB are the hexadecimal values for Red, Green, Blue;
-/// + with his name in the following table
-///
-///
-/// These are the color properties (someone is specific for only certain widgets):
+/// These are other attributes common nearly to all widgets:
 /// <table>
 ///   <tr >
 ///     <th>Option</th>
@@ -70,7 +64,7 @@
 ///     <th>Applies to</th>
 ///   </tr><tr>
 ///     <td>relief</td>
-///     <td>The border shape of the widget. You can choose between  color of the backgrouhd when the mouse, This property seems to be OS dependent: it doesn't work for Windows and MacOS. However you can get the same result by binding </td>
+///     <td>The border shape of the widget. You can choose between **SUNKEN, FLAT, RAISED, GROOVE, RIDGE, SOLID** </td>
 ///     <td>All widgets</td>
 ///   </tr><tr>
 ///     <td>borderwidth</td>
@@ -82,15 +76,15 @@
 ///     <td>All widgets</td>
 ///   </tr><tr>
 ///     <td>anchor</td>
-///     <td>Disabled foreground: the color of the b</td>
-///     <td>The widget box will be stacked after the last widget already placed. For details see. If the adiacent widget is resized the coordinate will be updated. See <a href="#packuse">Note on the use of PACK</a> for details.</td>
+///     <td>The text position inside the widget, you can choose between **N, E, NW, SE, S, SW, W, NE, CENTER**</td>
+///     <td>All widgets</td>
 ///   </tr><tr>
 ///     <td>justify</td>
-///     <td>This option is for widgets which allow multiline text: you can set </td>
+///     <td>This option is for widgets which allow multiline text: you can choose between **LEFT, RIGHT, CENTER**</td>
 ///     <td>The widget box will be centered (horizontally or vertically) in the parent widget</td>
 ///   </tr><tr>
-///     <td>hfcolor</td>
-///     <td>Highlight Foreground</td>
+///     <td>cursor</td>
+///     <td>The cursor shape when the mouse is over the widget</td>
 ///     <td>The topleft will be placed in the relative (in percent) position x or y with respect to parent widget left (or top). If the parent is resized the coordinate will be updated</td>
 ///   </tr><tr>
 ///     <td>cursor</td>
@@ -107,28 +101,6 @@
 ///   </tr>
 /// </table>
 
-/// MIDIMessage objects can be sent to an hardware MIDI port by the MIDIOutDriver::OutputMessage() method (this will be treated in detail in the \ref HOW_PLAYS section).
-/// \code
-///#include "msg.h"
-///#include "manager.h"                // includes "timer.h" and "driver.h"
-///
-///int main() {
-///   MIDIOutDriver* port = MIDIManager::GetOutPort(0);
-///                                    // gets a pointer to the driver of the 1st hardware out
-///                                    // port in the system
-///   port->OpenPort();                // you must open the port before sending MIDI messages
-///   MIDIMessage msg;
-///   msg.SetNoteOn(0, 60, 100);       // makes msg1 a Note On message
-///   port->OutputMessage(&msg1);      // outputs the message (the note should sound)
-///   MIDITimer::Wait(2000);           // waits two seconds
-///   msg.SetNoteOff(0, 60);           // makes msg the corresponding Note Off
-///   port->OutputMessage(&msg);       // outputs the message (the note should stop)
-///   port->ClosePort();               // closes the port
-///   return 0;
-///}
-/// \endcode
-///
-/// 
 
 /// \page WIDGET_INFO Methods for getting widget informations
 ///

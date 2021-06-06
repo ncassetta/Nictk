@@ -79,6 +79,7 @@ lstMode = NCtkListbox(vfr2, 0, "pack", "fill", 120, pad=(10, 5), command=selchan
 lstMode.config(bcolor="cyan", fcolor="brown", font=("TkDefaultFont", 14), relief=RIDGE)
 labExplain=NCtkLabel(vfr2, 0, "pack", "fill", "fill", pad=(10, 10), content=explmodes[0])
 labExplain.config(anchor=NW)
+lstMode.select(0)
 #print (labExplain.getwinfo("fpixels", 20))
 
 #winMain._draw_children()

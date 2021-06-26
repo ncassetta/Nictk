@@ -1,5 +1,5 @@
 import _setup           # allows import from parent folder
-from NCtk import *
+from Ntk import *
 
 
 # items to be added to the listbox (italian numbers)
@@ -53,35 +53,32 @@ def selchanged(event):
         lstTest.config(selectmode=modes[sel[0]])
     
 
-winMain = NCtkMain(200, 150, 600, 450, "NCtkListbox widget sample")
-hfr1 = NCtkHorFrame(winMain, 0, 0, "fill", "fill")
-rfr1 = NCtkRowFrame(hfr1, 0, 0, "50%", "fill")
-vfr2 = NCtkVerFrame(hfr1, "pack", 0, "fill", "fill")
+winMain = NtkMain(200, 150, 600, 450, "NtkListbox widget sample")
+hfr1 = NtkHorFrame(winMain, 0, 0, FILL, FILL)
+rfr1 = NtkRowFrame(hfr1, 0, 0, "50%", FILL)
+vfr2 = NtkVerFrame(hfr1, PACK, 0, FILL, FILL)
 rfr1.add_row(40)
-labTest = NCtkLabel(rfr1, 0, 0, "fill", "fill", pad=(10, 10, 10, 5), content="Try to select items")
+labTest = NtkLabel(rfr1, 0, 0, FILL, FILL, pad=(10, 10, 10, 5), content="Try to select items")
 labTest.config(bcolor="light green", fcolor="blue", relief=SOLID, borderwidth=1, anchor=CENTER)
 rfr1.add_row(-80)
-lstTest = NCtkListbox(rfr1, 0, 0, "fill", "fill", pad=(10, 5, 10, 40), command=testchanged)
+lstTest = NtkListbox(rfr1, 0, 0, FILL, FILL, pad=(10, 5, 10, 40), command=testchanged)
 lstTest.config(bcolor="blue", fcolor="yellow", sfcolor="maroon", sbcolor="light blue", 
                relief=RIDGE, font=("TkDefaultFont", 14))
 rfr1.add_row(40)
-labSel = NCtkLabel(rfr1, 0, 0, "fill", "fill", pad=(10, 5))
+labSel = NtkLabel(rfr1, 0, 0, FILL, FILL, pad=(10, 5))
 labSel.config(bcolor="light green", fcolor="blue", relief=SOLID, borderwidth=1)
 testchanged(None)
-rfr1.add_row("fill")
-butAdd = NCtkButton(rfr1, "15%", 0, "35%", "fill", pad=(5,5, 5, 10), content="Add item",
+rfr1.add_row(FILL)
+butAdd = NtkButton(rfr1, "15%", 0, "35%", FILL, pad=(5,5, 5, 10), content="Add item",
                     command=addtolbox) 
-butDel = NCtkButton(rfr1, "pack", "pack", "35%", "fill", pad=(5, 5, 5, 10), content="Del item",
+butDel = NtkButton(rfr1, PACK, PACK, "35%", FILL, pad=(5, 5, 5, 10), content="Del item",
                     command =delfromlbox)
-labMode = NCtkLabel(vfr2, 0, 0, "fill", 40, pad=(10, 10, 10, 5), content="Listbox Mode")
+labMode = NtkLabel(vfr2, 0, 0, FILL, 40, pad=(10, 10, 10, 5), content="Listbox Mode")
 labMode.config(bcolor="light green", fcolor="blue", relief=SOLID, borderwidth=1, anchor=CENTER)
-lstMode = NCtkListbox(vfr2, 0, "pack", "fill", 120, pad=(10, 5), command=selchanged, items=modes)
+lstMode = NtkListbox(vfr2, 0, PACK, FILL, 120, pad=(10, 5), command=selchanged, items=modes)
 lstMode.config(bcolor="cyan", fcolor="brown", font=("TkDefaultFont", 14), relief=RIDGE)
-labExplain=NCtkLabel(vfr2, 0, "pack", "fill", "fill", pad=(10, 10), content=explmodes[0])
+labExplain=NtkLabel(vfr2, 0, PACK, FILL, FILL, pad=(10, 10), content=explmodes[0])
 labExplain.config(anchor=NW)
 lstMode.select(0)
-#print (labExplain.getwinfo("fpixels", 20))
-
-#winMain._draw_children()
 
 mainloop()

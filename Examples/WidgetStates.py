@@ -1,5 +1,5 @@
 import _setup
-from NCtk import *
+from Ntk import *
 from time import *
 
 bcolors =  ("#FFFFFF", "#202060", "#D0D0A0", "#206020", "#FFA0A0", "#402000")
@@ -38,15 +38,15 @@ def changelabstatus(event):
 
 stringind = 0
 colorind = 0
-winMain = NCtkMain(200, 150, 400, 300, "Widget states sample")
-entText = NCtkEntry(winMain, 0, 0, "fill", 70, pad=10)
+winMain = NtkMain(200, 150, 400, 300, "Widget states sample")
+entText = NtkEntry(winMain, 0, 0, "fill", 70, pad=10)
 entText.config(font=("Arial", 14), bcolor=bcolors[0], fcolor=fcolors[0], dfcolor = dfcolors[0])
-butColor = NCtkButton(winMain, CENTER, 90, 100, 40,
+butColor = NtkButton(winMain, CENTER, 90, 100, 40,
                       content="Change Color", command=change)
-butHideShow = NCtkButton(winMain, 10, 200, 110, 50,
+butHideShow = NtkButton(winMain, 10, 200, 110, 50,
                          content=butcaptions[0], command=changelabstatus)
 butHideShow.config(bcolor="#C0C0FF")
-labExplain = NCtkLabel(winMain, 130, 200, -10, 50)
+labExplain = NtkLabel(winMain, 130, 200, -10, 50)
 labExplain.config(bcolor="#C0C0FF")
 labExplain.setcontent(explstates[0])
 mainloop()

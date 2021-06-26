@@ -7,7 +7,7 @@
 import tkinter as tk
 from  tkinter import ALL, BOTH, BOTTOM, CENTER, DISABLED, E, END, FIRST, FLAT, GROOVE, HIDDEN, HORIZONTAL, LAST, \
 LEFT, N, NE, NO, NORMAL, NS, NSEW, NW, RAISED, RIDGE, RIGHT, ROUND, S, SE, SEL, SINGLE, SOLID, SUNKEN, SW, TOP, \
-VERTICAL, W, IntVar, StringVar, BooleanVar, mainloop
+VERTICAL, W, IntVar, StringVar, BooleanVar, mainloop, EventType
 import tkinter.ttk as ttk
 import tkinter.filedialog as tkfd
 import tkinter.messagebox as tkmb
@@ -20,7 +20,7 @@ PACK, FILL = "pack", "fill"
 ###################    M I X I N   C L A S S E S
 #####################################################################
 
-class NCtkMisc:
+class NtkMisc:
     """Base class for windows and widgets.
 It defines methods common for windows and interior widgets."""
     
@@ -51,17 +51,21 @@ It defines methods common for windows and interior widgets."""
         if cnf is None:
             trans_cnf = None
         else:
+            if isinstance(self, (NtkButton, NtkCheckbutton, NtkCombobox, NtkEntry, NtkListbox, 
+                                 NtkMenu, NtkRadiobutton, NtkScale, NtkSpinbox)) and "command" in cnf.keys():
+                cmd = cnf.pop("command")
+                cback, value = ((cmd, None) if callable(cmd) else (cmd[0], cmd[1]))
+                self.commandwrap = _setitCommand(self, cback, value)
+                super().config(command=self.commandwrap)            
             trans_cnf = {}
             for k, v in cnf.items():
-                if k in NCtkMisc._del_opt:
+                if k in NtkMisc._del_opt:
                     raise ValueError
-                newk = NCtkMisc._trans_opt[k] if k in NCtkMisc._trans_opt else k
+                newk = NtkMisc._trans_opt[k] if k in NtkMisc._trans_opt else k
                 trans_cnf[newk] = v
                 # TODO: what other options must be config for the _extFrame???
-                #if k == "bcolor" and hasattr(self, "_extFrame"):
-                #    self._extFrame.config({newk:v})
         
-        return self._configure('configure', trans_cnf, None)
+        return self._configure('configure', None, trans_cnf)
     
     def getconfig(self, key):
         """Returns the value for the _key_ resource"""
@@ -74,7 +78,7 @@ It defines methods common for windows and interior widgets."""
         return self.master
     
     def toplevel(self):
-        """Returns the widget toplevel container (a NCtkWindow or NCtkMain).
+        """Returns the widget toplevel container (a NtkWindow or NtkMain).
         See /ref WIDGET_INFO"""
         return self.nametowidget(self.winfo_toplevel())
             
@@ -134,7 +138,7 @@ It defines methods common for windows and interior widgets."""
         
 
 
-class NCtkContainer:
+class NtkContainer:
     """Base class for widgets which can contain other widgets."""
     def __init__(self):
         """The constructor.
@@ -152,7 +156,7 @@ in turn, the options dict is updated: if a resource receives a new
 value it replaces the previous one, otherwise it remains unchanged.
 \param self the widget instance
 \param which you can indicate "all" for all children, or the name of a
-widget class (for example "NCtkENtry" or "NCtkButton") or a tuple of
+widget class (for example "NtkENtry" or "NtkButton") or a tuple of
 names for configuring only specific widgets.
 \param kw a list of named options for the resources to be configured"""
         l = [item["which"] for item in self._cnfchildren]
@@ -182,18 +186,18 @@ names for configuring only specific widgets.
 
 # Added by me to override tkinter Widget methods
 
-class NCtkWidget(NCtkMisc):
-    """Base class which defines methods common for all NCtk widgets."""
+class NtkWidget(NtkMisc):
+    """Base class which defines methods common for all Ntk widgets."""
     def __init__(self, parent, x, y, w, h, pad, ctor, **kw):
         """The constructor."""
         self._orig_dim = (x, y, w, h, pad)      # tk.Widget.__init__ does nothing
-        if isinstance(self, NCtkCombobox):
-            ctor(self, parent, kw["variable"], None, *kw["values"], command=kw["command"]) 
+        if isinstance(self, NtkCombobox):
+            ctor(parent, kw["variable"], kw["values"], kw["command"]) 
         else:
             ctor(self, master=parent, **kw)
         self._calc_dimensions()                 # sets _curr_dim
         self._place_widget()
-        if isinstance(parent, (NCtkRowFrame, NCtkColFrame)): 
+        if isinstance(parent, (NtkRowFrame, NtkColFrame)): 
             parent.get_active().children.append(self)       
         
     def hide(self):
@@ -214,6 +218,24 @@ If the widget was already shown it does nothing."""
     def visible(self):
         """Returns True if the widget is visible."""
         return self.winfo_ismapped()
+    
+    def activate(self):
+        try:
+            self.config(state=NORMAL)
+        except (ValueError, tk.TclError):
+            pass        
+        if isinstance(self, NtkContainer):
+            for w in self.winfo_children():
+                self.activate()
+                
+    def deactivate(self):
+        try:
+            self.config(state=DISABLED)
+        except (ValueError, tk.TclError):
+            pass        
+        if isinstance(self, NtkContainer):
+            for w in self.winfo_children():
+                self.deactivate()        
     
     def getcontent(self):
         return self.cget("text")
@@ -256,20 +278,24 @@ If the widget was already shown it does nothing."""
             raise TypeError
             
         # set some local variables
-        if isinstance(self.parent(), NCtkRowFrame):                                                 
+        if isinstance(self.parent(), NtkRowFrame):                                                 
             parent = self.parent().get_active()
             offs_x, offs_y = 0, parent.winfo_y()
             offs_border = 2 * self.parent().cget("borderwidth")
-        elif isinstance(self.parent(), (NCtkColFrame)):                                              
+            parent_w = parent.winfo_w() - offs_border
+            parent_h = parent.winfo_h() - offs_border            
+        elif isinstance(self.parent(), (NtkColFrame)):                                              
             parent = parent.get_active()
             offs_x, offs_y = parent.winfo_x(), 0
             offs_border = 2 * self.parent().cget("borderwidth")
+            parent_w = parent.winfo_w() - offs_border
+            parent_h = parent.winfo_h() - offs_border          
         else:
             parent = self.parent()
             offs_x, offs_y = 0, 0
             offs_border = 2 * parent.cget("borderwidth")
-        parent_w = parent.winfo_w() - offs_border 
-        parent_h = parent.winfo_h() - offs_border        
+            parent_w = parent.winfo_width() - offs_border       # not winfo_W in case root = None
+            parent_h = parent.winfo_height() - offs_border      # idem        
         
         # find the last widget from whom calculate coords
         brothers = [w for w in parent.winfo_children() if not isinstance(w, tk.Menu)]
@@ -278,9 +304,9 @@ If the widget was already shown it does nothing."""
         else:                                   # we are placing a new widget
             last_wdg = brothers[-1] if len(brothers) else None
         last_x, last_y = 0, 0
-        if isinstance(parent, (NCtkHorFrame, _framerow))and last_wdg:
+        if isinstance(parent, (NtkHorFrame, _framerow))and last_wdg:
             last_x = last_wdg.winfo_bx() + last_wdg.winfo_bw()
-        elif isinstance(parent, (NCtkVerFrame, _framecol, NCtkMain, NCtkWindow)) and last_wdg:
+        elif isinstance(parent, (NtkVerFrame, _framecol, NtkMain, NtkWindow)) and last_wdg:
             last_y = last_wdg.winfo_by() + last_wdg.winfo_bh() 
         #print ("parent name:", parent.winfo_name(), "   width:", parent.winfo_width(), "height:", parent.winfo_height(),
                #"reqwidth:", parent.winfo_width(), "reqheight:", parent.winfo_height())
@@ -368,7 +394,7 @@ user coordinates into numerical values"""
         w = self.winfo_w()
         h = self.winfo_h()
         self.place(x=x, y=y, width=w, height=h)       
-        if isinstance(self, (NCtkLabel, NCtkCheckbutton, NCtkRadiobutton)):
+        if isinstance(self, (NtkLabel, NtkCheckbutton, NtkRadiobutton)):
             self.config(wraplength=self._calc_wrap())
         if hasattr(self, "_vscroll"):
             self._auto_yscroll()        
@@ -384,34 +410,38 @@ user coordinates into numerical values"""
             self._vscroll.update()              # needed for drawing the scrollbar
     
     def _get_parent_config(self):
-        cl = "NCtk" + self.winfo_class()
+        #cl = "Ntk" + self.winfo_class()
         configured = []
         p = self.parent()
         while p:
             if hasattr(p, "_cnfchildren"):
                 for item in p._cnfchildren:
                     wh = item["which"]
-                    if (isinstance(wh, str) and (wh == "all" or wh == cl) or
-                        isinstance(wh, (list, tuple)) and cl in wh):
-                        for i in item["options"].keys():
-                            if i not in configured:
+                    if ((isinstance(wh, str) and wh == "all") or
+                        isinstance(self, wh)):
+                        for k, v in item["options"].items():
+                            if k not in configured:
                                 try:
-                                    self.config(item["options"])
-                                    configured.append(i)
-                                except (ValueError, TclError):
+                                    self.config({k:v})
+                                    configured.append(k)
+                                except (ValueError, tk.TclError):
+                                    #raise
                                     pass
-            p = p.parent()
+            p = p.master        # not parent() in case root = None 
 
          
 # Used by various widgets for calling with command with an event parameter. 
 class _setitCommand:
     """Internal class. It wraps the command in widgets which have a command option."""
-    def __init__(self, widget, callback=None, value=None):
+    def __init__(self, widget, callback=None, value=None, variable=None):
         self._widget = widget
         self._callback = callback
         self._value = value
+        self._variable = variable
         
     def __call__(self, *cnf):   # some widget (as Scale) send a 2nd argument, which is ignored
+        if self._variable:
+            self._variable.set(self._value)        
         if self._callback:
             ev = tk.Event
             ev.type = tk.EventType.VirtualEvent
@@ -419,6 +449,7 @@ class _setitCommand:
             ev.x = self._widget.winfo_pointerx()
             ev.y = self._widget.winfo_pointery()            
             ev.value = self._value
+            # print ("_setitCommand.__call__ with callback =", self._callback, "value =", self._value)
             self._callback(ev)
 
 
@@ -427,22 +458,24 @@ class _setitCommand:
 ###################    M A I N   W I N D O W S
 #####################################################################
 
-class BaseWindow(NCtkMisc, NCtkContainer):
-    """Base class for both NCtkMain and NCtkWindow.
+class BaseWindow(NtkMisc, NtkContainer):
+    """Base class for both NtkMain and NtkWindow.
     
 It implements some common methods."""
     def __init__(self, x, y, w, h, title=""):
-        """Common constructor for NCtkMain and NCtkWindow.
+        """Common constructor for NtkMain and NtkWindow.
         
 \param self the object instance
 \param x, y, w, h see \ref PLACING_WIDGETS
 \param title the window title"""
         self.geometry("{}x{}+{}+{}".format(w, h, x, y))
         self._curr_dim = (x, y, w, h, (0, 0, 0, 0))
-        NCtkContainer.__init__(self)
+        NtkContainer.__init__(self)
         super().bind("<Configure>", self._resize_children) 
         #self.resizable(width=FALSE, height=FALSE)
         self.title(title)
+        # used for onclose()
+        self.commandwrap = None
         
     # we must redefine bind() and unbind(): if the user is binding to "<Configure>"
     # event we must mantain the binding to _resize_children
@@ -456,21 +489,21 @@ It implements some common methods."""
             return super().bind(sequence, func, add=True)
         else:
             return super().bind(sequence, func, add)
-            
-    
+               
     def unbind(self, sequence, funcid=None):
         """Redefines the Misc.unbind method for this class."""
         super().unbind(sequence, funcid)
         if sequence == "<Configure>" and not funcid:
-            super().bind("<Configure>", self._resize_children)   
+            super().bind("<Configure>", self._resize_children)
             
+    def onclose(self, command):
+        cback, value = ((command, None) if callable(command) else (command[0], command[1]))
+        self.commandwrap = _setitCommand(self, cback, value)
+        self.protocol("WM_DELETE_WINDOW", self.commandwrap)
             
-            
-                
-        
-        
-    
-class NCtkMain(BaseWindow, tk.Tk):
+
+
+class NtkMain(BaseWindow, tk.Tk):
     """The main window of the app.
     
     This is the main window (derived from the tkinter Tk class).
@@ -485,7 +518,7 @@ class NCtkMain(BaseWindow, tk.Tk):
         BaseWindow.__init__(self, x, y, w, h, title)
         
                     
-class NCtkWindow(BaseWindow, tk.Toplevel):
+class NtkWindow(BaseWindow, tk.Toplevel):
     """A window (derived from the tkinter Toplevel class).
     
     You can use this for dialogs"""    
@@ -507,12 +540,14 @@ you close it"""
             
     def show(self):
         if self._modal == "modal":
-            self.transient(self.parent())
+            # is it needed? If you set transient cannot reset it
+            #self.transient(self.parent())
             self.focus_force() # added
             self.grab_set()      
         elif self._modal == "persistent":
             self.attributes('-topmost', 'true')
         else:
+            self.manage(self)
             self.attributes('-topmost', 'false')
         self.deiconify()
             
@@ -529,7 +564,7 @@ you close it"""
 #######################     F R A M E S
 #####################################################################
 
-class NCtkHorFrame(NCtkWidget, NCtkContainer, tk.LabelFrame):
+class NtkHorFrame(NtkWidget, NtkContainer, tk.LabelFrame):
     """A container in which you can stack children widgets horizontally.
 
 This is done by using PACK as the x parameter in their constructor. The
@@ -545,13 +580,13 @@ shown on it.
 \param parent the frame parent
 \param x, y, w, h, see \ref ***
 \param pad this is ignored, you cannot have a padding on frames"""        
-        NCtkWidget.__init__(self, parent, x, y, w, h, 0,
+        NtkWidget.__init__(self, parent, x, y, w, h, 0,
                             tk.LabelFrame.__init__)         # pad argument is ignored
         self.config(background=parent.cget("background"), relief=FLAT)
-        NCtkContainer.__init__(self)
+        NtkContainer.__init__(self)
  
  
-class NCtkVerFrame(NCtkWidget, NCtkContainer, tk.LabelFrame):
+class NtkVerFrame(NtkWidget, NtkContainer, tk.LabelFrame):
     """A container in which you can stack children widgets vertically.
     
 This is done by using PACK as the y parameter in their constructor. The
@@ -566,10 +601,10 @@ shown on it.
 \param parent the frame parent
 \param x, y, w, h, see \ref ***
 \param pad this is ignored, you cannot have a padding on frames"""                
-        NCtkWidget.__init__(self, parent, x, y, w, h, 0,
+        NtkWidget.__init__(self, parent, x, y, w, h, 0,
                             tk.LabelFrame.__init__)         # pad argument is ignored
         self.config(background=parent.cget("background"), relief=FLAT)
-        NCtkContainer.__init__(self)
+        NtkContainer.__init__(self)
         
         
 class _framerow():
@@ -644,7 +679,7 @@ class _framerow():
             if h < 0:
                 h = parent.winfo_h() - y + h
                 if h < 0:
-                    raise ValueError
+                    h = 1
         else:
             raise TypeError
         self._curr_dim = (0, y, parent.winfo_w(), h)
@@ -667,10 +702,10 @@ class _framecol:
     pass
 
 
-class NCtkRowFrame(NCtkWidget, NCtkContainer, tk.LabelFrame):
+class NtkRowFrame(NtkWidget, NtkContainer, tk.LabelFrame):
     """A container in which you can stack rows vertically.
     
-Each row behaves like a NCtkHorFrame, allowing to stack children
+Each row behaves like a NtkHorFrame, allowing to stack children
 widgets horizontally (using PACK as the x parameter in their constructor).
 You can add rows to the frame, obtaining thus a disposition similar
 to a matrix.
@@ -687,10 +722,10 @@ add_row() method.
 \param parent the frame parent
 \param x, y, w, h, see \ref PLACING_WIDGETS
 \param pad this is ignored, you cannot have a padding on frames"""         
-        NCtkWidget.__init__(self, parent, x, y, w, h, 0,
+        NtkWidget.__init__(self, parent, x, y, w, h, 0,
                             tk.LabelFrame.__init__)         # pad argument is ignored
         self.config(background=parent.cget("background"), relief=FLAT)
-        NCtkContainer.__init__(self)
+        NtkContainer.__init__(self)
         self._rows = []
         self._active = None
         
@@ -720,12 +755,12 @@ to this row.
             row._resize_children(event)
                     
     
-class NCtkColFrame(NCtkWidget, NCtkContainer, tk.LabelFrame):
+class NtkColFrame(NtkWidget, NtkContainer, tk.LabelFrame):
     def __init__(self, parent, x, y, w, h, pad=0):
-        NCtkWidget.__init__(self, parent, x, y, w, h, 0,
+        NtkWidget.__init__(self, parent, x, y, w, h, 0,
                             tk.LabelFrame.__init__)         # pad argument is ignored
         self.config(background=parent.cget("background"), relief=FLAT)
-        NCtkContainer.__init__(self)
+        NtkContainer.__init__(self)
         self._cols = []
         self._active = None
         
@@ -743,7 +778,7 @@ class NCtkColFrame(NCtkWidget, NCtkContainer, tk.LabelFrame):
 ############       tkinter WIDGETS SUPERCLASSES
 #####################################################################     
 
-class NCtkButton(NCtkWidget, tk.Button):
+class NtkButton(NtkWidget, tk.Button):
     """Button widget.
 
     STANDARD OPTIONS
@@ -763,7 +798,7 @@ class NCtkButton(NCtkWidget, tk.Button):
         overrelief, state, width
     """    
     def __init__(self, parent, x, y, w, h, pad=0, content=None, command=None):
-        NCtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Button.__init__)
+        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Button.__init__)
         self.config(anchor=CENTER, justify=LEFT)
         self._get_parent_config()
         self.setcontent(content)
@@ -771,20 +806,9 @@ class NCtkButton(NCtkWidget, tk.Button):
         if command:
             self.config(command=command)
             
-    def config(self, cnf=None, **kw): # override for command
-        if "command" in kw.keys():
-            cback = kw.pop("command")
-            if "value" in kw.keys():
-                value = kw.pop("value")
-                self.value = value
-                self.commandwrap = _setitCommand(self, cback, value)
-            else:
-                self.commandwrap = _setitCommand(self, cback)
-            super().config(command=self.commandwrap)
-        return super().config(cnf,**kw)     
+     
 
-
-class NCTkCanvas(tk.Canvas):
+class NTkCanvas(tk.Canvas):
     """Canvas widget to display graphical elements like lines or text.
 
     Valid resource names: background, bd, bg, borderwidth, closeenough,
@@ -795,11 +819,17 @@ class NCTkCanvas(tk.Canvas):
     state, takefocus, width, xscrollcommand, xscrollincrement,
     yscrollcommand, yscrollincrement.
     """    
-    def __init__(self, parent, x, y, w, h, content=None, padx=0, pady=0):
-        pass
+    #def __init__(self, parent, x, y, w, h, content=None, padx=0, pady=0):
+
+    def __init__(self, parent, x, y, w, h, pad=0, content=None):
+        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Canvas.__init__)
+        #self.config(anchor=W, justify=LEFT, wraplength=self._calc_wrap())
+        self._get_parent_config()
+        self.setcontent(content)
+        
 
 
-class NCtkCheckbutton(NCtkWidget, tk.Checkbutton):     ## TODO: manage command
+class NtkCheckbutton(NtkWidget, tk.Checkbutton):     ## TODO: manage command
     """Checkbutton widget which is either in on- or off-state.
 
     Valid resource names: activebackground, activeforeground, anchor,
@@ -812,7 +842,7 @@ class NCtkCheckbutton(NCtkWidget, tk.Checkbutton):     ## TODO: manage command
     #def __init__(self, parent, x, y, w, h, content=None, padx=0, pady=0):
     
     def __init__(self, parent, x, y, w, h, pad=0, content=None, command=None):
-        NCtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Checkbutton.__init__)
+        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Checkbutton.__init__)
         self.config(anchor=W, justify=LEFT, wraplength=self._calc_wrap())
         self._get_parent_config()
         self.setcontent(content)
@@ -820,24 +850,23 @@ class NCtkCheckbutton(NCtkWidget, tk.Checkbutton):     ## TODO: manage command
         if command:
             self.config(command=command)
             
-    def deselect(self):
-        """Put the button in off-state."""
-        self.tk.call(self._w, 'deselect')
+    #def deselect(self):
+        #"""Put the button in off-state."""
+        #self.tk.call(self._w, 'deselect')
 
-    def flash(self):
-        """Flash the button."""
-        self.tk.call(self._w, 'flash')
+    #def flash(self):
+        #"""Flash the button."""
+        #self.tk.call(self._w, 'flash')
 
-    def invoke(self):
-        """Toggle the button and invoke a command if given as resource."""
-        return self.tk.call(self._w, 'invoke')
+    #def invoke(self):
+        #"""Toggle the button and invoke a command if given as resource."""
+        #return self.tk.call(self._w, 'invoke')
 
-    def select(self):
-        """Put the button in on-state."""
-        self.tk.call(self._w, 'select')
+    #def select(self):
+        #"""Put the button in on-state."""
+        #self.tk.call(self._w, 'select')
             
     def setvariable(self, variable=None, offvalue=None, onvalue=None):
-        var = self.cget("variable")
         if variable:
             self.config(variable=variable)
         if offvalue:
@@ -848,24 +877,12 @@ class NCtkCheckbutton(NCtkWidget, tk.Checkbutton):     ## TODO: manage command
     def getvariable(self):
         return self.cget("variable")
     
-    def config(self, cnf=None, **kw): # override for command
-        if "command" in kw.keys():
-            cback = kw.pop("command")
-            if "value" in kw.keys():
-                value = kw.pop("value")
-                self.value = value
-                self.commandwrap = _setitCommand(self, cback, value)
-            else:
-                self.commandwrap = _setitCommand(self, cback)
-            super().config(command=self.commandwrap)
-        return super(NCtkCheckbutton, self).config(cnf,**kw)
-    
     def _calc_wrap(self):               # Used to calculate text wraplength when resized 
-        self.update_idletasks()         # sets correct sizes
-        return self.winfo_w() - 20    
+        #self.update_idletasks()
+        return 0 if self.cget("wraplen") == 0 else self.winfo_w() - 20
             
 
-class NCtkEntry(NCtkWidget, tk.Entry):
+class NtkEntry(NtkWidget, tk.Entry):
     """Entry widget which allows displaying simple text.
     
     Valid resource names: background, bd, bg, borderwidth, cursor,
@@ -879,18 +896,19 @@ class NCtkEntry(NCtkWidget, tk.Entry):
     
         
     def __init__(self, parent, x, y, w, h, pad=0, content=None, command=None):
-        NCtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Entry.__init__)
+        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Entry.__init__)
         self.config(relief=SUNKEN)
         self._get_parent_config()
         self.intStr = tk.StringVar()
         if content:
             self.intStr.set(str(content))
-        self.intStr.trace("w", lambda *args: self.event_generate("<<CHANGEDVAR>>"))
+        self.intStr.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
         self.config(textvariable=self.intStr)
+        self.commandwrap = None
         if command:
             self.bind("<Return>", command)
         
-    # overrides NCtkWidget methods!
+    # overrides NtkWidget methods!
     def setcontent(self, content):
         self.intStr.set(str(content))
         
@@ -898,9 +916,9 @@ class NCtkEntry(NCtkWidget, tk.Entry):
         return self.intStr.get()        
 
 
-# class Frame substituted by NCtkHorFrame, NCtkVerFrame   
+# class Frame substituted by NtkHorFrame, NtkVerFrame   
     
-class NCtkLabel(NCtkWidget, tk.Label):
+class NtkLabel(NtkWidget, tk.Label):
     """Label widget which can display text and bitmaps.
 
        STANDARD OPTIONS
@@ -919,17 +937,17 @@ class NCtkLabel(NCtkWidget, tk.Label):
 
         """    
     def __init__(self, parent, x, y, w, h, pad=0, content=None):
-        NCtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Label.__init__)
+        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Label.__init__)
         self.config(anchor=W, justify=LEFT, relief=SUNKEN, wraplength=self._calc_wrap())
         self._get_parent_config()
         self.setcontent(content)
         
     def _calc_wrap(self):               # Used to calculate text wraplength when resized 
-        self.update_idletasks()         # sets correct sizes
-        return self.winfo_w() - 1  
+        #self.update_idletasks() 
+        return 0 if self.cget("wraplen") == 0 else self.winfo_w() - 1  
         
     
-class NCtkListbox(NCtkWidget, tk.Listbox):
+class NtkListbox(NtkWidget, tk.Listbox):
     """Listbox widget which can display a list of strings.
 
         Valid resource names: background, bd, bg, borderwidth, cursor,
@@ -939,12 +957,13 @@ class NCtkListbox(NCtkWidget, tk.Listbox):
         width, xscrollcommand, yscrollcommand, listvariable."""
     # and activestyle ???
     def __init__(self, parent, x, y, w, h, pad=0, command=None, items=None) :
-        NCtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Listbox.__init__)
+        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Listbox.__init__)
         self.config(justify=LEFT, relief=SUNKEN, activestyle="none", exportselection=False)
         self._get_parent_config()
         self._vscroll = tk.Scrollbar(self, orient=VERTICAL)
         self.config(yscrollcommand=self._vscroll.set)
         self._vscroll.config(command=self.yview)
+        # this has non need for commandwrap
         if command:
             self.bind("<<ListboxSelect>>", command)
         if items:
@@ -987,99 +1006,113 @@ class NCtkListbox(NCtkWidget, tk.Listbox):
 
 
 ### UNUSED ??? ###
-# Used by NCtkMenu
-class _setitMenu:
-    """Internal class. It wraps the command in the widget Menu."""
-    def __init__(self, value, callback=None):
-        self.__value = value
-        self.__callback = callback
-    def __call__(self, *args):
-        if self.__callback:
-            self.__callback(self.__value, *args)
-            #self.__callback(*args)     
+# Used by NtkMenu
+#class _setitMenu:
+    #"""Internal class. It wraps the command in the widget Menu."""
+    #def __init__(self, value, callback=None):
+        #self.__value = value
+        #self.__callback = callback
+    #def __call__(self, *args):
+        #if self.__callback:
+            #self.__callback(self.__value, *args)
+            ##self.__callback(*args)     
         
-class NCtkMenu(NCtkMisc, tk.Menu):
+class NtkMenu(NtkMisc, tk.Menu):
     """Menu widget which allows displaying menu bars, pull-down menus and pop-up menus.
         
         Valid resource names: activebackground, activeborderwidth,
         activeforeground, background, bd, bg, borderwidth, cursor,
         disabledforeground, fg, font, foreground, postcommand, relief,
         selectcolor, takefocus, tearoff, tearoffcommand, title, type."""
-    def __init__(self, parent):
-        tk.Menu.__init__(self, parent, tearoff=0)
-        self.value = None
-        
-    # These override the Menu methods to insert the "value" option
-    def getconfig(self, key):
-        """Returns the value for the _key_ resource"""
-        if key == "value":
-            return self.value
-        if key in self._trans_opt:
-            key = self._trans_opt[key]
-        return self.cget(key)    
+    def __init__(self, parent, label=None, popup=False, name=None):
+        tk.Menu.__init__(self, parent, tearoff=0, name=name)
+        if isinstance(parent, NtkMenu):
+            parent.add_cascade(label=label, menu=self)
+        elif isinstance(parent, (NtkMain, NtkWindow)) and not popup:
+            parent.config(menu=self)
+        self._len = 0
 
     def add(self, itemType, cnf={}, **kw):
         if "command" in cnf.keys():
-            cback = cnf["command"]
-            if "value" in cnf.keys():
-                value = cnf.pop("value")
-                self.commandwrap = _setitCommand(self, cback, value)
-            else:
-                self.commandwrap = _setitCommand(self, cback)
+            cmd = cnf["command"]
+            cback, value = ((cmd, None) if callable(cmd) else (cmd[0], cmd[1]))
+            self.commandwrap = _setitCommand(self, cback, value)                  
             cnf.update({"command":self.commandwrap})        
+        self.tk.call((self._w, 'add', itemType) + self._options(cnf, kw))
+        self._len += 1
         
-        
-        
-        #if "command" in cnf.keys():
-            #if "arg" in cnf.keys():
-                #cmd = _setitMenu(cnf["arg"], cnf["command"])
-                #cnf.pop("arg")
-            #else:
-                #cmd = _setitMenu(cnf["label"], cnf["command"])
-            #cnf.update({"command":cmd})
-        self.tk.call((self._w, 'add', itemType) +
-                 self._options(cnf, kw))   
-        
-    def insert(self, index, itemType, cnf={}, **kw):
-        if "value" in cnf.keys():
-            self.value = cnf["value"]
-            cnf.pop("value")        
+    def insert(self, index, itemType, cnf={}, **kw):       
         if "command" in cnf.keys():
-            cmd = _setitMenu(cnf["label"], cnf["command"])
-            cnf.update({"command":cmd})        
-        self.tk.call((self._w, 'insert', index, itemType) +
-                 self._options(cnf, kw))
+            cmd = cnf["command"]
+            cback, value = ((cmd, None) if callable(cmd) else (cmd[0], cmd[1]))
+            self.commandwrap = _setitMenu(self, cback, value)
+            cnf.update({"command":self.commandwrap})        
+        self.tk.call((self._w, 'insert', index, itemType) + self._options(cnf, kw))
+        self._len += 1
+        
+    def delete(self, index1, index2=None):
+        """Delete menu items between INDEX1 and INDEX2 (included)."""
+        if index2 is None:
+            index2 = index1
+
+        num_index1, num_index2 = self.index(index1), self.index(index2)
+        if (num_index1 is None) or (num_index2 is None):
+            num_index1, num_index2 = 0, -1
+
+        for i in range(num_index1, num_index2 + 1):
+            if 'command' in self.entryconfig(i):
+                c = str(self.entrycget(i, 'command'))
+                if c:
+                    self.deletecommand(c)
+            self._len -= 1
+        self.tk.call(self._w, 'delete', index1, index2)    
         
     def entrycget(self, index, option):
         """Return the resource value of a menu item for OPTION at INDEX."""
-        if option == "value":
-            return self.value
-        if option in NCtkMisc._trans_opt:
-            option = NCtkMisc._trans_opt["option"]
+        if option in NtkMisc._trans_opt:
+            option = NtkMisc._trans_opt["option"]
         return self.tk.call(self._w, 'entrycget', index, '-' + option)
+    
     entrygetconfig = entrycget
     
     def entryconfigure(self, index, cnf=None, **kw):
-        """Configure a menu item at INDEX."""
+        """Configure a menu item at INDEX."""      
         trans_kw = {}
         if isinstance(cnf, dict):
             for k, v in cnf.items():
-                if k in NCtkMisc._trans_opt:
+                if k in NtkMisc._trans_opt:
                     trans_kw[_trans_opt[k]] = v
                 else:
                     trans_kw[k] = v        
         for k, v in kw.items():
-            if k in NCtkMisc._trans_opt:
-                trans_kw[NCtkMisc._trans_opt[k]] = v
+            if k in NtkMisc._trans_opt:
+                trans_kw[NtkMisc._trans_opt[k]] = v
             else:
                 trans_kw[k] = v        
-        return self._configure(('entryconfigure', index), trans_kw, {})
+        return self._configure(('entryconfigure', index), None, trans_kw)
+    
     entryconfig = entryconfigure
+    
+    def entrysetvariable(self, index, variable=None, offvalue=None, onvalue=None):
+        if variable:
+            self.entryconfig(index, variable=variable)
+        if offvalue:
+            self.entryconfig(index, offvalue=offvalue)
+        if onvalue:
+            self.entryconfig(index, onvalue=onvalue)
+    
+    def len(self):
+        return self._len
+    
+    #def clear(self):
+        #while self.index(1) == 1:
+            #self.delete(1)
+            
     
 # MenuButton and Message obsolete in tkinter
 
 
-class NCtkRadiobutton(NCtkWidget, tk.Radiobutton):
+class NtkRadiobutton(NtkWidget, tk.Radiobutton):
     """Radiobutton widget which shows only one of several buttons in on-state.
 
         Valid resource names: activebackground, activeforeground, anchor,
@@ -1090,26 +1123,30 @@ class NCtkRadiobutton(NCtkWidget, tk.Radiobutton):
         state, takefocus, text, textvariable, underline, value, variable,
         width, wraplength."""
     def __init__(self, parent, x, y, w, h, pad=0, content=None, command=None):
-        NCtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Radiobutton.__init__)
+        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Radiobutton.__init__)
         self.config(anchor=W, justify=LEFT, wraplength=self._calc_wrap())
         self._get_parent_config()
         self.setcontent(content)
+        self.commandwrap = None
         if command:
-            self.config(command=command)    
+            self.config(command=command)
+            
+    def setvariable(self, variable, value=None):
+        if variable:
+            self.config(variable=variable)
+        if value:
+            self.config(value=value)
+    
+    def getvariable(self):
+        return self.cget("variable")    
         
     def _calc_wrap(self):               # Used to calculate text wraplength when resized 
-        self.update_idletasks()         # sets correct sizes
-        return self.winfo_w() - 20   
+        #self.update_idletasks()
+        return 0 if self.cget("wraplen") == 0 else self.winfo_w() - 20
 
-    def config(self, cnf=None, **kw): # override for command
-        if "command" in kw.keys():
-            cback = kw.pop("command")
-            self.commandwrap = _setitCommand(self, cback)
-            super().config(command=self.commandwrap)
-        return super().config(cnf,**kw)    
     
 
-class NCtkScale(NCtkWidget, tk.Scale):
+class NtkScale(NtkWidget, tk.Scale):
     """Scale widget which can display a numerical scale.
 
         Valid resource names: activebackground, background, bigincrement, bd,
@@ -1119,7 +1156,7 @@ class NCtkScale(NCtkWidget, tk.Scale):
         showvalue, sliderlength, sliderrelief, state, takefocus,
         tickinterval, to, troughcolor, variable, width."""
     def __init__(self, parent, x, y, w, h,  pad=0, limits= None, command=None):
-        NCtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Scale.__init__)
+        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Scale.__init__)
          # _box_dim[2] and _box_dim[3] are true w and h
         hv = HORIZONTAL if self.winfo_w() >= self.winfo_h() else VERTICAL  
         self.config(orient=hv)
@@ -1132,24 +1169,19 @@ class NCtkScale(NCtkWidget, tk.Scale):
                     self.config(bigincrement=limits[2])
         self.intStr = tk.StringVar()
         self.intStr.set(str(limits[0]))
-        self.intStr.trace("w", lambda *args: self.event_generate("<<CHANGEDVAR>>"))
+        self.intStr.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
         self.config(variable=self.intStr)
         self._get_parent_config()
+        self.commandwrap = None
         if command:
             self.config(command=command)
-        
-    def config(self, cnf=None, **kw): # override for command
-        if "command" in kw.keys():
-            cback = kw.pop("command")
-            self.commandwrap = _setitCommand(self, cback)
-            super().config(command=self.commandwrap)
-        return super().config(cnf,**kw)
         
     def getcontent(self):
         return self.intStr.get()        
 
 
-class NCtkScrollbar(tk.Scrollbar):
+
+class NtkScrollbar(tk.Scrollbar):
     """Scrollbar widget which displays a slider at a certain position.
 
         Valid resource names: activebackground, activerelief,
@@ -1162,7 +1194,8 @@ class NCtkScrollbar(tk.Scrollbar):
         tk:Scrollbar.__init_(self, master, cnf, kw)
 
 
-class NCtkSpinbox(NCtkWidget, tk.Spinbox):
+
+class NtkSpinbox(NtkWidget, tk.Spinbox):
     """spinbox widget.
 
         STANDARD OPTIONS
@@ -1195,11 +1228,9 @@ class NCtkSpinbox(NCtkWidget, tk.Spinbox):
         #val = self.cget("values")
         #if val:
             #pass
-    
-       
-            
+           
     def __init__(self, parent, x, y, w, h, pad=0, limits=None, command=None):
-        NCtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Spinbox.__init__)
+        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Spinbox.__init__)
         #self.config(relief=SUNKEN)
         if isinstance(limits, (list, tuple)):
             if isinstance(limits[0], str):
@@ -1211,41 +1242,68 @@ class NCtkSpinbox(NCtkWidget, tk.Spinbox):
         self.intStr = tk.StringVar()
         if limits:
             self.intStr.set(str(limits[0]))
-        self.intStr.trace("w", lambda *args: self.event_generate("<<CHANGEDVAR>>"))
+        self.intStr.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
         self.config(textvariable=self.intStr)
         self._get_parent_config()
+        self.commandwrap = None
+        self.autoaddflag = False
         if command:
             self.config(command=command)
-            self.bind("<Key-Return>", command)
-        autoaddflag = False
-
-    def config(self, cnf=None, **kw): # override for command
-        if "command" in kw.keys():
-            cback = kw.pop("command")
-            self.commandwrap = _setitCommand(self, cback)
-            super().config(command=self.commandwrap)
-        return super().config(cnf,**kw)
+            self.bind("<Key-Return>", self.autoadd)            
+        
+        
+    def bind(self, sequence=None, func=None, add=None):
+        """Redefines the Misc.bind() method for this class.
+        We need it because the constructor binds the 'Key-Return to
+        the command callback."""
+        # If sequence has more than one event, they must happen in sequence
+        # for the func is triggered. So sequence="<Configure><Enter>" does not
+        # affect <Configure>
+        if sequence == "<Key-Return>":
+            return super().bind(sequence, func, add=True)
+        else:
+            return super().bind(sequence, func, add)
+               
+    def unbind(self, sequence, funcid=None):
+        """Redefines the Misc.unbind method for this class.
+        We need it because the constructor binds the 'Key-Return to
+        the command callback."""
+        super().unbind(sequence, funcid)
+        if sequence == "<Key-Return>" and not funcid:
+            super().bind("<Key-Return>", self.commandwrap)       
+    
+    def autoadd(self, event):
+        s = self.intStr.get()
+        values = self.cget("values")
+        if self.autoaddflag and len(values) and len(s):
+            values = values.split()
+            if s not in values:
+                values.append(s)
+                self.config(values=values)
+        if self.commandwrap:
+            self.commandwrap()
+                    
+            
     
     def mode(self, mode, wrap=False, validate=None):
-        if mode in ("NORMAL", "readonly"):
+        if mode in ("normal", "readonly"):
             self.config(state=mode)
             autoaddflag = False
         elif mode == "autoadd":
-            self.config(state="NORMAL")
-            autoaddflag = True
+            self.config(state="normal")
+            self.autoaddflag = True
         self.config(wrap=wrap)
             
-    # overrides NCtkWidget method!
+    # overrides NtkWidget method!
     def setcontent(self, content):
-        self.delete(0, END)
-        self.insert(0, content)
+        self.intStr.set(str(content))
     
     def getcontent(self):
         return self.intStr.get()
 
 
 
-class NCtkText(NCtkWidget, tk.Text):
+class NtkText(NtkWidget, tk.Text):
     """Text widget which can display text in various forms.
 
         STANDARD OPTIONS
@@ -1269,11 +1327,11 @@ class NCtkText(NCtkWidget, tk.Text):
 
         """
     def __init__(self, parent, x, y, w, h, pad=0):
-        NCtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Text.__init__)
+        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Text.__init__)
         self.config(relief=SUNKEN)
         self._get_parent_config()
-        self._vscroll = tk.Scrollbar(self._extFrame, orient=VERTICAL)
-        self.config(_yscrollcommand=self._vscroll.set)
+        self._vscroll = tk.Scrollbar(self, orient=VERTICAL)
+        self.config(yscrollcommand=self._vscroll.set)
         self._vscroll.config(command=self.yview)        
                
     def appendtext(self, t):
@@ -1308,20 +1366,20 @@ class NCtkText(NCtkWidget, tk.Text):
 # I don't know if others are to be modified
 
 
-# Used by NCtkCombobox. 
-class _setitCombobox:
-    """Internal class. It wraps the command in the widget OptionMenu."""
-    def __init__(self, var, value, callback=None):
-        self.__value = value
-        self.__var = var
-        self.__callback = callback
-    def __call__(self, *args):
-        self.__var.set(self.__value)
-        if self.__callback:
-            self.__callback(self.__value, *args)
-            #self.__callback(*args)
+# No more used by NtkCombobox. 
+#class _setitCombobox:
+    #"""Internal class. It wraps the command in the widget OptionMenu."""
+    #def __init__(self, var, value, callback=None):
+        #self.__value = value
+        #self.__var = var
+        #self.__callback = callback
+    #def __call__(self, *args):
+        #self.__var.set(self.__value)
+        #if self.__callback:
+            #self.__callback(self.__value, *args)
+            ##self.__callback(*args)
 
-class NCtkCombobox(NCtkWidget, tk.OptionMenu):
+class NtkCombobox(NtkWidget, tk.OptionMenu):
     """Combobox which allows the user to select a value from a menu.
        It is the equivalent (renamed) of the OptionMenu class in tkinter
        
@@ -1330,88 +1388,87 @@ class NCtkCombobox(NCtkWidget, tk.OptionMenu):
         disabledforeground, fg, font, foreground, postcommand, relief,
         selectcolor, takefocus, tearoff, tearoffcommand, title, type.
     """  
-    def __init__(self, parent, x, y, w, h, pad=0, items=[], command=None,):
+    def __init__(self, parent, x, y, w, h, pad=0, values=[], command=None,):
         """Construct an optionmenu widget with the parent MASTER, with
         the resource textvariable set to VARIABLE, the initially selected
         value VALUE, the other menu values VALUES and an additional
         keyword argument command."""
         
         self.intStr = tk.StringVar()        # goes here! Required by Optionmenu ctor
-        NCtkWidget.__init__(self, parent, x, y, w, h, pad, tk.OptionMenu.__init__, variable=self.intStr,
-                            values=items, command=command)
-        #self.config(values=items)
+        self.intStr.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
+        NtkWidget.__init__(self, parent, x, y, w, h, pad, self._init1_, variable=self.intStr,
+                            values=values, command=command)
         self._get_parent_config()
         self.commandwrap = _setitCommand(self, command)
-        #self["menu"].delete(0)
-        #for value in items:
-        #    self["menu"].add_command(label=value, command=self.commandwrap)
     
-    def _init1_(self, master, **kwargs):
+    def _init1_(self, master, variable, values, command, **kw):
         """Construct an optionmenu widget with the parent MASTER, with
         the resource textvariable set to VARIABLE, the initially selected
         value VALUE, the other menu values VALUES and an additional
         keyword argument command."""
-        variable = kwargs.pop("variable")
         kw = {"borderwidth": 2, "textvariable": variable,
               "indicatoron": 1, "relief": RAISED, "anchor": "c",
               "highlightthickness": 2}
         tk.Widget.__init__(self, master, "menubutton", kw)
         self.widgetName = 'tk_optionMenu'
-        menu = self.__menu = tk.Menu(self, name="menu", tearoff=0)
+        menu = self.__menu = NtkMenu(self, name="menu")
         self.menuname = menu._w
-        # 'command' is the only supported keyword
-        callback = kwargs.get('command')
-        if 'command' in kwargs:
-            del kwargs['command']
-        if kwargs:
-            raise tk.TclError('unknown option -'+next(iter(kwargs)))
-        menu.add_command(label=value,
-                 command=_setit(variable, value, callback))
+        # value is ignored
+        if not command:
+            self.callback = None
+        elif callable(command):
+            self.callback = command
+        else:
+            self.callback = command[0]     
         for v in values:
-            menu.add_command(label=v,
-                     command=_setit(variable, v, callback))
-        self["menu"] = menu    
+            menu.add_command(label=v, command=_setitCommand(self, self.callback, v, variable))
+        self["menu"] = menu             # I don't know why
+        variable.set(values[0] if len(values) else "")
+        
+    #def __getitem__(self, name):
+        #if name == 'menu':
+            #return self.__menu
+        #return NtkWidget.__getitem__(self, name)
+        
+    def getmenu(self):
+        return self.__menu
+    
+    def getmenuentry(self, index):
+        return self.__menu.entrycget(index, "label")
+        
+    def getcontent(self):
+        return self.intStr.get()
+    
+    def setcontent(self, val, invoke=True):
+        self.intStr.set(val)
+        if invoke and len(val):
+            self.invoke(val)
             
         
             
     #def activate(self, index):
         #"""Activate entry at INDEX."""
         #self.tk.call(self._w, 'activate', index)
-    def add(self, item, cnf={}, **kw):
-        if "command" in cnf.keys():
-            cnf.delete("command")
-        cnf.update({"label":item})
-        self["menu"].add_command(cnf, kw)
+        
+    def add(self, item):
+        self.__menu.add_command(label=item,
+                command=_setitCommand(self, self.callback, item, self.intStr))
         
     def insert(self, index, item, cnf={}, **kw):
         if "command" in cnf.keys():
             cnf.delete("command")
         cnf.update({"label":item})        
-        self["menu"].insert_command(index, cnf, **kw)    
-    #def add(self, itemType, cnf={}, **kw):
-        #"""Internal function."""
-        #self.tk.call((self._w, 'add', itemType) +
-                 #self._options(cnf, kw))
-    #def add_command(self, cnf={}, **kw):
-        #"""Add command menu item."""
-        #self.add('command', cnf or kw)
-    #def insert(self, index, itemType, cnf={}, **kw):
-        #"""Internal function."""
-        #self.tk.call((self._w, 'insert', index, itemType) +
-                 #self._options(cnf, kw))
-    #def insert_command(self, index, cnf={}, **kw):
-        #"""Add command menu item at INDEX."""
-        #self.insert(index, 'command', cnf or kw)
+        self.__menu.insert_command(index, cnf, **kw)    
     
     def delete(self, index1, index2=None):
         """Delete menu items between INDEX1 and INDEX2 (included)."""
-        self["menu"].delete(index1, index2)
+        self.__menu.delete(index1, index2)
     
     def entrycget(self, index, option):
         """Return the resource value of a menu item for OPTION at INDEX."""
-        if option in _trans_opt:
-            option = _trans_opt["option"]        
-        return self["menu"].tk.call(self["menu"]._w, 'entrycget', index, '-' + option)
+        if option in NtkMisc._trans_opt:
+            option = NtkMisc._trans_opt["option"]        
+        return self.__menu.tk.call(self["menu"]._w, 'entrycget', index, '-' + option)
     entrygetconfig = entrycget
     
     def entryconfigure(self, index, cnf=None, **kw):
@@ -1419,43 +1476,36 @@ class NCtkCombobox(NCtkWidget, tk.OptionMenu):
         trans_kw = {}
         if isinstance(cnf, dict):
             for k, v in cnf.items():
-                if k in _trans_opt:
-                    trans_kw[_trans_opt[k]] = v
+                if k in NtkMisc._trans_opt:
+                    trans_kw[NtkMisc._trans_opt[k]] = v
                 else:
                     trans_kw[k] = v        
         for k, v in kw.items():
-            if k in _trans_opt:
-                trans_kw[_trans_opt[k]] = v
+            if k in NtkMisc._trans_opt:
+                trans_kw[NtkMisc._trans_opt[k]] = v
             else:
                 trans_kw[k] = v        
-        return self["menu"]._configure(('entryconfigure', index), trans_kw, {})
+        return self.__menu._configure(('entryconfigure', index), {}, **trans_kw)
     entryconfig = entryconfigure
     
     def index(self, index):
         """Return the index of a menu item identified by INDEX."""
-        i = self["menu"].tk.call(self["menu"]._w, 'index', index)
+        i = self.__menu.tk.call(self.__menu._w, 'index', index)
         if i == 'none': return None
-        return self["menu"].tk.getint(i)
+        return self.__menu.tk.getint(i)
     
     def invoke(self, index):
         """Invoke a menu item identified by INDEX and execute
         the associated command."""
-        return self["menu"].tk.call(self["menu"]._w, 'invoke', index)
-    #def type(self, index):
-        #"""Return the type of the menu item at INDEX."""
-        #return self["menu"].tk.call(self["menu"]._w, 'type', index)
-        
-    def getcontent(self):
-        return self.intStr.get()
+        return self.__menu.tk.call(self.__menu._w, 'invoke', index)
 
 
 
-
-class NCtkNotebook(NCtkWidget, ttk.Notebook):
+class NtkNotebook(NtkWidget, ttk.Notebook):
     """Ttk Notebook widget manages a collection of windows and displays
     a single one at a time. Each child window is associated with a tab,
     which the user may select to change the currently-displayed window."""
     def __init__(self, parent, x, y, w, h, pad=0):
-        NCtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Notebook.__init__)
+        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Notebook.__init__)
         self._get_parent_config()
         

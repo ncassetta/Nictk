@@ -1,5 +1,5 @@
 import _setup           # allows import from parent folder
-from NCtk import *
+from Ntk import *
 from random import choice, seed, random, randrange
 from time import sleep
 
@@ -18,12 +18,12 @@ class MoveLine:
         self.boxes = []
         self.locked = MM_ALL
         for j in range(LEN):
-            lab = NCtkLabel(parent, PACK, 0, 40, 40, pad=5)
+            lab = NtkLabel(parent, PACK, 0, 40, 40, pad=5)
             lab.bind("<Button-1>", self.changeColor)
             lab.color = -1
             self.boxes.append(lab)
         for j in range(LEN):
-            lab = NCtkLabel(parent, PACK, CENTER, 30, 30, pad=5)
+            lab = NtkLabel(parent, PACK, CENTER, 30, 30, pad=5)
             lab.bind("<Button-1>", self.changeBlackWhite)
             lab.config(relief=SOLID, borderwidth=1)
             lab.color = -1
@@ -284,6 +284,8 @@ class HumanPlayer:
 
 
 class CompPlayer:
+    
+    numAnalyzed = (0, 0, 5, 5, 10, 10, 20, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100)
     def __init__(self, moves1, moves2):
         self.your_moves = moves1
         self.other_moves = moves2
@@ -302,7 +304,7 @@ class CompPlayer:
     def move(self):
         self.your_moves[Game.nmoves].show(MM_ALL)
         self.your_moves[Game.nmoves].setLock(MM_COLOR)
-        your_move = choice(self.bestChoices())
+        your_move = self.bestChoice(self.numAnalyzed[Game.nmoves - 1])
         self.your_moves[Game.nmoves].setMove(your_move)
         return your_move
     
@@ -333,21 +335,16 @@ class CompPlayer:
             tstrike, tball = Game.evaluate(patt, move)
             if (tstrike, tball) != (strike, ball) and random() < prob:
                 choices.remove(patt)
-                      
-    TOO_BIG = 1000
-    MAX_MOVES = 100
             
-    def bestChoices(self):
-        if len(self.choices) > self.TOO_BIG:
-            sleep(1.0)
-            return self.choices
+    def bestChoice(self, max_analyzed):
         labStat.setcontent("Thinking in Python!\nPlease be patient")
-        betterChoices = []
-        better = 100000
-        num = 0
-        for move in self.choices:
-            num += 1
-            print("Evaluating", num, "of", len(self.choices), "; better number =", better)
+        analyzed = min(len(self.choices), max_analyzed)
+        offset = randrange(len(self.choices))
+        better_move = self.choices[offset]
+        better = 10000000
+        for num in range(analyzed):
+            move = self.choices[(offset + num) % len(self.choices)]
+            print("Evaluating", num + 1, "of", analyzed, "moves; better number =", better)
             temp_better = 0
             for patt in self.choices:
                 if patt == move:
@@ -362,19 +359,10 @@ class CompPlayer:
                 if temp_better > better:
                     break
             if temp_better < better:
-                betterChoices.clear()
+                better_move = move
                 better = temp_better
-                betterChoices.append(move)
-            elif temp_better == better:
-                betterChoices.append(move)
-            if num > self.MAX_MOVES:
-                print("Max analysis limit reached")
-                break
             winMain.update()
-        if len(betterChoices) == 0:
-            return self.choices
-        else:
-            return betterChoices
+        return better_move
                             
             
             
@@ -430,34 +418,34 @@ def configButtons(state):
 
 
 
-winMain= NCtkMain(100, 100, 800, 600, "NCtk Mastermind")
+winMain= NtkMain(100, 100, 800, 600, "Ntk Mastermind")
 BGCOLOR = winMain.getconfig("bcolor")
 
 ## menu
-menuBar = NCtkMenu(winMain)
-menuFile = NCtkMenu(winMain)
+menuBar = NtkMenu(winMain)
+menuFile = NtkMenu(winMain)
 menuFile.add_command(label="Quit", command=winMain.destroy)
 menuBar.add_cascade(label="File", menu=menuFile)
-menuGame = NCtkMenu(winMain)
-menuMode = NCtkMenu(winMain)
+menuGame = NtkMenu(winMain)
+menuMode = NtkMenu(winMain)
 menuMode.add_radiobutton(label="Training", command=setMode, value=True)
 menuMode.add_radiobutton(label="Play against computer", command=setMode, value=False)
 menuGame.add_cascade(label="Mode", menu=menuMode)
-menuDiff = NCtkMenu(winMain)
+menuDiff = NtkMenu(winMain)
 menuDiff.add_radiobutton(label="1 - Easier", command=setDifficulty, value=1)
 menuDiff.add_radiobutton(label="2         ", command=setDifficulty, value=2)
 menuDiff.add_radiobutton(label="3 - Normal", command=setDifficulty, value=3)
 menuDiff.add_radiobutton(label="4         ", command=setDifficulty, value=4)
 menuDiff.add_radiobutton(label="5 - Harder", command=setDifficulty, value=5)
 menuGame.add_cascade(label="Difficulty", menu=menuDiff)
-menuAss = NCtkMenu(winMain)
+menuAss = NtkMenu(winMain)
 menuAss.add_radiobutton(label="Auto answer", command=setAssistance, value=1)
 menuAss.add_radiobutton(label="Correct wrong answers", command=setAssistance, value=2)
 menuAss.add_radiobutton(label="No correction", command=setAssistance, value=3)
 menuGame.add_cascade(label="Answer", menu=menuAss)
 
 menuBar.add_cascade(label="Game", menu=menuGame)
-menuHelp = NCtkMenu(winMain)
+menuHelp = NtkMenu(winMain)
 menuHelp.add_command(label="How to play", command=howtoplay)
 menuHelp.add_command(label="Credits", command=credits)
 menuBar.add_cascade(label="Help", menu=menuHelp)
@@ -466,17 +454,17 @@ menuMode.invoke(menuMode.index("Play against computer"))
 menuDiff.invoke(menuDiff.index("3 - Normal"))
 
 # frames for player and computer
-rfrYou = NCtkRowFrame(winMain, 10, 10, "40%", -10)
+rfrYou = NtkRowFrame(winMain, 10, 10, "40%", -10)
 rfrYou.config(relief=RIDGE, borderwidth=2)
 rfrYou.add_row(40)
-labYou = NCtkLabel(rfrYou, 0, 0, FILL, FILL, pad=(10,5), content="you")
+labYou = NtkLabel(rfrYou, 0, 0, FILL, FILL, pad=(10,5), content="you")
 labYou.config(bcolor="light blue", fcolor="dark blue", anchor="center",
                    font=("Arial", 16, "bold"))
 
-rfrComp = NCtkRowFrame(winMain, "40%", 10,  "40%", -10)
+rfrComp = NtkRowFrame(winMain, "40%", 10,  "40%", -10)
 rfrComp.config(relief=RIDGE, borderwidth=2)
 rfrComp.add_row(40)
-labComp = NCtkLabel(rfrComp, 0, 0, FILL, FILL, pad=(10,5), content="the computer")
+labComp = NtkLabel(rfrComp, 0, 0, FILL, FILL, pad=(10,5), content="the computer")
 labComp.config(bcolor="light green", fcolor="dark green", anchor="center",
                    font=("Arial", 16, "bold"))
 
@@ -489,11 +477,11 @@ for i in range(NUM_TRIES + 1):
 you = HumanPlayer(your_moves, comp_moves)
 comp = CompPlayer(comp_moves, your_moves)
 
-butStart = NCtkButton(winMain,"80%", 100, 80, 40, pad=(10,5), content="Start", command=startReset)
-butTry = NCtkButton(winMain, "80%", 140, 80, 40, pad=(10,5), content="Try", command=you.tryPattern)
-butAns = NCtkButton(winMain, "80%", 180, 80, 40, pad=(10,5), content="Answer", command=you.tryAnswer)
+butStart = NtkButton(winMain,"80%", 100, 80, 40, pad=(10,5), content="Start", command=startReset)
+butTry = NtkButton(winMain, "80%", 140, 80, 40, pad=(10,5), content="Try", command=you.tryPattern)
+butAns = NtkButton(winMain, "80%", 180, 80, 40, pad=(10,5), content="Answer", command=you.tryAnswer)
 
-labStat = NCtkLabel(winMain, "80%", 220, -20, 60, pad=(10,5))
+labStat = NtkLabel(winMain, "80%", 220, -20, 60, pad=(10,5))
 labStat.config(bcolor="white", font=("Arial", 10))
 
 winMain.update_idletasks()

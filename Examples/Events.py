@@ -1,5 +1,5 @@
 import _setup           # allows import from parent folder
-from Ntk import *
+import Ntk
 
 
 COL1 = "#A0C0E0"        # light blue
@@ -8,9 +8,9 @@ COL3 = "#F0B0D0"        # pink
 COL4 = "#E0E0A0"        # light yellow
 
 
-class MyMain(NtkMain):
+class MyMain(Ntk.NtkMain):
     def __init__(self, x, y, w, h):
-        NtkMain.__init__(self, x, y, w, h)
+        Ntk.NtkMain.__init__(self, x, y, w, h)
         # these are used in self.change_title
         self.oldw, self.oldh = w, h
         self.afterid = None
@@ -19,13 +19,13 @@ class MyMain(NtkMain):
         self.bind("<Configure>", self.change_title)
         
         # creates two upper labels
-        self.lab1 = NtkLabel(self, 0, 0, FILL, "40%", pad=(20, 10))
+        self.lab1 = Ntk.NtkLabel(self, 0, 0, Ntk.FILL, "40%", pad=(20, 10))
         self.lab1.config(bcolor=COL1, font=("Arial", 12), takefocus=True)
-        self.lab2 = NtkLabel(self, 0, PACK, FILL, "40%", pad=(20, 10))
+        self.lab2 = Ntk.NtkLabel(self, 0, Ntk.PACK, Ntk.FILL, "40%", pad=(20, 10))
         self.lab2.config(bcolor=COL1, font=("Arial", 12), takefocus=True)
         # third (helper) label
-        self.labHelp = NtkLabel(self, 0, PACK, FILL, FILL, pad=(20, 10))
-        self.labHelp.setcontent(self.helpstr)
+        self.labHelp = Ntk.NtkLabel(self, 0, Ntk.PACK, Ntk.FILL, Ntk.FILL, pad=(20, 10))
+        self.labHelp.set_content(self.helpstr)
         # text will scroll, so no line wrapping
         self.labHelp.config(wraplen=0)
 
@@ -45,9 +45,9 @@ class MyMain(NtkMain):
         # string which will scroll in the helper label
         
 
-    helpstr = ("                          " +
+    helpstr = ("                   " +
         "Click on the labels above and move the focus with the TAB key    ---   " +
-        "Try to drag windows edges")         
+        "Try to drag the window edges             ---")         
         
 
     def change_title(self, event):
@@ -92,31 +92,31 @@ class MyMain(NtkMain):
         # we don't want lab3 involved in events
         if w == self.labHelp:
             return
-        if t == EventType.Enter:
+        if t == Ntk.EventType.Enter:
             w.config(bcolor=COL2)
-            w.setcontent("The mouse is over me")
+            w.set_content("The mouse is over me")
             # enlarges the widget
             w.resize(pad=(17, 7))
-        elif t == EventType.Leave:
+        elif t == Ntk.EventType.Leave:
             w.config(bcolor=COL1)
-            w.setcontent("The mouse has left me")
+            w.set_content("The mouse has left me")
             # sets original dims
             w.resize(pad=(20, 10))
-        elif t == EventType.FocusIn:
+        elif t == Ntk.EventType.FocusIn:
             w.config(bcolor=COL3)
-            w.setcontent("I've got the focus")
-        elif t == EventType.FocusOut:
+            w.set_content("I've got the focus")
+        elif t == Ntk.EventType.FocusOut:
             w.config(bcolor=COL1)
-            w.setcontent("I've lost the focus")
-        elif t == EventType.Button:
+            w.set_content("I've lost the focus")
+        elif t == Ntk.EventType.Button:
             w.config(bcolor=COL4)
-            w.setcontent("You clicked on me!")
+            w.set_content("You clicked on me!")
             
 
     def scroll_string(self):
         "Scrolls  the helper string 1 char every 1/5 sec"""
         self.helpstr = self.helpstr[1:] + self.helpstr[0]
-        self.labHelp.setcontent(self.helpstr)
+        self.labHelp.set_content(self.helpstr)
         # recharges the timer
         self.after(200, self.scroll_string)
        
@@ -124,4 +124,4 @@ class MyMain(NtkMain):
                 
 winMain = MyMain(100, 100, 400, 300)
 
-mainloop()
+Ntk.mainloop()

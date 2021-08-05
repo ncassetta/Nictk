@@ -129,7 +129,7 @@ class Game:
                 if not comp_moves[0].getMove():
                     return
                 Game.challengeGame()
-            butStart.setcontent("Reset")
+            butStart.set_content("Reset")
             configButtons("ndd")
         
     def reset():
@@ -144,8 +144,8 @@ class Game:
         if not Game.training:
             comp_moves[0].show(MM_COLOR)
             comp_moves[0].setLock(MM_NONE)
-            labStat.setcontent("Choose your pattern")
-        butStart.setcontent("Start")
+            labStat.set_content("Choose your pattern")
+        butStart.set_content("Start")
         configButtons("ndd")
         Game.status = "idle"
         
@@ -297,7 +297,7 @@ class CompPlayer:
         self.other_moves[0].setMove(self.pattern)
         if Game.training == False:
             self.generateChoices()
-            labStat.setcontent(str(len(self.choices)) + " moves left")
+            labStat.set_content(str(len(self.choices)) + " moves left")
     
     def move(self):
         self.your_moves[Game.nmoves].show(MM_ALL)
@@ -310,7 +310,7 @@ class CompPlayer:
     def getAnswer(self, strike, ball):
         move = self.your_moves[Game.nmoves].getMove()
         self.cutChoices(move, strike, ball, self.choices, Game.difficulty)
-        labStat.setcontent(str(len(self.choices)) + " moves left")
+        labStat.set_content(str(len(self.choices)) + " moves left")
         
         
     def answer(self, move):
@@ -341,7 +341,7 @@ class CompPlayer:
         if len(self.choices) > self.TOO_BIG:
             sleep(1.0)
             return self.choices
-        labStat.setcontent("Thinking in Python!\nPlease be patient")
+        labStat.set_content("Thinking in Python!\nPlease be patient")
         betterChoices = []
         better = 100000
         num = 0
@@ -382,13 +382,15 @@ class CompPlayer:
             
                         
 LEN = 4
-STR_RULES = """
-You must guess the combination of 4 colors chosen by the computer (colors can be repeated).
-At each attempt the computer will report the number of strikes (right colors in the right position) and balls (right colors but in the wrong position)"""
+STR_RULES = "You must guess the combination of 4 colors chosen by the computer (colors can be repeated)."
+"At each attempt the computer will report the number of strikes (black squares: right colors in the right "
+"position) and balls (white squares: right colors but in the wrong position)"""
             
 STR_CREDITS = """
 M  A  S  T  E  R  M  I  N  D
 copyright 2021 by Nicola Cassetta"""
+
+AUTO_ANS, CORRECT_WRONG, NO_CORRECT = 1, 2, 3
                         
 def howtoplay(event):
     tkmb.showinfo("Mastermind", STR_RULES)
@@ -406,8 +408,8 @@ def setAssistance(event):
     Game.assistance = event.value
 
 def startReset(event):
-    if event.widget.getcontent() == "Reset":
-        event.widget.setcontent("Start")
+    if event.widget.get_content() == "Reset":
+        event.widget.set_content("Start")
         Game.reset()
     else:
         Game.start()
@@ -431,51 +433,54 @@ def configButtons(state):
 
 
 winMain= NtkMain(100, 100, 800, 600, "Ntk Mastermind")
-BGCOLOR = winMain.getconfig("bcolor")
+BGCOLOR = winMain.get_config("bcolor")
 
 ## menu
 menuBar = NtkMenu(winMain)
-menuFile = NtkMenu(winMain)
+menuFile = NtkMenu(menuBar, "File   ")
 menuFile.add_command(label="Quit", command=winMain.destroy)
-menuBar.add_cascade(label="File", menu=menuFile)
-menuGame = NtkMenu(winMain)
-menuMode = NtkMenu(winMain)
-menuMode.add_radiobutton(label="Training", command=setMode, value=True)
-menuMode.add_radiobutton(label="Play against computer", command=setMode, value=False)
-menuGame.add_cascade(label="Mode", menu=menuMode)
-menuDiff = NtkMenu(winMain)
-menuDiff.add_radiobutton(label="1 - Easier", command=setDifficulty, value=1)
-menuDiff.add_radiobutton(label="2         ", command=setDifficulty, value=2)
-menuDiff.add_radiobutton(label="3 - Normal", command=setDifficulty, value=3)
-menuDiff.add_radiobutton(label="4         ", command=setDifficulty, value=4)
-menuDiff.add_radiobutton(label="5 - Harder", command=setDifficulty, value=5)
-menuGame.add_cascade(label="Difficulty", menu=menuDiff)
-menuAss = NtkMenu(winMain)
-menuAss.add_radiobutton(label="Auto answer", command=setAssistance, value=1)
-menuAss.add_radiobutton(label="Correct wrong answers", command=setAssistance, value=2)
-menuAss.add_radiobutton(label="No correction", command=setAssistance, value=3)
-menuGame.add_cascade(label="Answer", menu=menuAss)
-
-menuBar.add_cascade(label="Game", menu=menuGame)
-menuHelp = NtkMenu(winMain)
-menuHelp.add_command(label="How to play", command=howtoplay)
-menuHelp.add_command(label="Credits", command=credits)
-menuBar.add_cascade(label="Help", menu=menuHelp)
-winMain.config(menu=menuBar)
-menuMode.invoke(menuMode.index("Play against computer"))
-menuDiff.invoke(menuDiff.index("3 - Normal"))
+menuGame = NtkMenu(menuBar, "Game   ")
+menuMode = NtkMenu(menuGame, "Mode   ")
+modeStr = StringVar("")
+menuMode.add_radiobutton(label="Training", variable=modeStr,
+                         command=lambda ev: comp.settattr(training, True))
+menuMode.add_radiobutton(label="Play against computer", variable=modeStr,
+                         command=lambda ev: comp.setattr(training, False))
+menuDiff = NtkMenu(menuGame, "Difficulty")
+diffStr = StringVar("")
+menuDiff.add_radiobutton(label="1 - Easier", variable=diffStr,
+                         command=lambda ev: comp.setattr(difficulty, 0.2))
+menuDiff.add_radiobutton(label="2         ", variable=diffStr,
+                         command=lambda ev: comp.setattr(difficulty, 0.4))
+menuDiff.add_radiobutton(label="3 - Normal", variable=diffStr,
+                         command=lambda ev: comp.setattr(difficulty, 0.6))
+menuDiff.add_radiobutton(label="4         ", variable=diffStr,
+                         command=lambda ev: comp.setattr(difficulty, 0.8))
+menuDiff.add_radiobutton(label="5 - Harder", variable=diffStr,
+                         command=lambda ev: comp.setattr(difficulty, 1.0))
+menuAss = NtkMenu(menuGame, "Assistance")
+assStr = StringVar("")
+menuAss.add_radiobutton(label="Auto answer", variable=assStr,
+                        command=lambda ev: comp.setattr(assistance, AUTO_ANS))
+menuAss.add_radiobutton(label="Correct wrong answers", variable=assStr,
+                        command=lambda ev: comp.setattr(assistance, CORRECT_WRONG))
+menuAss.add_radiobutton(label="No correction", variable=assStr,
+                        command=lambda ev: comp.setattr(assistance, NO_CORRECT))
+menuHelp = NtkMenu(menuBar, "Help   ")
+menuHelp.add_command(label="How to play", command=lambda ev: tkmb.showinfo("Mastermind", STR_RULES))
+menuHelp.add_command(label="Credits", command=lambda ev: tkmb.showinfo("Mastermind", STR_CREDITS)) 
 
 # frames for player and computer
 rfrYou = NtkRowFrame(winMain, 10, 10, "40%", -10)
 rfrYou.config(relief=RIDGE, borderwidth=2)
-rfrYou.add_row(40)
+rfrYou.add_row(50)
 labYou = NtkLabel(rfrYou, 0, 0, FILL, FILL, pad=(10,5), content="you")
 labYou.config(bcolor="light blue", fcolor="dark blue", anchor="center",
                    font=("Arial", 16, "bold"))
 
 rfrComp = NtkRowFrame(winMain, "40%", 10,  "40%", -10)
 rfrComp.config(relief=RIDGE, borderwidth=2)
-rfrComp.add_row(40)
+rfrComp.add_row(50)
 labComp = NtkLabel(rfrComp, 0, 0, FILL, FILL, pad=(10,5), content="the computer")
 labComp.config(bcolor="light green", fcolor="dark green", anchor="center",
                    font=("Arial", 16, "bold"))
@@ -495,6 +500,11 @@ butAns = NtkButton(winMain, "80%", 180, 80, 40, pad=(10,5), content="Answer", co
 
 labStat = NtkLabel(winMain, "80%", 220, -20, 60, pad=(10,5))
 labStat.config(bcolor="white", font=("Arial", 10))
+
+# set correct menu items
+menuMode.invoke("Play against computer")
+menuDiff.invoke("3 - Normal")
+menuAss.invoke("Correct wrong answers")
 
 winMain.update_idletasks()
 Game.reset() 

@@ -1,10 +1,10 @@
 import _setup           # allows import from parent folder
-from Ntk import *
+import Ntk
 
 
 # items to be added to the listbox (italian numbers)
-lines = ("Uno", "Due", "Tre", "Quattro", "Cinque", "Sei", "Sette", "Otto",
-         "Nove", "Dieci", "Undici", "Dodici", "Tredici", "Quattordici")
+numbers = ("Uno", "Due", "Tre", "Quattro", "Cinque", "Sei", "Sette", "Otto",
+           "Nove", "Dieci", "Undici", "Dodici", "Tredici", "Quattordici")
 # selection modes
 modes = ("single", "browse", "multiple", "extended")
 # explanations of selection modes
@@ -16,22 +16,37 @@ explmodes = ("single mode : you can select only one item at once, clicking on it
              "<CTRL> or <SHIFT> keys")
 
 
-def addtolbox(event):
-    """Adds an item to the left listbox."""
+def add_item(event):
+    """Adds an item to the left listbox and controls
+    the state of ButAdd and ButDel."""
     nitems = lstTest.size()
-    if nitems < len(lines):
-        lstTest.insert(nitems, lines[nitems])
+    if nitems < len(numbers):
+        lstTest.add(numbers[nitems])
+    nitems = lstTest.size()
+    if nitems > 0:        
+        butDel.activate()
+    if nitems == len(numbers):
+        butAdd.deactivate()
         
-def delfromlbox(event):
-    """ Deletes an item from the left listbox."""
-    if lstTest.size() > 0:
-        lstTest.delete(END)
-        testchanged(None)
+def del_item(event):
+    """ Deletes an item from the left listbox and controls
+    the state of ButAdd and ButDel."""
+    nitems = lstTest.size()
+    if nitems > 0:
+        lstTest.delete(nitems - 1)
+        # adjusts the selection report
+        lbox_changed(None)
+    nitems = lstTest.size()
+    if nitems < len(numbers):
+        butAdd.activate()
+    if lstTest.size() == 0:
+        butDel.deactivate()
         
         
-def testchanged(event):
+        
+def lbox_changed(event):
     """Callback called when you select one or more item in the left listbox."""
-    sel = lstTest.getselected()
+    sel = lstTest.get_selected()
     #print("testchanged with index", sel)
     if len(sel) == 0:
         s = "none"
@@ -40,45 +55,63 @@ def testchanged(event):
         for i in sel:
             s += "{}, ".format(i)
         s = s[:-2]
-    labSel.setcontent("Selected index: " + s if len(sel) <= 1 else "Selected indexes: " + s) 
+    labSel.set_content("Selected index: " + s if len(sel) <= 1 else "Selected indexes: " + s) 
 
-def selchanged(event):
+def mode_changed(event):
     """Callback called when the user modifies the selection mode."""
     #lstTest.select_clear(0, END)
-    testchanged(None)
-    sel = lstMode.getselected()
+    lbox_changed(None)
+    sel = lstMode.get_selected()
     #print("selchanged() called with index", sel)
     if len(sel):
-        labExplain.setcontent(explmodes[sel[0]])
+        labExplain.set_content(explmodes[sel[0]])
         lstTest.config(selectmode=modes[sel[0]])
     
 
-winMain = NtkMain(200, 150, 600, 450, "NtkListbox widget sample")
-hfr1 = NtkHorFrame(winMain, 0, 0, FILL, FILL)
-rfr1 = NtkRowFrame(hfr1, 0, 0, "50%", FILL)
-vfr2 = NtkVerFrame(hfr1, PACK, 0, FILL, FILL)
+winMain = Ntk.NtkMain(200, 150, 600, 450, "NtkListbox widget sample")
+
+# we use frames for positioning widgets
+hfr1 = Ntk.NtkHorFrame(winMain, 0, 0, Ntk.FILL, Ntk.FILL)
+rfr1 = Ntk.NtkRowFrame(hfr1, 0, 0, "50%", Ntk.FILL)
+vfr2 = Ntk.NtkVerFrame(hfr1, Ntk.PACK, 0, Ntk.FILL, Ntk.FILL)
+
 rfr1.add_row(40)
-labTest = NtkLabel(rfr1, 0, 0, FILL, FILL, pad=(10, 10, 10, 5), content="Try to select items")
-labTest.config(bcolor="light green", fcolor="blue", relief=SOLID, borderwidth=1, anchor=CENTER)
+labTest = Ntk.NtkLabel(rfr1, 0, 0, Ntk.FILL, Ntk.FILL, pad=(10, 10, 10, 5),
+                       content="Try to select items")
+labTest.config(bcolor="light green", fcolor="blue", relief=Ntk.SOLID,
+               borderwidth=1, anchor=Ntk.CENTER)
+
 rfr1.add_row(-80)
-lstTest = NtkListbox(rfr1, 0, 0, FILL, FILL, pad=(10, 5, 10, 40), command=testchanged)
+lstTest = Ntk.NtkListbox(rfr1, 0, 0, Ntk.FILL, Ntk.FILL, pad=(10, 5, 10, 40),
+                         command=lbox_changed)
 lstTest.config(bcolor="blue", fcolor="yellow", sfcolor="maroon", sbcolor="light blue", 
-               relief=RIDGE, font=("TkDefaultFont", 14))
+               relief=Ntk.RIDGE, font=("TkDefaultFont", 14))
+
 rfr1.add_row(40)
-labSel = NtkLabel(rfr1, 0, 0, FILL, FILL, pad=(10, 5))
-labSel.config(bcolor="light green", fcolor="blue", relief=SOLID, borderwidth=1)
-testchanged(None)
-rfr1.add_row(FILL)
-butAdd = NtkButton(rfr1, "15%", 0, "35%", FILL, pad=(5,5, 5, 10), content="Add item",
-                    command=addtolbox) 
-butDel = NtkButton(rfr1, PACK, PACK, "35%", FILL, pad=(5, 5, 5, 10), content="Del item",
-                    command =delfromlbox)
-labMode = NtkLabel(vfr2, 0, 0, FILL, 40, pad=(10, 10, 10, 5), content="Listbox Mode")
-labMode.config(bcolor="light green", fcolor="blue", relief=SOLID, borderwidth=1, anchor=CENTER)
-lstMode = NtkListbox(vfr2, 0, PACK, FILL, 120, pad=(10, 5), command=selchanged, items=modes)
-lstMode.config(bcolor="cyan", fcolor="brown", font=("TkDefaultFont", 14), relief=RIDGE)
-labExplain=NtkLabel(vfr2, 0, PACK, FILL, FILL, pad=(10, 10), content=explmodes[0])
-labExplain.config(anchor=NW)
+labSel = Ntk.NtkLabel(rfr1, 0, 0, Ntk.FILL, Ntk.FILL, pad=(10, 5))
+labSel.config(bcolor="light green", fcolor="blue", relief=Ntk.SOLID,
+              borderwidth=1)
+
+# calls the callback to adjust labSel content
+lbox_changed(None)
+
+rfr1.add_row(Ntk.FILL)
+butAdd = Ntk.NtkButton(rfr1, "15%", 0, "35%", Ntk.FILL, pad=(5,5, 5, 10),
+                       content="Add item", command=add_item) 
+butDel = Ntk.NtkButton(rfr1, Ntk.PACK, Ntk.PACK, "35%", Ntk.FILL, pad=(5, 5, 5, 10),
+                       content="Del item", command =del_item)
+butDel.deactivate()
+
+labMode = Ntk.NtkLabel(vfr2, 0, 0, Ntk.FILL, 40, pad=(10, 10, 10, 5),
+                       content="Listbox Mode")
+labMode.config(bcolor="light green", fcolor="blue", relief=Ntk.SOLID, borderwidth=1,
+               anchor=Ntk.CENTER)
+lstMode = Ntk.NtkListbox(vfr2, 0, Ntk.PACK, Ntk.FILL, 120, pad=(10, 5),
+                         command=mode_changed, items=modes)
+lstMode.config(bcolor="cyan", fcolor="brown", font=("TkDefaultFont", 14), relief=Ntk.RIDGE)
+labExplain=Ntk.NtkLabel(vfr2, 0, Ntk.PACK, Ntk.FILL, Ntk.FILL, pad=(10, 10),
+                        content=explmodes[0])
+labExplain.config(anchor=Ntk.NW)
 lstMode.select(0)
 
-mainloop()
+Ntk.mainloop()

@@ -1,53 +1,73 @@
 import _setup           # allows import from parent folder
-from Ntk import *
+import Ntk
 
-def changeLabText(ev):
+
+
+def change_label_text(ev):
+    """This callback recognizes which widget called it,
+    and updates the upper label content accordingly."""
     if ev.widget == chk1:
         s = "Pink button variable value:     " + chk1Var.get()
     elif ev.widget == chk2:
         s = "Orange button variable value:   " + str(chk2Var.get())
     else:
         s = "Option " + str(optVar.get()) + " selected"
-    labSample.setcontent(s)
+    labSample.set_content(s)
 
 
-winMain = NtkMain(200, 150, 600, 400, "Radio and Check Buttons")
+
+winMain = Ntk.NtkMain(200, 150, 600, 400, "Radio and Check Buttons")
 winMain.config(bcolor="#FFFFA0")
-winMain.config_children(ALL, relief=GROOVE)
-rfr1 = NtkRowFrame(winMain, 0, 0, FILL, FILL)
+winMain.config_children("all", relief="groove")
+
+# we dispose our widgets in rows
+rfr1 = Ntk.NtkRowFrame(winMain, 0, 0, "fill", "fill")
 rfr1.add_row(60)
-labSample = NtkLabel(rfr1, 0, 0, FILL, FILL, pad=10)
+
+# main label: its content is updated by the callback
+labSample = Ntk.NtkLabel(rfr1, 0, 0, "fill", "fill", pad=10)
 rfr1.add_row(80)
 
-chk1 = NtkCheckbutton(rfr1, 0, 0, "40%", FILL, pad=(10, 5, 5, 5),
-                       content="This button controls a StrVar, which can get values: 'Value: on' and 'Value: off",
-                       command=changeLabText) 
+# creates pink checkbutton, and associates a StringVar to the button states 
+chk1Var = Ntk.StringVar()
+chk1 = Ntk.NtkCheckbutton(rfr1, 0, 0, "40%", "fill", pad=(10, 5, 5, 5),
+                          content="This button controls a StrVar, which can get values: 'Value: on' and 'Value: off",
+                          variable=(chk1Var, "Value: on", "Value: off"), command=change_label_text) 
 chk1.config(bcolor="pink", abcolor="pink")
-chk1Var = StringVar()
-chk1.setvariable(chk1Var, "Value: off", "Value: on")
 chk1.select()
-labChk1 = NtkLabel(rfr1, PACK, 0, FILL, FILL, pad=(5, 5, 10, 5))
-labChk1.config(textvariable=chk1Var)
+# the label will be automatically updated with chk1Var content
+labChk1 = Ntk.NtkLabel(rfr1, "pack", 0, "fill", "fill", pad=(5, 5, 10, 5), content=chk1Var)
 rfr1.add_row(80)
-chk2 = NtkCheckbutton(rfr1, 0, 0, "40%", FILL, pad=(10, 5, 5, 5),
-                       content="This button controls an IntVar, which gan get values: 0 and 1", command=changeLabText)
-chk2Var = IntVar()
-chk2.config(bcolor="orange", abcolor="orange")
-chk2.setvariable(chk2Var, 0, 1)
-chk2.deselect()
-labChk2 = NtkLabel(rfr1, PACK ,0 , FILL, FILL, pad=(5, 5, 10, 5))
-labChk2.config(textvariable=chk2Var)
-optVar = IntVar()
-rfr1.add_row(-10)
-frm3 = NtkVerFrame(rfr1, 10, 10, -10, FILL)
-frm3.config_children("all", relief=FLAT)
-frm3.config(relief=GROOVE)
-rad1 = NtkRadiobutton(frm3, 0, PACK, FILL, "33%", command=changeLabText)
-rad1.config(variable=optVar, value=1, text = "Option 1")
-rad2 = NtkRadiobutton(frm3, 0, PACK, FILL, "33%", command=changeLabText)
-rad2.config(variable=optVar, value= 2, text="Option 2")
-rad3 = NtkRadiobutton(frm3, 0, PACK, FILL, "33%", command=changeLabText)
-rad3.config(variable=optVar, value= 3, text="Option 3")
-rad2.invoke()
 
-mainloop()
+# creates orange checkbutton, and associates an IntVar to the button states
+# (its offvalue and onvalue are set to 0 and 1) 
+chk2Var = Ntk.IntVar()
+chk2 = Ntk.NtkCheckbutton(rfr1, 0, 0, "40%", "fill", pad=(10, 5, 5, 5),
+                          content="This button controls an IntVar, which can get values: 0 and 1",
+                          variable=chk2Var, command=change_label_text)
+chk2.config(bcolor="orange", abcolor="orange")
+chk2.deselect()
+# the label will be automatically updated with chk2Var content
+labChk2 = Ntk.NtkLabel(rfr1, "pack", 0 , "fill", "fill", pad=(5, 5, 10, 5), content=chk2Var)
+rfr1.add_row(-10)
+
+# we need this to stack radiobuttons vertically
+frm3 = Ntk.NtkVerFrame(rfr1, 10, 10, -10, "fill")
+frm3.config(relief="groove")
+frm3.config_children("all", relief="flat")
+
+# common variable for all radiobuttons
+optVar = Ntk.IntVar()
+# radiobuttons
+rad1 = Ntk.NtkRadiobutton(frm3, 0, "pack", "fill", "33%", content="Option 1",
+                          variable=(optVar, 1), command=change_label_text)
+rad2 = Ntk.NtkRadiobutton(frm3, 0, "pack", "fill", "33%", content="Option 2",
+                          variable=(optVar, 2), command=change_label_text)
+rad3 = Ntk.NtkRadiobutton(frm3, 0, "pack", "fill", "33%", content="Option 3",
+                          variable=(optVar, 3), command=change_label_text)
+# sets rad2 at the beginning
+rad2.invoke()
+# clears the text set by the previous
+labSample.set_content("")
+
+Ntk.mainloop()

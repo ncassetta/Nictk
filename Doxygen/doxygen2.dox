@@ -1,412 +1,363 @@
 /// \page ATTRIBUTES Widgets properties
 ///
-/// You can set the widget attributes with the NCtkMisc.config() method.It takes a dictionary of named parameters, one for every attribute. In NCtk some attribute has been renamed for a better  
+/// Widgets attributes are a real nuisance in **tkinter**: there are dozens of options, and each widget accepts only a subset of them, making it difficult to remember their name and meaning (even the documentation is not always complete). I tried to semplify this situation, renaming some option in a way easier to remember, and introducing new functions to set some of them. 
+///
+/// ## Setting and getting option values
+///
+/// In **tkinter** you can use the config() method (or its alias configure()) to set the value of an option and the getc() method to get it. In Ntk I kept the Ntk.NtkMisc.config() method (while configure() was removed) to set the values and renamed getc() into Ntk.NtkMisc.get_config() (NtkMisc is a general class inherited both by containers and internal widgets).
+///
+/// The Ntk.NtkWidget.config() method has this signature:
+///
+/// \code{.py}
+/// def config(self, cnf=None, **kw):
+/// \endcode
+///
+/// and you can usually call it with any number of keyword arguments, for example:
+///
+/// \code{.py}
+/// >>> import Ntk
+/// >>> lab = Ntk.NtkLabel(None, 0, 0, 100, 20)
+/// >>> lab.config(anchor="ne", relief="solid", justify="left")
+/// \endcode
+///
+/// The Ntk.NtkWidget.get_config() has:
+///
+/// \code{.py}
+/// def get_config(self, key):
+/// \endcode
+///
+/// where _key_ is the name of the requested option value (as a string), for example:
+///
+/// \code{.py}
+/// >>> .  .  .
+/// >>> lab.get_config("anchor")
+/// 'ne'
+/// \endcode
+///
+/// A common tedious situation is the need to repeat the same settings on a large number of widgets (this led to the introduction of **ttk** with its  themed widgets). In Ntk I introduced the Ntk.NtkContainer.config_children() method. When creating a container (a window or a frame) you can call this method before adding child widgets, and all of them will inherit the options set in the method. Examples of the use of this method are in many example files.
+///
+/// This is an (incomplete) list of the most useful options, however in the tkinter docstrings there is always a list of **all** accepted options.
+///
+/// \note All Ntk constants in capital letters correspond to the same string in lowercase; so, for example, CENTER = "center" etc.
 /// 
 /// ## Colors ##
 ///
 /// You can set many color for widgets; a color can be indicated:
-/// + by a string *"#RRGGBB"* where RR, GG, BB are the hexadecimal values for Red, Green, Blue;
-/// + with his name in the following table
+/// + by a string <b>"#RRGGBB"</b> where **RR**, **GG**, **BB** are the hexadecimal values for Red, Green, Blue;
+/// + by his name (also as a string) in the following <a href="http://www.science.smith.edu/dftwiki/index.php/File:TkInterColorCharts.png" target="_blank">table of colors</a>.
 ///
-/// These are the color attributes (someone is specific for only certain widgets):
+/// These are the color attributes (with the widgets which accept them): in %Ntk they has been renamed for a better coherence, but, if you want, you can continue to use the old names.
+///
 /// <table>
 ///   <tr >
-///     <th>Option</th>
+///     <th>New %Ntk name</th>
+///     <th>Old tkinter name</th>
 ///     <th>Meaning</th>
 ///     <th>Applies to</th>
 ///   </tr><tr>
 ///     <td>abcolor</td>
-///     <td>Active background: the color of the backgrouhd when the mouse, This property seems to be OS dependent: it doesn't work for Windows and MacOS. However you can get the same result by binding </td>
-///     <td>All widgets</td>
+///     <td>activebackground</td>
+///     <td>Active background: the color of the backgrouhd when the widget is in active state (the mouse is over it) This property seems to be OS dependent: it doesn't work for some widgets</td>
+///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkLabel, Ntk.NtkMenu, Ntk.NtkRadiobutton, Ntk.NtkScale, Ntk.NtkScrollbar, Ntk.NtkSpinbox</td>
 ///   </tr><tr>
 ///     <td>afcolor</td>
+///     <td>activeforeground</td>
 ///     <td>Active foreground: see above</td>
-///     <td>All widgets</td>
+///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkLabel, Ntk.NtkMenu, Ntk.NtkRadiobutton</td>
 ///   </tr><tr>
 ///     <td>bcolor</td>
-///     <td>Background</td>
+///     <td>background, bg</td>
+///     <td>The background color when the widget is in normal state</td>
 ///     <td>All widgets</td>
 ///   </tr><tr>
 ///     <td>dfcolor</td>
-///     <td>Disabled foreground: the color of the b</td>
-///     <td>The widget box will be stacked after the last widget already placed. For details see. If the adiacent widget is resized the coordinate will be updated. See <a href="#packuse">Note on the use of PACK</a> for details.</td>
+///     <td>disabledforeground</td>
+///     <td>Disabled foreground: the color of the text when the widget is in disabled state</td>
+///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkLabel, Ntk.NtkMenu, Ntk.NtkRadiobutton, Ntk.NtkSpinbox</td>
+///   </tr><tr>
+///     <td>fcolor</td>
+///     <td>foreground, fg</td>
+///     <td>Foreground: the color of the text when the widget is in normal state</td>
+///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkEntry, Ntk.NtkLabel, Ntk.NtkListbox, Ntk.NtkMenu, Ntk.NtkRadiobutton, Ntk.NtkScale, Ntk.NtkSpinbox, Ntk.NtkText</td>
 ///   </tr><tr>
 ///     <td>hbcolor</td>
-///     <td>Highlight background</td>
-///     <td>The widget box will be centered (horizontally or vertically) in the parent widget</td>
+///     <td>highlightbackground</td>
+///     <td>Highlight background: the background color when the text is highlighted</td>
+///     <td>All widgets, except Ntk.NtkMenu</td>
 ///   </tr><tr>
 ///     <td>hfcolor</td>
-///     <td>Highlight Foreground</td>
-///     <td>The topleft will be placed in the relative (in percent) position x or y with respect to parent widget left (or top). If the parent is resized the coordinate will be updated</td>
+///     <td>highlightcolor</td>
+///     <td>Highlight foreground: the color of the text when it is highlighted</td>
+///     <td>All widgets, except Ntk.NtkMenu</td>
 ///   </tr><tr>
 ///     <td>rbcolor</td>
-///     <td>Readonly background</td>
-///     <td>The widget box will be stacked after the last widget already placed. For details see. If the adiacent widget is resized the coordinate will be updated. See <a href="#packuse">Note on the use of PACK</a> for details.</td>
+///     <td>readonlybackground</td>
+///     <td>Readonly background: the background color when the widget is in readonly state</td>
+///     <td>Ntk.NtkSpinbox</td>
 ///   </tr><tr>
 ///     <td>sbcolor</td>
-///     <td>Select background</td>
-///     <td>The widget box will be centered (horizontally or vertically) in the parent widget</td>
+///     <td>selectbackground</td>
+///     <td>Select background: the background color of a selected text</td>
+///     <td>Ntk.NtkCanvas, Ntk.NtkEntry, Ntk.NtkListbox, Ntk.NtkSpinbox, Ntk.NtkText</td>
 ///   </tr><tr>
 ///     <td>sfcolor</td>
-///     <td>Select foreground</td>
-///     <td>The widget box will be centered (horizontally or vertically) in the parent widget</td>
+///     <td>selectforeground</td>
+///     <td>Select foreground: the text color when it is selected</td>
+///     <td>Ntk.NtkCanvas, Ntk.NtkEntry, Ntk.NtkListbox, Ntk.NtkSpinbox, Ntk.NtkText</td>
+///   </tr><tr>
+///     <td>tcolor</td>
+///     <td>throughcolor</td>
+///     <td>Through color: the color of the guide where the cursor slides</td></td>
+///     <td>Ntk.NtkScale, Ntk.NtkScrollbar</td>
 ///   </tr>
 /// </table>
 ///
 ///
 /// ## Other common attributes ##
 ///
-/// These are other attributes common nearly to all widgets:
+/// These are other attributes common to many widgets and widely used:
+///
 /// <table>
 ///   <tr >
-///     <th>Option</th>
+///     <th>New %Ntk name</th>
+///     <th>Old tkinter name</th>
 ///     <th>Meaning</th>
 ///     <th>Applies to</th>
 ///   </tr><tr>
-///     <td>relief</td>
-///     <td>The border shape of the widget. You can choose between **SUNKEN, FLAT, RAISED, GROOVE, RIDGE, SOLID** </td>
-///     <td>All widgets</td>
+///     <td>anchor</td>
+///     <td></td>
+///     <td>The text position inside the widget, you can choose between **N, E, NW, SE, S, SW, W, NE, CENTER**</td>
+///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkLabel, Ntk.NtkRadiobutton</td>
 ///   </tr><tr>
 ///     <td>borderwidth</td>
-///     <td>The depth of the border in pixels: default is 2</td>
+///     <td>borderwidth, bd</td>
+///     <td>The depth of the border in pixels: default is 2 for common widgets and 0 for frames (no border). Some shapes are not drawn well if it is 1</td>
+///     <td>All widgets</td>
+///   </tr><tr>
+///     <td>cursor</td>
+///     <td></td>
+///     <td>The cursor shape when the mouse is over the widget. For a list of shapes see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/cursors.html">here</a></td>
 ///     <td>All widgets</td>
 ///   </tr><tr>
 ///     <td>font</td>
-///     <td>You can indicate a font for widget text with a duple ("Name", size). For a list fo allowed names see</td>
-///     <td>All widgets</td>
-///   </tr><tr>
-///     <td>anchor</td>
-///     <td>The text position inside the widget, you can choose between **N, E, NW, SE, S, SW, W, NE, CENTER**</td>
-///     <td>All widgets</td>
+///     <td></td>
+///     <td>You can indicate a font for widget text. See <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/fonts.html" here for a complete reference about fonts </td>
+///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkEntry, Ntk.NtkLabel, Ntk.NtkListbox, Ntk.NtkMenu, Ntk.NtkRadiobutton, Ntk.NtkScale, Ntk.NtkSpinbox, Ntk.NtkText</td>
 ///   </tr><tr>
 ///     <td>justify</td>
+///     <td></td>
 ///     <td>This option is for widgets which allow multiline text: you can choose between **LEFT, RIGHT, CENTER**</td>
-///     <td>The widget box will be centered (horizontally or vertically) in the parent widget</td>
+///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkEntry, Ntk.NtkLabel, Ntk.NtkRadiobutton, Ntk.NtkSpinbox</td>
 ///   </tr><tr>
-///     <td>cursor</td>
-///     <td>The cursor shape when the mouse is over the widget</td>
-///     <td>The topleft will be placed in the relative (in percent) position x or y with respect to parent widget left (or top). If the parent is resized the coordinate will be updated</td>
+///     <td>relief</td>
+///     <td></td>
+///     <td>The border shape of the widget. You can choose between **SUNKEN, FLAT, RAISED, GROOVE, RIDGE, SOLID** </td>
+///     <td>All widgets</td>
 ///   </tr><tr>
-///     <td>cursor</td>
-///     <td>The cursor shape when the mouse is over the widget</td>
-///     <td>The widget box will be stacked after the last widget already placed. For details see. If the adiacent widget is resized the coordinate will be updated. See <a href="#packuse">Note on the use of PACK</a> for details.</td>
+///     <td>takefocus</td>
+///     <td></td>
+///     <td>Enables (with 1) or disabes (0) the widget focus when the widget is clicked or when you press the TAB key</td>
+///     <td>All widgets</td>
+///   </tr>
 ///   </tr><tr>
-///     <td>sbcolor</td>
-///     <td>Select background</td>
-///     <td>The widget box will be centered (horizontally or vertically) in the parent widget</td>
+///     <td>hborder</td>
+///     <td>highlightthickness</td>
+///     <td>Enables (with 1) or disabes (0) the dotted rectangle around the text when the widget has the focus</td>
+///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkEntry, Ntk.NtkLabel, Ntk.NtkListbox, Ntk.NtkRadiobutton, Ntk.NtkSpinbox, Ntk.NtkText</td>
+///   </tr>
+/// </table>
+///
+/// You can see an example of the use of these attributes in the file \ref WidgetOptions.py.
+///
+///
+/// ## Changed widget options 
+///
+/// The use of these widgets is changed in Ntk with respect to **tkinter**:
+///
+/// <table>
+///   <tr >
+///     <th>Name</th>
+///     <th>Meaning</th>
+///     <th>Applies to</th>
 ///   </tr><tr>
-///     <td>sfcolor</td>
-///     <td>Select foreground</td>
-///     <td>The widget box will be centered (horizontally or vertically) in the parent widget</td>
+///     <td>height, width</td>
+///     <td>These are disabled in %Ntk. You must give the widgets dimensions in their constructor. If you want to change them after the construction use the Ntk.NtkWidget.resize() method.</td>
+///     <td></td>
+///   </tr><tr>
+///     <td>command</td>
+///     <td>This associates some widget event (as clicking a button or pressing RETURN in an entry) with a callback. In %Ntk it has been enhanced and you can also associate a value to this; moreover you can do this in the constructor and so you need to use this option only if you want to change the callback. For details see \ref EVENTS.</td>
+///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkCombobox, Ntk.NtkEntry, Ntk.NtkListbox, Ntk.NtkMenu, Ntk.NtkRadiobutton, Ntk.NtkScale, Ntk.NtkSpinbox</td>
+///   </tr><tr>
+///     <td>state</td>
+///     <td>This can switch between <b>"normal"</b> and <b>"disabled"</b> state. In %Ntk is simpler to use Ntk.NtkWidget.activate() and Ntk.NtkWidget.deactivate() methods. The Ntk.NtkSpinbox widget has a third option <b>"readonly"</b>, which you can set with the Ntk:NtkSpinbox.set_state() method</td>
+///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkCombobox, Ntk.NtkEntry, Ntk.NtkLabel, Ntk.NtkListbox, Ntk.NtkMenu, Ntk.NtkRadiobutton, Ntk.NtkScale, Ntk.NtkSpinbox</td>
+///   </tr><tr>
+///     <td>text</td>
+///     <td>You can use this to set the text of some widget, but is simpler to use the Ntk.NtkWidget.set_ontent() and Ntk.NtkWidget.get_content() methods</td>
+///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkLabel, Ntk.NtkRadiobutton</td>
+///   </tr><tr>
+///     <td>variable</td>
+///     <td>In many widgets you can associate a tk.Variable object to the widget directly in the constructor. If you want to change the variable after the widget has been created you can use the NtkWidget.set_variable() method</td>
+///     <td>Ntk.NtkCheckbutton, Ntk.NtkRadiobutton</td>
+///   </tr><tr>
+///     <td>wraplength</td>
+///     <td>This is the text wrap length in widgets which allow multiline text. %Ntk sets automatically this value (even if the widget is resized). So you can only indicate 0 (text not wrapped) or non zero (default: automatic wrap).</td>
+///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkLabel, Ntk.NtkRadiobutton</td>
+///   </tr>
+/// </table>
+///
+///
+/// ## The widget content
+///
+/// Some widget (as Ntk.NtkEntry) can hold a text as their content, other (as Ntk.NtkLabel) can hold a text or an image. Moreover, many of them allows the user to associate a tkinter.Variable object (see \ref VARIABLES). This is done in **tkinter** by mean of the properties _text_, _image_, _textvariable_ and _variable_.
+///
+/// In Ntk I introduced the methods Ntk.NtkWidget.set_content() and Ntk.NtkWidget.get_content() which simplify setting and getting these options and usually make it unnecessary to use config() for them.
+
+
+
+/// \page WIDGET_INFO Getting widget informations
+///
+/// As said in the previous section, you can query many widget properties with the Ntk.NtkMisc.get_config() method.
+///
+/// ## The get_winfo() method
+///
+/// For other properties **tkinter** has a long list of _winfo_... methods (one for every property we want to know). I reorganized them in one method Ntk.NtkMisc.get_winfo() which, similarly to Ntk.NtkMisc.get_config(), accepts the property as a string. For a list of all accepted options see the example file \ref winfo.py.
+/// For the meaning of various tkinter winfo_... methods you can see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/universal.html" target="_blank">this page</a>, which elencates all tkinter general methods common to all widgets.
+///
+/// \anchor dimensions
+///  ## Retrieving widgets dimensions ##
+///
+/// In **tkinter** we can use the functions winfo_x (), winfo_y () etc. to find the dimensions of a widget, but these often create confusion, because they return the correct values only when the widget has been placed by the geometry manager.
+///
+/// In Ntk I left the general _winfo_... pattern only for methods getting widget dimensions, adding some new methods. These have been rewritten to always report the exact value, expressed in pixels. These are the methods (they all belong to the clas Ntk.NtkMisc, inerithed by windows and internal widgets):
+///
+/// <table>
+///   <tr>
+///     <th>winfo_...() method</th>
+///     <th>get_winfo() method</th>
+///     <th>Returns</th>
+///     <th>Notes</th>
+///   </tr><tr>
+///     <td>winfo_bx()</td>
+///     <td></td>
+///     <td>The bounding box topleft corner x</td>
+///     <td rowspan="4">These are the dimensions of the bounding box of the widget (before applying the pad to it). They are used by the library when packing widgets (i.e. the bounding boxes, not the real widgets, are packed).</td>
+///   </tr><tr>
+///     <td>winfo_by()</td>
+///     <td></td>
+///     <td>The bounding box topleft corner y</td>
+///   </tr><tr>
+///     <td>winfo_bwidth(), winfo_bw()</td>
+///     <td></td>
+///     <td>The bounding box width</td>
+///   </tr><tr>
+///     <td>winfo_bheight(), winfo_bh()</td>
+///     <td></td>
+///     <td>The bounding box height</td>
+///   </tr><tr>
+///     <td>winfo_x()</td>
+///     <td>get_winfo("x")</td>
+///     <td>The widget topleft corner x</td>
+///     <td rowspan="4">These are the real widget dimensions, after applying the pad to the bounding box.</td>
+///   </tr><tr>
+///     <td>winfo_y()</td>
+///     <td>get_winfo("y")</td>
+///     <td>The widget topleft corner y</td>
+///   </tr><tr>
+///     <td>winfo_width(), winfo_w()</td>
+///     <td>get_winfo("width")</td>
+///     <td>The widget width</td>
+///   </tr><tr>
+///     <td>winfo_height(), winfo_h()</td>
+///     <td>get_winfo("height")</td>
+///     <td>The widget height</td>
+///   </tr><tr>
+///     <td>winfo_bpad()</td>
+///     <td></td>
+///     <td>A tuple with the four pad values (E-N-W-S) for the widget int its bounding box</td>
+///     <td></td>
 ///   </tr>
 /// </table>
 
-
-/// \page WIDGET_INFO Methods for getting widget informations
-///
-/// As we have seen the widget constructor always has the format
-/// \code
-///
-///Widget_name(parent, x, y, w, h, pad=0, **kw)
-///
-/// \endcode
-/// where **parent** is the parent widget, **x**, **y** determine its position and **w**, **h** ist size.
-/// We emphasize that
-/// + The position and size always are relative to the parent widget and expressed in pixels;
-/// + The parameters you provide are relative to the ** bounding box ** of the widget, which coincides with it if the pad parameter is set to 0. The pad can be set to a value other than zero, thus leaving some space for left, right up and down. However, this reduces the actual size of the widget;
-/// + The library provides some containers that facilitate the placement of widgets, making it possible to obtain complex layouts with few code lines.
-///
-/// These are the various options you have to indicate the position and size of the widget.
-///
-/// Values for x, y
-/// ---------------
-///
-/// <table>
-///   <tr >
-///     <th>Value</th>
-///     <th>Meaning</th>
-///     <th>Notes</th>
-///   </tr><tr>
-///     <td>positive int</td>
-///     <td>Absolute positioning from left/top</td>
-///     <td>The widget box topleft will be placed in the exact position x or y with respect to parent widget left (or top).
-///         If the parent is resized the coordinate will not change</td>
-///   </tr><tr>
-///     <td>negative int</td>
-///     <td>Absolute positioning from right/bottom</td>
-///     <td>The widget box topleft will be placed in the exact position x or y with respect to parent widget right (or bottom).
-///         If the parent is resized the coordinate will be updated</td>
-///   </tr><tr>
-///     <td>string as "20%"</td>
-///     <td>Relative positioning from left/top</td>
-///     <td>The widget box topleft will be placed in the relative (in percent) position x or y with respect to parent widget
-///         left (or top). If the parent is resized the coordinate will be updated</td>
-///   </tr><tr>
-///     <td>"pack" (or constant PACK"</td>
-///     <td>Relative positioning respect a widget</td>
-///     <td>The widget box topleft will be placed in the relative position x or y with respect to parent widget left (or top).
-///         If the parent is resized the coordinate will be updated</td>
-///   </tr><tr>
-///     <td>"center (or constant CENTER)</td>
-///     <td>Widget centered</td>
-///     <td>The widget box will becentered (horizontally or vertically) in the parent widget</td>
-///   </tr>
-/// </table>
-///
-/// Values for w, h
-/// ---------------
-///
-/// <table>
-///   <tr >
-///     <th>Value</th>
-///     <th>Meaning</th>
-///     <th>Notes</th>
-///   </tr><tr>
-///     <td>positive int</td>
-///     <td>Absolute width/height</td>
-///     <td>The widget box has fixed width/height. If the parent is resized it will not change.</td>
-///   </tr><tr>
-///     <td>string as "20%"</td>
-///     <td>Relative width/height</td>
-///     <td>The widget box has relative (in percent) width/height be placed in the relative position x or y with respect to parent widget left (or top).
-///         If the parent is resized the coordinate will be updated</td>
-///   </tr><tr>
-///     <td>"pack" (or constant PACK"</td>
-///     <td>Relative positioning respect a widget</td>
-///     <td>The widget box topleft will be placed in the relative position x or y with respect to parent widget left (or top).
-///         If the parent is resized the coordinate will be updated</td>
-///   </tr><tr>
-///     <td>"center (or constant CENTER)</td>
-///     <td>Widget centered</td>
-///     <td>The widget box will becentered (horizontally or vertically) in the parent widget</td>
-///   </tr>
-/// </table>
-///
-/// Values for pad
-/// ---------------
-///
-/// <table>
-///   <tr >
-///     <th>Value</th>
-///     <th>Meaning</th>
-///     <th>Notes</th>
-///   </tr><tr>
-///     <td>0</td>
-///     <td>No padding</td>
-///     <td>The widget has same dimensions as its bounding box.</td>
-///   </tr><tr>
-///     <td>positive int</td>
-///     <td>Same padding in all directions</td>
-///     <td>The given value is the padding amount for left, right, up and down.</td>
-///   </tr><tr>
-///     <td>Two duples of positive int</td>
-///     <td>Same padding for left/right and for up/down/td>
-///     <td>The first duple is the padding amount for left and right, the second the padding amount for up and down.</td>
-///   </tr><tr>
-///     <td>A quadruple of positive int</td>
-///     <td>Different padding for the four directions</td>
-///     <td>The provided numbers are the amounts respectively for left, up, right, down directions.</td>
-///   </tr>
-/// </table>
-///
 
 
 
 /// \page EVENTS Events
-/// The MIDITimedMessage class inherits from MIDIMessage and adds the ability to associate a MIDI time to the message, so MIDITimedMessage objects can be ordered by time and queued into a MIDI track. Time is counted in MIDI ticks (the library defines the \ref MIDIClockTime type as a typedef for **unsigned long**) and the class has methods to set, inspect, increment and decrement it. A newly created MIDITimedMessage has its time set to 0.
-/// \code
-///#include "msg.h"
 ///
-///int main() {
-///   MIDITimedMessage msg;
-///   msg.SetNoteOn(0, 60, 100);       // makes msg1 a Note On message
-///   msg.SetTime(480);                // sets its time (in MIDI ticks)
-///   msg.AddTime(960);                // adds 960 ticks
-///   msg.SubTime(240);                // subtracts 240 ticks
-///   std::cout << msg.MsgToText();    // prints a description of msg
-///   return 0;
-///}
+/// In tkinter we have two ways to connect a callback to a widget event:
+/// - The **bind()** method, which allows the user to freely bind an event generated by the widget to a callback function. 
+/// - The **command** option of the config() method which allows to bind a predefined event (the click for a button, the return for an Entry, ecc) to a callback function.
+/// The two methods differ: with _bind()_ the callback gets a **tkinter.Event** as paramether, i.e. an object with various informations on what is happened, while with _command_ the callback gets no parameter. So **tkinter** suggest to write for the callbacks the signature:
+/// \code{.py}
+/// def callback(event=None):
 /// \endcode
 ///
-/// The %MIDITrack class
-/// --------------------
+/// If you are not familiar with tkinter events, I suggest the following documentation:
+/// - <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/event-types.html" target="_blank">Event types</a>
+/// - <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/event-handlers.html" target="_blank">Event class attributes</a>
+/// - <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/binding-levels.html" target="_blank">The **bind()**, **bind_class()** and **bind_all()** methods</a>
+/// - <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/event-sequences.html" target="_blank">How to specify the event to bind</a>
 ///
-/// The MIDITrack is basically a stl::vector of MIDITimedMessage objects, ordered by time. It has methods for editing the track adding, deleting and examining messages. Due to the SMF format a MIDITrack always contains almost a message, the system End of Data (or End of Track, EOT), as last message. This is automatically handled by the library, and the user cannot insert or delete it; every time you insert a MIDITimedMessage into the track the MIDIClockTime of the EOT is examined and eventually updated.
+/// In Ntk I made these changes:
+/// - Both the _bind()_ method and the _command_ option pass a **tkinter.Event** object to the callback. In the case of the _command_ the event is a <b>\<\<VirtualEvent>></b> and has only the following attributes:
+///   + .widget
+///   + .x
+///   + .y
+///   + .value (see below)
+/// - I added the _command_ option to some other widgets: this is a list of the widgets which support it:
+///   + Ntk.NtkButton (when the button is pressed)
+///   + Ntk.NtkCheckbutton (when the button changes its state)
+///   + Ntk.NtkCombobox (when an item is selected)
+///   + Ntk.NtkEntry (when Return is pressed)
+///   + Ntk.NtkListbox (when an item is selected)
+///   + Ntk.NtkRadiobutton (when the button is selected)
+///   + Ntk.NtkScale (when the scale index changes)
+///   + Ntk.NtkScrollbar (when the scrollbar is moved)
+///   + Ntk.NtkSpinbox (when an item is selected, with arrow buttons or with Return)
+/// - For the _command_ option you have the following choices:
+///   + command=_callback_ this only binds the callback to the event
+///   + command=(_callback_, _value_) setting a tuple callback - value the Event passed to the callback will contain the given value in the .value attribute (otherwise this will be set to None)
 ///
-/// The constructor creates an empty track, with only the EOT; you can then edit it: the MIDITrack::InsertEvent(), MIDITrack::InsertNote(), MIDITrack::DeleteEvent() and MIDITrack::DeleteNote() methods insert and delete MIDITimedMessage objects, while other methods can insert or delete entire time intervals.
-///
-/// Here is an example:
-/// \code
-///#include "track.h"
-///#include "dump_tracks.h"             // contains helper functions to print track content
-///
-///int main() {
-///   MIDITrack track;
-///   MIDITimedMessage msg;             // a new MIDITimedMessage has time set to 0
-///   msg.SetProgramChange(0, 49);      // msg becomes a Program Change, channel 1, program 49, time 0
-///   track.InsertEvent(msg);           // inserts a copy of msg into the track
-///   msg.SetVolumeChange(0, 127);      // msg becomes a Volume Change (CC 7), channel 1, volume 127, time 0
-///   track.InsertEvent(msg);
-///   msg.SetNoteOn(0, 60, 100);        // msg becomes a Note On, channel 1, note 60, velocity 100
-///   msg3.SetTime(480);                // sets the time of msg to 480 MIDI ticks
-///   track.InsertNote(msg, 240);       // inserts the Note On and the corresponding Note Off after 240 ticks
-///   DumpMIDITrack(&track);            // prints the contents of the track
-///   return 0;
-///}
-/// \endcode
-///
-/// MIDI standards do not specify how events with same MIDI time must be ordered, so the library uses its own comparing algorithm; if you want to know how exactly events are ordered in a track see the MIDITimedMessage::CompareEventsForInsert() method. Moreover, some kind of messages (for example two time signatures, or control change with the same control number) are usually incompatible (or useless) at the same time in the same track; I called these messages *same kind* messages. When you insert a message at the same time of an old *same kind* message you can control if the new message will replace the old or not (see the MIDITimedMessage::IsSameKind() and the static MIDITrack::SetInsertMode() for details).
-///
-/// The SMF format has no prescriptions on the contents of a MIDI track (for example in the SMF 0 files all messages come in a single track, while in the SMF 1 there is a master track with system events and a track for every MIDI channel); usually the MIDI messages are grouped in tracks according to their kind (tracks with only system messages, or lyrics, or channel messages...). When you load or edit a MIDITrack the library analyzes its content and classifies it into various types; you can inspect the contents of a track with the MIDITrack::GetType() method (see it for details on the various track types recognized by the library).
-///
-/// The %MIDIMultiTrack class
-/// -------------------------
-///
-/// The MIDIMultiTrack is an array of MIDITrack objects to be played simultaneously; all tracks share the same \ref MIDIMultiTrack::clks_per_beat parameter (i.e\. the MIDI ticks for a quarter note) which determines the conversion between MIDI ticks and musical values. Typically track 0 is the master track, containing meta events (time and key signature, tempo ...) and other system messages, while other tracks are channel tracks, every one containing events with the same channel number (this is the standard in SMF 1 files).
-///
-/// The constructor creates an empty multitrack with no tracks and the MIDIMultiTrack::clks_per_beat parameter given by the **DEFAULT_CLKS_PER_BEAT** constant defined in the file midi.h (actually it is 120 ticks for a quarter note, you can change it via the MIDIMultiTrack.SetClksPerBeat() method); you can then add, delete or move tracks with the appropriate methods. Alternatively you can fill a MIDIMultiTrack with the \ref LoadMIDIFile() function, which loads the contents of a SMF into the multitrack creating the needed tracks and setting the clks_per_beats according to the file. There is also a \ref WriteMIDIFile() which saves the content of the multitrack into a SMF.
-///
-/// The MIDIMultiTrack alone has no playing ability, it must be embedded into a MIDITickComponent derived class (as MIDISequencer or AdvancedSequencer) which picks up its content and sends it to the MIDI ports with the appropriate timing. This will be treated in the next section.
-///
-///Here is an example:
-/// \code
-///#include "multitrack.h"
-///#include "dump_tracks.h"                     // contains helper functions to print track content
-///
-///int main() {
-///   MIDIMultiTrack multi;
-///   LoadMIDIFile("twinkle.mid", &multi);      // loads a midifile into the multitrack
-///   DumpAllTracks(&multi);                    // shows a dump of the content of multitrack
-///   MIDITrack track(*multi.GetTrack(1));      // creates a copy of track 1
-///   for (unsigned int i = 0; i < track.GetNumEvents(); i++) {
-///                                             // examines all track messages
-///      MIDITimedMessage msg = track.GetEvent(i);
-///      if (msg.IsNote())                      // if the message is a note ...
-///         msg.SetNote(msg.GetNote() + 12):    // ... transposes it up an octave
-///   }
-///   multi.InsertTrack(track);                 // appends the new track to the multitrack
-///   DumpAllTracks(&multi);
-///   return 0;
-///}
-/// \endcode
-///
-/// Editing and playing the content of a %MIDIMultiTrack
-/// ----------------------------------------------------
-///
-/// If you want to compose your MIDI song you must create a MIDIMultiTrack and edit its tracks; while editing you will probably want to listen to your changes. The simpler way to get this is working with an AdvancedSequencer class: it infact embeds a MIDIMultiTrack for storing MIDI data, and has methods for playing its content. Here are the main tips for working in this way.
-/// + The AdvancedSequencer(MIDISequencerGUINotifier*) constructor creates an instance with an embedded 17-tracks multitrack (track 0 is intended to be the master track while tracks 1-16 are the channel tracks). The multitrack is initially empty and in this case it is owned by the sequencer (will be deleted if you delete the sequencer instance). For the parameter see \ref NOTIFIERS.
-/// + There is another constructor, the AdvancedSequencer(MIDIMultiTrack*, MIDISequencerGUINotifier*) which creates an instance embedding a multitrack given by the user; in this case the multitrack is not owned and you are responsible for deleting it.
-/// + There are also two ways to load the embedded multitrack: the method AdvancedSequencer::Load(const char*) loads a MIDI file into it, while the AdvancedSequencer::Load(const MIDIMultiTrack*) copies the content of the given multitrack into the sequencer multitrack. In both cases the number of tracks and the timing parameter(MIDIMultiTrack::clks_per_beat) are adjusted and the old sequencer contents are deleted.
-/// + You can get a pointer to the embedded multitrack with the AdvancedSequencer::GetMultiTrack() method.
-///
-/// Once got the pointer you can start to edit the MIDIMultiTrack with its methods; this causes however its content to go out-of-sync with other internal sequencer parameters. All goes OK if you follow these simple rules:
-/// + If you only add or delete events you must call, **before playing or jumping from one time to another**, the AdvancedSequencer::UpdateStatus() method which resynchronizes the most common parameters.
-/// + If you want to add, delete or move tracks you **must not use the %MIDIMultiTrack methods**, but the (inherited) MIDISequencer::InsertTrack(), MIDISequencer::DeleteTrack() and MIDISequencer::MoveTrack(). This is because the sequencer has internal arrays holding data for port, time shift, processors for every track, and these array must be updated  accordingly.
-/// + If you make more drastic changes (as copying another MIDIMultiTrack into it) and don't know the actual number of tracks you must use the AdvancedSequencer::Load() or AdvancedSequencer::Reset() methods: these however reset also the processors, port assign and time shift (the sequencer could not guess the correspondence between old values and new).
-///
-/// You can see some example of the use of the AdvancedSequencer and MIDIMultiTrack here:
-/// + \ref test_writefile.cpp : an example demonstrating how to edit the %MIDIMultiTrack embedded in the AdvancedSequencer, play its content and then save it in a MIDI file.
-/// + \ref test_stepsequencer.cpp : a more complicate (and NOT comfortable!) command line step sequencer
-///
-///
-///
-///
-/// If we want to play the contents of a MIDIMultiTrack we must send them to an hardware MIDI port with accurate timing. As said in previous sections, this can easily be done by the AdvancedSequencer object. This section is a more in-depth examination of how this is done by mean of some library classes.
-///
-/// The %MIDITimer class
-/// --------------------
-///
-/// The MIDITimer is a static class that provides MIDI timing. This is accomplished by starting a background thread that calls a user-defined callback function at a regular rate. The timing is provided by the C++ <std::chrono> classes, so you need to compile the library according to (at least) the C++ 0x11 standard; the default temporal resolution is 10 msecs, but you can change it with the MIDITimer::SetResolution() method.
-///
-/// When playing MIDI, the timer is usually controlled by the MIDIManager class (described later), so it is rarely necessary to use its methods directly. You may find useful its MIDITimer::Wait() method (which waits a certain number of milliseconds) or the MIDITimer::GetSysTimeMs() method (which returns the absolute time in milliseconds from the class instantiation).
-///
-/// The %MIDIOutDriver and %MIDIInDriver classes
-/// --------------------------------------------
-///
-/// The MIDIOutDriver and MIDIInDriver classes are objects which communicate between the library software and the hardware MIDI ports regardless the underlying OS; NiCMidi uses the RTMidi library of Gary Scavone (see http://www.music.mcgill.ca/~gary/rtmidi/) to have a common interface for all OS. Every port has an Id number and a readable name (given by the OS).
-///
-///If you want to send (or receive) MIDI messages to (from) a port you must open it with the MIDIOutDriver::OpenPort() or MIDIInDriver::OpenPort() methods. The %MIDIOutDriver has a method MIDIOutDriver::OutputMessage() which sends a MIDITimedMessage to the port; the %MIDIInDriver is a bit more complicated, because it manages a queue for incoming messages, and you have various methods for inspecting them (see the class documentation for details).
-///
-/// However, when using the high-level objects of the library (such as AdvancedSequencer, MIDISequencer, MIDIRecorder, etc.), all the work (opening and closing doors, sending/receiving messages ...) is done by these classes, so even in this case the user rarely needs to use the methods of this class directly.
-///
-/// The %MIDIManager class
-/// ----------------------
-///
-/// The MIDIManager is a static class that handles the temporized communications between the software and the hardware MIDI ports.
-/// + **Ports**: when the manager is instantiated it enumerates all the hardware ports, then creates a MIDIOutDriver for each out port and a MIDIInDriver for each in port; you can get the ports id, their name and a pointer to their driver via static class methods. Here is an example which enumerates the MIDI ports on your system.
-/// \code
-///#include "manager.h"
-///#include <iostream>
-///
-///int main() {
-///   std::cout << "YOUR MIDI OUT PORTS" << std::endl;
-///   for(unsigned int i = 0, i < MIDIManager::GetNumMIDIOuts(), i++)
-///      std:cout << "Port " << i << ": " << MIDIManager::GetMIDIOutName(i) << std::endl;
-///   std::cout << "YOUR MIDI IN PORTS" << std::endl;
-///   for(unsigned int i = 0, i < MIDIManager::GetNumMIDIIns(), i++)
-///      std:cout << "Port " << i << ": " << MIDIManager::GetMIDIInName() << std::endl;
-///   return 0;
-///}
-/// \endcode
-///
-/// + **Timing**: The manager takes the control of the (also static) MIDITimer, redirecting its background thread to call the static method MIDIManager::TickProc() at every timer tick.
-///
-/// + **Communications with other classes**: The MIDIManager handles a queue of MIDITickComponent objects (i.e. objects "which have a callback", see below): you can insert a pointer to such an object in the queue with the MIDIManager::AddMIDITick() method and remove it with MIDIManager::RemoveMIDITick(). The MIDIManager::TickProc() (which is called at every timer tick) calls in turn all the callbacks of the queued objects, giving them the absolute time as parameter. So every MIDITickComponent object can perform its tasks with accurate timing. This is a sketch of MIDIManager calling mechanism:
-/// \image html "MIDIManager.png"
-///
-/// This modular design allows the user to stack many components which all share the same timing (for example a sequencer, a metronome, a recorder ...) and encourages him to develop its own objects.
-///
-/// The %MIDITickComponent class
-/// ----------------------------
-///
-/// The core of MIDI timed playback is the pure virtual MIDITickComponent class: this is the prototype for all objects that have a callback procedure to be called at every tick of the MIDITimer; the AdvancedSequencer, MIDISequencer, MIDIThru, Metronome and MIDIRecorder classes all inherit from it. Let us analyze its most important methods:
-/// + The constructor MIDITickComponent::MIDITickComponent(tPriority pr, MIDITick func) must be called by your subclass constructor. See its documentation for details on the parameters. Once the component ha been created, it must be  added to the %MIDIManager queue with the MIDIManager::AddMIDITick() method to make it effective.
-/// + The destructor MIDITickComponent::~MIDITickComponent() removes the component from the %MIDIManager queue in order to prevent the use of an invalid pointer, so you do not need to call MIDIManager::RemoveMIDITick() by yourself.
-/// + The MIDITickComponent::Start() method enables the callback. Moreover, it initialize the internal parameter MIDITickComponent::sys_time_offset to the start time, so every subsequent call of the callback can perform time calculations. You may want to redefine it in your subclass in order to initialize your component at start (for example, in the derived classes of the library it opens the appropriate MIDI ports).
-/// + The MIDITickComponent::Stop() method disables the callback (again, you can redefine it if you want to perform ending operations).
-///
-/// Due to the difficulty of calling member functions as callbacks in C++ this class actually needs two methods (one static and one member) to implement the callback mechanism:
-/// + The static MIDITickComponent::StaticTickProc(tMsecs sys_time, void* p) is called by the MIDIManager, getting as parameters the absolute system time and the **this** pointer of the class instance as a void. This does nothing in the base class, and you must redefine it in your subclass. It only should cast the pointer to point to the derived class and then call the (virtual) member callback. For example:
-/// \code
-///
-///void MyClass::StaticTickProc(tMsecs sys_time, void* p) {
-///   MyClass* my_pt = static_cast<MyClass*>(p);
-///   my_pt->TickProc(sys_time);
-///}
-///
-/// \endcode
-///
-/// + The member MIDITickComponent::TickProc(tMsecs sys_time) is pure virtual in the base class: you must implement it and do  all your work here. You can know the number of msecs elapsed from the Start() call with sys_time - sys_time_offset and use it to perform time calculations and send, receive or manipulate MIDI messages with accurate timing.
-///
-/// We repeat that if you want to use a MIDITickComponent you must first add it to the manager queue, then you can call its methods Start() and Stop() for enabling/disabling the callback. This is an example of the usage of the Metronome:
-/// \code
-///#include "metronome.h"
-///#include "manager.h"
-///
-///int main() {
-///   Metronome metro;                   // creates the metronome
-///   MIDIManager::AddMIDITick(&metro);  // adds it to the MIDIManager queue
-///   metro.SetTempo(100);               // sets the musical tempo
-///   metro.Start();
-///   MIDITimer::Wait(10000);            // waits 10 seconds
-///   metro.Stop();
-///}
-/// \endcode
-///
-/// The %AdvancedSequencer class
-/// ----------------------------
-///
-/// The AdvancedSequencer class inherits from MIDITickComponent, but has some special features.
-/// + It automatically adds itself to the MIDIManager queue in the constructor, so it is ready to play when created.
-/// + Its Start() method is aliased with Play(), following the ordinary naming conventions in a sequencer.
-///
-/// More detailed examples of the usage of the derived classes are  in the following files:
-/// + \ref test_thru.cpp (use of MIDIThru)
-/// + \ref test_metronome.cpp (use of Metronome)
-/// + \ref test_sequencer.cpp (use of MIDISequencer)
-/// + \ref test_component.cpp shows a simple example of subclass.
-///
+/// Examples of these procedures are in all example files.
 
 
 
-
+/// \page VARIABLES Variable objects
+///
+/// Tkinter has special objects called control variables. They all inherit from the **tkinter.Variable** class (they are **tkinter.IntVar, tkinter.DoubleVar, tkinter.StringVar** and **tkinter.BooleanVar**) and behave like normal Python variables (we can write and read their value with the set() and get() methods), but they have some additional features:
+///
+/// For more details on these objects you can see the <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/control-variables.html">anzeljg reference</a>.
+///
+/// This is a summary of how these variables are treated in Ntk:
+///
+/// <table>
+///   <tr>
+///     <th>Widget</th>
+///     <th>Notes</th>
+///     <th>Writing and reading</th>
+///   </tr><tr>
+///     <td>Ntk.NtkButton, Ntk.NtkLabel</td>
+///     <td>You can set a **StringVar** in the _content_ parameter of its constructor; this is shown as the widget label, and the widget will be updated if the variable changes.</td>
+///     <td>You can set or get the value both with the Ntk.NtkWidget.set_content() and Ntk.NtkWidget.get_content methods, or with the variable **set()** and **get()** methods</td>
+///   </tr><tr>
+///     <td>Ntk.NtkCheckbutton</td>
+///     <td>You have two parameters in the constructor: in _content_ you can set a **StringVar** which will control the button label, in _variable_ you can set a variable of any kind and its values corrisponding to the on and off state.</td>
+///     <td>You can set and get the button label with the Ntk.NtkWidget.set_content() and Ntk.NtkWidget.get_content methods, and the button state (on/off) with Ntk.NtkCheckButton.set_value() and Ntk.NtkCheckbutton.get_value() methods. Moreover you can use the variables set()** and **get()** methods</td>
+///   </tr><tr>
+///     <td>Ntk.NtkCombobox, Ntk.NtkEntry</td>
+///     <td>You can set a **StringVar** in the _variable_ parameter of its constructor; this will hold the selected item (or the entry text).</td>
+///     <td>As above.</td>
+///   </tr><tr>
+///     <td>Ntk.NtkRadiobutton</td>
+///     <td>You must assign all buttons of the same mutually exclusive group the same variable (of any type), giving each button a different value (in the constructor parameter _variable_. Pressing a button will assign the variable the value associated with the button, and turn off all the other buttons in the group.</td>
+///     <td>There are no widget methods, you must use the variable set()** and **get()** methods</td>
+///   </tr><tr>
+///     <td>Ntk.NtkScale</td>
+///     <td>You can set a **IntVar** or **DoubleVar**  in the _variable_ parameter of its constructor; this will hold the widget selected value.</td>
+///     <td><You get the selected value with the Ntk.NtkScale.get_value(), or can use the variables set()** and **get()** methods</td>
+///   </tr><tr>
+///     <td>Ntk.NtkSpinbox</td>
+///     <td>get_winfo("width")</td>
+///     <td>The widget width</td>
+///   </tr>
+/// </table>

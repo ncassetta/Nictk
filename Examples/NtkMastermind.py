@@ -129,7 +129,7 @@ class Game:
                 if not comp_moves[0].getMove():
                     return
                 Game.challengeGame()
-            butStart.setcontent("Reset")
+            butStart.set_content("Reset")
             configButtons("ndd")
         
     def reset():
@@ -144,8 +144,8 @@ class Game:
         if not Game.training:
             comp_moves[0].show(MM_COLOR)
             comp_moves[0].setLock(MM_NONE)
-            labStat.setcontent("Choose your pattern")
-        butStart.setcontent("Start")
+            labStat.set_content("Choose your pattern")
+        butStart.set_content("Start")
         configButtons("ndd")
         Game.status = "idle"
         
@@ -299,7 +299,7 @@ class CompPlayer:
         self.other_moves[0].setMove(self.pattern)
         if Game.training == False:
             self.generateChoices()
-            labStat.setcontent(str(len(self.choices)) + " moves left")
+            labStat.set_content(str(len(self.choices)) + " moves left")
     
     def move(self):
         self.your_moves[Game.nmoves].show(MM_ALL)
@@ -312,7 +312,7 @@ class CompPlayer:
     def getAnswer(self, strike, ball):
         move = self.your_moves[Game.nmoves].getMove()
         self.cutChoices(move, strike, ball, self.choices, Game.difficulty)
-        labStat.setcontent(str(len(self.choices)) + " moves left")
+        labStat.set_content(str(len(self.choices)) + " moves left")
         
         
     def answer(self, move):
@@ -337,7 +337,7 @@ class CompPlayer:
                 choices.remove(patt)
             
     def bestChoice(self, max_analyzed):
-        labStat.setcontent("Thinking in Python!\nPlease be patient")
+        labStat.set_content("Thinking in Python!\nPlease be patient")
         analyzed = min(len(self.choices), max_analyzed)
         offset = randrange(len(self.choices))
         better_move = self.choices[offset]
@@ -394,8 +394,8 @@ def setAssistance(event):
     Game.assistance = event.value
 
 def startReset(event):
-    if event.widget.getcontent() == "Reset":
-        event.widget.setcontent("Start")
+    if event.widget.get_content() == "Reset":
+        event.widget.set_content("Start")
         Game.reset()
     else:
         Game.start()
@@ -419,7 +419,7 @@ def configButtons(state):
 
 
 winMain= NtkMain(100, 100, 800, 600, "Ntk Mastermind")
-BGCOLOR = winMain.getconfig("bcolor")
+BGCOLOR = winMain.get_config("bcolor")
 
 ## menu
 menuBar = NtkMenu(winMain)

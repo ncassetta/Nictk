@@ -1,5 +1,6 @@
 import _setup           # allows import from parent folder
 import Ntk
+from Ntk.constants import *
 
 
 def get_focus(event):
@@ -35,7 +36,7 @@ def to_Celsius(event):
     
 
 winMain = Ntk.NtkMain(100, 100, 300, 150, "C-F Conversion")
-winMain.config_children(Ntk.ALL, font=("Arial", 12))
+winMain.config_children(ALL, font=("Arial", 12))
 
 # here we place  the widgets using absolute coords
 labCelsius = Ntk.NtkLabel(winMain, 20, 20, 100, 40, content="Celsius") 

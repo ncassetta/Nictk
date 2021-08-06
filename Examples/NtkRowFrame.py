@@ -4,8 +4,8 @@ import Ntk
 
 winMain = Ntk.NtkMain(200, 150, 400, 300, "NtkRowFrame sample")
 rfr1 = Ntk.NtkRowFrame(winMain, 0, 0, "fill", "fill")
-rfr1.config_children(Ntk.NtkLabel, relief=Ntk.SOLID, bcolor = "blue", fcolor="yellow",
-                     anchor=Ntk.CENTER)
+rfr1.config_children(Ntk.NtkLabel, relief="solid", bcolor = "blue", fcolor="yellow",
+                     anchor="center")
 # In this example we have added all rows, and then selected them with set_active.
 # Is more common to add a row at a time (which sets it as active) and then add
 # widgets to it
@@ -19,7 +19,7 @@ rfr1.add_row("30%")
 # fixed from bottom vertical size
 rfr1.add_row(-10)
 
-# "pack" == Ntk.PACK and "fill" == Ntk.FILL
+# "pack" == PACK and "fill" == FILL
 rfr1.set_active(0)
 lab1 = Ntk.NtkLabel(rfr1, "pack", "20%", "30%", "fill", pad=(10, 0), content="A label in row 0")
 lab2 = Ntk.NtkLabel(rfr1, "pack", "20%", "50%", "fill", pad=(10, 0), content="This is a fixed height row")

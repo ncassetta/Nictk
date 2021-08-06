@@ -1,5 +1,6 @@
 import _setup           # allows import from parent folder
 import Ntk
+from Ntk.constants import *
 
 
 # italian cities
@@ -56,44 +57,44 @@ def insert_sel(event):
 def reset_combo(event):
     """This callback resets the contents of the two combos"""
     # empties and refills the upper combo
-    cmbCities.delete(0, Ntk.END)
+    cmbCities.delete(0, END)
     for i in CITIES:
         cmbCities.add(i)
     # selects the first city
     cmbCities.set_content(CITIES[0])
     # empties the lower combo
-    cmbIns.delete(0, Ntk.END)
+    cmbIns.delete(0, END)
     cmbIns.set_content("")
     labHelp.set_content("You reset the combos")
     
 
 winMain = Ntk.NtkMain(200, 150, 400, 300, "Combobox sample")
 # configures all children widget when they are created
-winMain.config_children(Ntk.ALL, font=("Arial", 16))
+winMain.config_children(ALL, font=("Arial", 16))
 winMain.config_children((Ntk.NtkButton, Ntk.NtkCombobox), bcolor="#D0D080", abcolor="#E0E090")
 # creates the combobox with the cities
-cmbCities = Ntk.NtkCombobox(winMain, 0, 0, Ntk.FILL, 70, pad=(10, 20, 10, 10),
+cmbCities = Ntk.NtkCombobox(winMain, 0, 0, FILL, 70, pad=(10, 20, 10, 10),
                             items=CITIES, command=change_label)
 # creates the label under it
-labHelp = Ntk.NtkLabel(winMain, 0, Ntk.PACK, Ntk.FILL, 90, pad=10, 
+labHelp = Ntk.NtkLabel(winMain, 0, PACK, FILL, 90, pad=10, 
                        content="Initially selected: " + CITIES[0])
-labHelp.config(bcolor="#B0D0F0", relief=Ntk.RIDGE, anchor=Ntk.CENTER)
+labHelp.config(bcolor="#B0D0F0", relief=RIDGE, anchor=CENTER)
 # rowframe for aligning other widgets
-rfr1 = Ntk.NtkRowFrame(winMain, 0, Ntk.PACK, Ntk.FILL, Ntk.FILL)
+rfr1 = Ntk.NtkRowFrame(winMain, 0, PACK, FILL, FILL)
 rfr1.add_row(55)
 # button for deleting a city from cmbCities
-butDel = Ntk.NtkButton(rfr1, 0, 0, "50%", Ntk.FILL, pad=(10, 10, 10, 5),
+butDel = Ntk.NtkButton(rfr1, 0, 0, "50%", FILL, pad=(10, 10, 10, 5),
                        content="Delete selected", command=delete_sel)
 # button for reset
-butRes = Ntk.NtkButton(rfr1, Ntk.PACK, 0, Ntk.FILL, Ntk.FILL, pad=(10, 10, 10, 5), 
+butRes = Ntk.NtkButton(rfr1, PACK, 0, FILL, FILL, pad=(10, 10, 10, 5), 
                        content="Reset", command=reset_combo)
 rfr1.add_row(55)
 # button for reinserting a deleted city
-butIns = Ntk.NtkButton(rfr1, 0, 0, "50%", Ntk.FILL, pad=(10, 5, 10, 10), 
+butIns = Ntk.NtkButton(rfr1, 0, 0, "50%", FILL, pad=(10, 5, 10, 10), 
                        content="Insert selected", command=insert_sel)
 butIns.deactivate()
 # combobox for deleted cities
-cmbIns = Ntk.NtkCombobox(rfr1, Ntk.PACK, 0, Ntk.FILL, Ntk.FILL, pad=(10, 5, 10, 10))
+cmbIns = Ntk.NtkCombobox(rfr1, PACK, 0, FILL, FILL, pad=(10, 5, 10, 10))
 # auto activate - deactivate buttons 
 cmbCities.bind("<<ChangedVar>>",
                lambda ev: butDel.activate() if len(ev.widget.get_content()) else butDel.deactivate())

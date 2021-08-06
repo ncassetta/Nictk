@@ -1,0 +1,5 @@
+from  tkinter import ALL, BOTH, BOTTOM, CENTER, DISABLED, E, END, FIRST, FLAT, GROOVE, HIDDEN, HORIZONTAL, LAST, \
+LEFT, N, NE, NO, NORMAL, NS, NSEW, NW, RAISED, RIDGE, RIGHT, ROUND, S, SE, SEL, SINGLE, SOLID, SUNKEN, SW, TOP, \
+VERTICAL, W, IntVar, StringVar, BooleanVar, mainloop, EventType
+
+PACK, FILL = "pack", "fill"

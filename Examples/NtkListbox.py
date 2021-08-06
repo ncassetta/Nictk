@@ -1,5 +1,6 @@
 import _setup           # allows import from parent folder
 import Ntk
+from Ntk.constants import *
 
 
 # items to be added to the listbox (italian numbers)
@@ -71,47 +72,47 @@ def mode_changed(event):
 winMain = Ntk.NtkMain(200, 150, 600, 450, "NtkListbox widget sample")
 
 # we use frames for positioning widgets
-hfr1 = Ntk.NtkHorFrame(winMain, 0, 0, Ntk.FILL, Ntk.FILL)
-rfr1 = Ntk.NtkRowFrame(hfr1, 0, 0, "50%", Ntk.FILL)
-vfr2 = Ntk.NtkVerFrame(hfr1, Ntk.PACK, 0, Ntk.FILL, Ntk.FILL)
+hfr1 = Ntk.NtkHorFrame(winMain, 0, 0, FILL, FILL)
+rfr1 = Ntk.NtkRowFrame(hfr1, 0, 0, "50%", FILL)
+vfr2 = Ntk.NtkVerFrame(hfr1, PACK, 0, FILL, FILL)
 
 rfr1.add_row(40)
-labTest = Ntk.NtkLabel(rfr1, 0, 0, Ntk.FILL, Ntk.FILL, pad=(10, 10, 10, 5),
+labTest = Ntk.NtkLabel(rfr1, 0, 0, FILL, FILL, pad=(10, 10, 10, 5),
                        content="Try to select items")
-labTest.config(bcolor="light green", fcolor="blue", relief=Ntk.SOLID,
-               borderwidth=1, anchor=Ntk.CENTER)
+labTest.config(bcolor="light green", fcolor="blue", relief=SOLID,
+               borderwidth=1, anchor=CENTER)
 
 rfr1.add_row(-80)
-lstTest = Ntk.NtkListbox(rfr1, 0, 0, Ntk.FILL, Ntk.FILL, pad=(10, 5, 10, 40),
+lstTest = Ntk.NtkListbox(rfr1, 0, 0, FILL, FILL, pad=(10, 5, 10, 40),
                          command=lbox_changed)
 lstTest.config(bcolor="blue", fcolor="yellow", sfcolor="maroon", sbcolor="light blue", 
-               relief=Ntk.RIDGE, font=("TkDefaultFont", 14))
+               relief=RIDGE, font=("TkDefaultFont", 14))
 
 rfr1.add_row(40)
-labSel = Ntk.NtkLabel(rfr1, 0, 0, Ntk.FILL, Ntk.FILL, pad=(10, 5))
-labSel.config(bcolor="light green", fcolor="blue", relief=Ntk.SOLID,
+labSel = Ntk.NtkLabel(rfr1, 0, 0, FILL, FILL, pad=(10, 5))
+labSel.config(bcolor="light green", fcolor="blue", relief=SOLID,
               borderwidth=1)
 
 # calls the callback to adjust labSel content
 lbox_changed(None)
 
-rfr1.add_row(Ntk.FILL)
-butAdd = Ntk.NtkButton(rfr1, "15%", 0, "35%", Ntk.FILL, pad=(5,5, 5, 10),
+rfr1.add_row(FILL)
+butAdd = Ntk.NtkButton(rfr1, "15%", 0, "35%", FILL, pad=(5,5, 5, 10),
                        content="Add item", command=add_item) 
-butDel = Ntk.NtkButton(rfr1, Ntk.PACK, Ntk.PACK, "35%", Ntk.FILL, pad=(5, 5, 5, 10),
+butDel = Ntk.NtkButton(rfr1, PACK, PACK, "35%", FILL, pad=(5, 5, 5, 10),
                        content="Del item", command =del_item)
 butDel.deactivate()
 
-labMode = Ntk.NtkLabel(vfr2, 0, 0, Ntk.FILL, 40, pad=(10, 10, 10, 5),
+labMode = Ntk.NtkLabel(vfr2, 0, 0, FILL, 40, pad=(10, 10, 10, 5),
                        content="Listbox Mode")
-labMode.config(bcolor="light green", fcolor="blue", relief=Ntk.SOLID, borderwidth=1,
-               anchor=Ntk.CENTER)
-lstMode = Ntk.NtkListbox(vfr2, 0, Ntk.PACK, Ntk.FILL, 120, pad=(10, 5),
+labMode.config(bcolor="light green", fcolor="blue", relief=SOLID, borderwidth=1,
+               anchor=CENTER)
+lstMode = Ntk.NtkListbox(vfr2, 0, PACK, FILL, 120, pad=(10, 5),
                          command=mode_changed, items=modes)
-lstMode.config(bcolor="cyan", fcolor="brown", font=("TkDefaultFont", 14), relief=Ntk.RIDGE)
-labExplain=Ntk.NtkLabel(vfr2, 0, Ntk.PACK, Ntk.FILL, Ntk.FILL, pad=(10, 10),
+lstMode.config(bcolor="cyan", fcolor="brown", font=("TkDefaultFont", 14), relief=RIDGE)
+labExplain=Ntk.NtkLabel(vfr2, 0, PACK, FILL, FILL, pad=(10, 10),
                         content=explmodes[0])
-labExplain.config(anchor=Ntk.NW)
+labExplain.config(anchor=NW)
 lstMode.select(0)
 
 Ntk.mainloop()

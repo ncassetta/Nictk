@@ -136,12 +136,12 @@
 ///   </tr><tr>
 ///     <td>cursor</td>
 ///     <td></td>
-///     <td>The cursor shape when the mouse is over the widget. For a list of shapes see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/cursors.html">here</a></td>
+///     <td>The cursor shape when the mouse is over the widget. For a list of shapes see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/cursors.html" target="_blank">here</a></td>
 ///     <td>All widgets</td>
 ///   </tr><tr>
 ///     <td>font</td>
 ///     <td></td>
-///     <td>You can indicate a font for widget text. See <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/fonts.html" here for a complete reference about fonts </td>
+///     <td>You can indicate a font for widget text. See <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/fonts.html" target="_blank" here for a complete reference about fonts </td>
 ///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkEntry, Ntk.NtkLabel, Ntk.NtkListbox, Ntk.NtkMenu, Ntk.NtkRadiobutton, Ntk.NtkScale, Ntk.NtkSpinbox, Ntk.NtkText</td>
 ///   </tr><tr>
 ///     <td>justify</td>
@@ -326,7 +326,7 @@
 ///
 /// Tkinter has special objects called control variables. They all inherit from the **tkinter.Variable** class (they are **tkinter.IntVar, tkinter.DoubleVar, tkinter.StringVar** and **tkinter.BooleanVar**) and behave like normal Python variables (we can write and read their value with the set() and get() methods), but they have some additional features:
 ///
-/// For more details on these objects you can see the <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/control-variables.html">anzeljg reference</a>.
+/// For more details on these objects you can see the <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/control-variables.html" target="_blank">anzeljg reference</a>.
 ///
 /// This is a summary of how these variables are treated in Ntk:
 ///
@@ -359,5 +359,62 @@
 ///     <td>Ntk.NtkSpinbox</td>
 ///     <td>get_winfo("width")</td>
 ///     <td>The widget width</td>
+///   </tr>
+/// </table>
+
+
+
+/// \page DIALOGS Dialog boxes
+///
+/// In **tkinter** there are some functions to open the standard dialog boxes of the System, grouped in some submodules. Here is a list of them with their name in Ntk. For a reference with all their parameters see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/dialogs.html" target="_blank">here</a>.
+///
+/// For an example of their use see the file \ref Dialogs.py.
+///
+/// <table>
+///   <tr>
+///     <th>Function</th>
+///     <th>Notes</th>
+///     <th>Returns</th>
+///   </tr><tr>
+///     <td>Ntk.mb.askokcancel</td>
+///     <td>Opens a dialog box with tho buttons "Ok", "Cancel".</td>
+///     <td>**True** for "Ok" and **False** for "Cancel".</td>
+///   </tr><tr>
+///     <td>Ntk.mb.askquestion</td>
+///     <td>Opens a dialog box with two buttons "Yes", "No".</td>
+///     <td>"yes" or "no".</td>
+///   </tr><tr>
+///     <td>Ntk.mb.askretrycancel</td>
+///     <td>Opens a dialog box with two buttons "Retry", "Cancel".</td>
+///     <td>**True** for "Retry" and **False** for "Cancel".</td>
+///   </tr><tr>
+///     <td>Ntk.mb.askyesno</td>
+///     <td>Same of askquestion.</td>
+///     <td>**True** for "Yes" and **False** for "No".</td>
+///   </tr><tr>
+///     <td>Ntk.mb.showerror</td>
+///     <td>Opens a dialog box with an error icon and only the button "Ok".</td>
+///     <td>Always "ok".</td>
+///   </tr><tr>
+///     <td>Ntk.mb.showinfo</td>
+///     <td>Opens a dialog box with an info icon and only the button "Ok".</td>
+///     <td>Always "ok".</td>
+///   </tr><tr>
+///     <td>Ntk.mb.showwarning</td>
+///     <td>Opens a dialog box with a warning icon and only the button "Ok".</td>
+///     <td>Always "ok".</td>
+///   </tr><tr>
+///     <td>Ntk.fd.askopenfilename</td>
+///     <td>Opens the file dialog "Open file" where you can choose a file.</td>
+///     <td>The complete path of the chosen file, or an empty string if you press "Cancel".</td>
+///   </tr>
+///   </tr><tr>
+///     <td>Ntk.fd.asksaveasfilename</td>
+///     <td>Opens the file dialog "Save as file" where you can choose a file.</td>
+///     <td>The complete path of the chosen file, or an empty string if you press "Cancel".</td>
+///   </tr><tr>
+///     <td>Ntk.cc.askcolor</td>
+///     <td>Opens a color chooser file dialog.</td>
+///     <td>A duple, with in the first element three integers R, G, B, in the second a tkinter Color object, or (None, None) if you press "Cancel"</td>
 ///   </tr>
 /// </table>

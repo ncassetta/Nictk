@@ -1,5 +1,6 @@
 import _setup           # allows import from parent folder
 import Ntk
+from Ntk.constants import *
 
 
 COL1 = "#A0C0E0"        # light blue
@@ -19,12 +20,12 @@ class MyMain(Ntk.NtkMain):
         self.bind("<Configure>", self.change_title)
         
         # creates two upper labels
-        self.lab1 = Ntk.NtkLabel(self, 0, 0, Ntk.FILL, "40%", pad=(20, 10))
+        self.lab1 = Ntk.NtkLabel(self, 0, 0, FILL, "40%", pad=(20, 10))
         self.lab1.config(bcolor=COL1, font=("Arial", 12), takefocus=True)
-        self.lab2 = Ntk.NtkLabel(self, 0, Ntk.PACK, Ntk.FILL, "40%", pad=(20, 10))
+        self.lab2 = Ntk.NtkLabel(self, 0, PACK, FILL, "40%", pad=(20, 10))
         self.lab2.config(bcolor=COL1, font=("Arial", 12), takefocus=True)
         # third (helper) label
-        self.labHelp = Ntk.NtkLabel(self, 0, Ntk.PACK, Ntk.FILL, Ntk.FILL, pad=(20, 10))
+        self.labHelp = Ntk.NtkLabel(self, 0, PACK, FILL, FILL, pad=(20, 10))
         self.labHelp.set_content(self.helpstr)
         # text will scroll, so no line wrapping
         self.labHelp.config(wraplen=0)

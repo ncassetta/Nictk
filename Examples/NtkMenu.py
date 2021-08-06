@@ -1,5 +1,6 @@
 import _setup           # allows import from parent folder
 import Ntk
+from Ntk.constants import *
 
 
 # callbacks (you may prefer to use lambdas)
@@ -21,7 +22,7 @@ def hitcombo(event):
 
 
 winMain = Ntk.NtkMain(200, 180, 640, 480, "Menu example")
-winMain.config_children(Ntk.NtkLabel, relief=Ntk.SOLID, borderwidth=1)
+winMain.config_children(Ntk.NtkLabel, relief=SOLID, borderwidth=1)
 # menu bar (auto added to the parent winMain)
 menuBar = Ntk.NtkMenu(winMain)
 # first menu (auto added to the parent menuBar)
@@ -57,15 +58,15 @@ menuPopup.add_command(label="Paste", command=(hitpopup, "Paste"))
 # creates the upper label and binds double click on it to popup opening
 labPopup=Ntk.NtkLabel(winMain, 0, "10%", "fill", 100, pad=(15, 10), content="Double click to open a popup", )
 labPopup.bind("<Double-Button-1>", lambda event: menuPopup.post(event.x_root, event.y_root))
-labPopup.config(bcolor="orange", anchor=Ntk.CENTER, font=("Arial", 12, "bold"))
+labPopup.config(bcolor="orange", anchor=CENTER, font=("Arial", 12, "bold"))
 
 #creates the middle Combobox
 cmbmenu = ["Option " + str(i + 1) for i in range(100)]
-cmbSample = Ntk.NtkCombobox(winMain, Ntk.CENTER, Ntk.PACK, "80%", 50, pad=(0, 5), items=cmbmenu, command=hitcombo)
+cmbSample = Ntk.NtkCombobox(winMain, CENTER, PACK, "80%", 50, pad=(0, 5), items=cmbmenu, command=hitcombo)
 cmbSample.config(fcolor="dark blue", afcolor="blue", font=("Arial", 12, "bold"))
 
 #creates the lower label
-labText = Ntk.NtkLabel(winMain, Ntk.PACK, Ntk.PACK, Ntk.FILL, Ntk.FILL, pad=(15, 10))
-labText.config(bcolor="light green", fcolor="dark green", font=("Arial", 16), anchor=Ntk.CENTER)
+labText = Ntk.NtkLabel(winMain, PACK, PACK, FILL, FILL, pad=(15, 10))
+labText.config(bcolor="light green", fcolor="dark green", font=("Arial", 16), anchor=CENTER)
 
 Ntk.mainloop()

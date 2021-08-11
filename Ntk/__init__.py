@@ -2239,7 +2239,7 @@ class NtkNotebook(NtkWidget, ttk.Notebook):
     """Ttk Notebook widget which manages a collection of windows and displays
     a single one at a time. Each child window is associated with a tab,
     which the user may select to change the currently-displayed window.
-    See <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/ttk-Notebook.html"anzeljg
+    See <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/ttk-Notebook.html">anzeljg
     reference</a> for the class **ttk.Notebook**.
     \warning being this a ttk widget you cannot use the config() method on it."""
     def __init__(self, parent, x, y, w, h, pad=0):

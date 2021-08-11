@@ -26,8 +26,8 @@ $RECYCLE.BIN/
 
 # Packages
 *.egg
-*.egg-info
-dist/
+#*.egg-info      No! These are needed
+#dist/
 build/
 eggs/
 parts/

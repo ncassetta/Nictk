@@ -33,7 +33,7 @@
    <div id="projectname">Ntk
    &#160;<span id="projectnumber">1.0</span>
    </div>
-   <div id="projectbrief">A simplified version of tkinter</div>
+   <div id="projectbrief">An easy to use pyton GUI</div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -98,89 +98,107 @@ $(document).ready(function(){initNavTree('_widget_states_8py-example.html',''); 
 </div><!--header-->
 <div class="contents">
 <p>A simple example showing the three state "normal", "disabled" and "hidden" of a widget</p>
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="keyword">import</span> _setup</div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="keyword">from</span> Ntk <span class="keyword">import</span> *</div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keyword">from</span> time <span class="keyword">import</span> *</div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;bcolors =  (<span class="stringliteral">&quot;#FFFFFF&quot;</span>, <span class="stringliteral">&quot;#202060&quot;</span>, <span class="stringliteral">&quot;#D0D0A0&quot;</span>, <span class="stringliteral">&quot;#206020&quot;</span>, <span class="stringliteral">&quot;#FFA0A0&quot;</span>, <span class="stringliteral">&quot;#402000&quot;</span>)</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;fcolors =  (<span class="stringliteral">&quot;#000000&quot;</span>, <span class="stringliteral">&quot;#FFFFC0&quot;</span>, <span class="stringliteral">&quot;#002060&quot;</span>, <span class="stringliteral">&quot;#FFFFC0&quot;</span>, <span class="stringliteral">&quot;#004040&quot;</span>, <span class="stringliteral">&quot;#D0B0FF&quot;</span>)</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;dfcolors = (<span class="stringliteral">&quot;#202020&quot;</span>, <span class="stringliteral">&quot;#D0D0A0&quot;</span>, <span class="stringliteral">&quot;#204080&quot;</span>, <span class="stringliteral">&quot;#D0D0A0&quot;</span>, <span class="stringliteral">&quot;#206060&quot;</span>, <span class="stringliteral">&quot;#A0A0D0&quot;</span>)</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;explstates = (<span class="stringliteral">&quot;Now the buttons and the entry are enabled: you can type into the entry and press the buttons&quot;</span>,</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;              <span class="stringliteral">&quot;Now the buttons and the entry are disabled: you cannot type into the entry or press the buttons&quot;</span>,</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;              <span class="stringliteral">&quot;Now the buttons and the entry are hidden&quot;</span>)</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;texts = (<span class="stringliteral">&quot;If you change the state of a container ...&quot;</span>, <span class="stringliteral">&quot;... all of its children inherits it&quot;</span>)</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;butcaptions = (<span class="stringliteral">&quot;Disable&quot;</span>, <span class="stringliteral">&quot;Hide&quot;</span>, <span class="stringliteral">&quot;Show&quot;</span>)</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;colorind, textind = 0, 0</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">def </span>change_color(event):</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="stringliteral">&quot;&quot;&quot;This is called by butColor and changes the colors for the entText entry.&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">global</span> colorind</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    colorind = (colorind + 1) % len(bcolors)</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    entText.config(bcolor = bcolors[colorind], fcolor = fcolors[colorind], dfcolor= dfcolors[colorind])</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">def </span>change_text(event):</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="stringliteral">&quot;&quot;&quot;This is called by butFeame and changes the text of labFrame.&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">global</span> textind</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    textind = (textind + 1) % 2</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    labFrame.set_content(texts[textind])</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">def </span>change_status(event):</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="stringliteral">&quot;&quot;&quot;This is called by butHideShow and ciclicaly disables and hides</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="stringliteral">    butColor, entText and hfr1.&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="comment"># event.widget.get_content() also works</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    txt = butHideShow.get_content()</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordflow">if</span> txt == <span class="stringliteral">&quot;Disable&quot;</span>:</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        entText.deactivate()</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        butColor.deactivate()</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        hfr1.deactivate()</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        newind = 1</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">elif</span> txt == <span class="stringliteral">&quot;Hide&quot;</span>:</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        entText.hide()</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        butColor.hide()</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        hfr1.hide()</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        newind = 2</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">elif</span> txt == <span class="stringliteral">&quot;Show&quot;</span>:</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        entText.show()</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        entText.activate()</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        butColor.show()</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        butColor.activate()</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        hfr1.show()</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        hfr1.activate()</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        newind = 0</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    butHideShow.set_content(butcaptions[newind])</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    labExplain.set_content(explstates[newind])</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;winMain = NtkMain(200, 150, 400, 300, <span class="stringliteral">&quot;Widget states sample&quot;</span>)</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"># widgets are aligned with absolute coords</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"># upper entry and button</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;entText = NtkEntry(winMain, 0, 0, <span class="stringliteral">&quot;fill&quot;</span>, 60, pad=10)</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;entText.config(font=(<span class="stringliteral">&quot;Arial&quot;</span>, 14), bcolor=bcolors[0], fcolor=fcolors[0], dfcolor = dfcolors[0])</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;butColor = NtkButton(winMain, CENTER, 70, 100, 30,</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                      content=<span class="stringliteral">&quot;Change Color&quot;</span>, command=change_color)</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment"># frame and its children</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;hfr1 = NtkHorFrame(winMain, 0, 110, FILL, 80, content=<span class="stringliteral">&quot;This is a HorFrame&quot;</span>)</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;hfr1.config(relief=RIDGE)</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;labFrame= NtkLabel(hfr1, 0, 0, <span class="stringliteral">&quot;70%&quot;</span>, FILL, pad=(8, 8, 8, 28), content=texts[0])</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;labFrame.config(fcolor=<span class="stringliteral">&quot;#FFFFC0&quot;</span>, bcolor=<span class="stringliteral">&quot;#202060&quot;</span>, dfcolor=<span class="stringliteral">&quot;#D0D0A0&quot;</span>,</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                     relief=RIDGE)</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;butFrame= NtkButton(hfr1, PACK, 0, FILL, FILL, pad=(8, 8, 8, 28), content=</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                   <span class="stringliteral">&quot;Click me&quot;</span>, command=change_text)</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment"># lower button and label</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;butHideShow = NtkButton(winMain, 10, 220, 110, 50,</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                         content=butcaptions[0], command=change_status)</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;butHideShow.config(bcolor=<span class="stringliteral">&quot;#C0C0FF&quot;</span>)</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;labExplain = NtkLabel(winMain, 130, 220, -10, 50)</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;labExplain.config(bcolor=<span class="stringliteral">&quot;#C0C0FF&quot;</span>)</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;labExplain.set_content(explstates[0])</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;mainloop()</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment"># This file is part of Ntk - A simple tkinter wrapper.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">#    Copyright (C) 2021  Nicola Cassetta</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">#    See &lt;https://github.com/ncassetta/Ntk&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">#    This program is free software: you can redistribute it and/or modify</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">#    it under the terms of the GNU Lesser General Public License as published</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">#    by the Free Software Foundation, either version 3 of the License, or</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">#    (at your option) any later version.</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">#    This program is distributed in the hope that it will be useful,</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">#    GNU Lesser General Public License for more details.</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">#    You should have received a copy of the Lesser GNU General Public License</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">#    along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">import</span> _setup           <span class="comment"># allows import from parent folder</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">from</span> Ntk <span class="keyword">import</span> *</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">from</span> time <span class="keyword">import</span> *</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;bcolors =  (<span class="stringliteral">&quot;#FFFFFF&quot;</span>, <span class="stringliteral">&quot;#202060&quot;</span>, <span class="stringliteral">&quot;#D0D0A0&quot;</span>, <span class="stringliteral">&quot;#206020&quot;</span>, <span class="stringliteral">&quot;#FFA0A0&quot;</span>, <span class="stringliteral">&quot;#402000&quot;</span>)</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;fcolors =  (<span class="stringliteral">&quot;#000000&quot;</span>, <span class="stringliteral">&quot;#FFFFC0&quot;</span>, <span class="stringliteral">&quot;#002060&quot;</span>, <span class="stringliteral">&quot;#FFFFC0&quot;</span>, <span class="stringliteral">&quot;#004040&quot;</span>, <span class="stringliteral">&quot;#D0B0FF&quot;</span>)</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;dfcolors = (<span class="stringliteral">&quot;#202020&quot;</span>, <span class="stringliteral">&quot;#D0D0A0&quot;</span>, <span class="stringliteral">&quot;#204080&quot;</span>, <span class="stringliteral">&quot;#D0D0A0&quot;</span>, <span class="stringliteral">&quot;#206060&quot;</span>, <span class="stringliteral">&quot;#A0A0D0&quot;</span>)</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;explstates = (<span class="stringliteral">&quot;Now the buttons and the entry are enabled: you can type into the entry and press the buttons&quot;</span>,</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;              <span class="stringliteral">&quot;Now the buttons and the entry are disabled: you cannot type into the entry or press the buttons&quot;</span>,</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;              <span class="stringliteral">&quot;Now the buttons and the entry are hidden&quot;</span>)</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;texts = (<span class="stringliteral">&quot;If you change the state of a container ...&quot;</span>, <span class="stringliteral">&quot;... all of its children inherits it&quot;</span>)</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;butcaptions = (<span class="stringliteral">&quot;Disable&quot;</span>, <span class="stringliteral">&quot;Hide&quot;</span>, <span class="stringliteral">&quot;Show&quot;</span>)</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;colorind, textind = 0, 0</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">def </span>change_color(event):</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="stringliteral">&quot;&quot;&quot;This is called by butColor and changes the colors for the entText entry.&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">global</span> colorind</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    colorind = (colorind + 1) % len(bcolors)</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    entText.config(bcolor = bcolors[colorind], fcolor = fcolors[colorind], dfcolor= dfcolors[colorind])</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">def </span>change_text(event):</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="stringliteral">&quot;&quot;&quot;This is called by butFeame and changes the text of labFrame.&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">global</span> textind</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    textind = (textind + 1) % 2</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    labFrame.set_content(texts[textind])</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">def </span>change_status(event):</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="stringliteral">&quot;&quot;&quot;This is called by butHideShow and ciclicaly disables and hides</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="stringliteral">    butColor, entText and hfr1.&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="comment"># event.widget.get_content() also works</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    txt = butHideShow.get_content()</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordflow">if</span> txt == <span class="stringliteral">&quot;Disable&quot;</span>:</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        entText.deactivate()</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        butColor.deactivate()</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        hfr1.deactivate()</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        newind = 1</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordflow">elif</span> txt == <span class="stringliteral">&quot;Hide&quot;</span>:</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        entText.hide()</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        butColor.hide()</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        hfr1.hide()</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        newind = 2</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">elif</span> txt == <span class="stringliteral">&quot;Show&quot;</span>:</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        entText.show()</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        entText.activate()</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        butColor.show()</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        butColor.activate()</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        hfr1.show()</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        hfr1.activate()</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        newind = 0</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    butHideShow.set_content(butcaptions[newind])</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    labExplain.set_content(explstates[newind])</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;winMain = NtkMain(200, 150, 400, 300, <span class="stringliteral">&quot;Widget states sample&quot;</span>)</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment"># widgets are aligned with absolute coords</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment"># upper entry and button</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;entText = NtkEntry(winMain, 0, 0, <span class="stringliteral">&quot;fill&quot;</span>, 60, pad=10)</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;entText.config(font=(<span class="stringliteral">&quot;Arial&quot;</span>, 14), bcolor=bcolors[0], fcolor=fcolors[0], dfcolor = dfcolors[0])</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;butColor = NtkButton(winMain, CENTER, 70, 100, 30,</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                      content=<span class="stringliteral">&quot;Change Color&quot;</span>, command=change_color)</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment"># frame and its children</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;hfr1 = NtkHorFrame(winMain, 0, 110, FILL, 80, content=<span class="stringliteral">&quot;This is a HorFrame&quot;</span>)</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;hfr1.config(relief=RIDGE)</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;labFrame= NtkLabel(hfr1, 0, 0, <span class="stringliteral">&quot;70%&quot;</span>, FILL, pad=(8, 8, 8, 28), content=texts[0])</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;labFrame.config(fcolor=<span class="stringliteral">&quot;#FFFFC0&quot;</span>, bcolor=<span class="stringliteral">&quot;#202060&quot;</span>, dfcolor=<span class="stringliteral">&quot;#D0D0A0&quot;</span>,</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                     relief=RIDGE)</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;butFrame= NtkButton(hfr1, PACK, 0, FILL, FILL, pad=(8, 8, 8, 28), content=</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                   <span class="stringliteral">&quot;Click me&quot;</span>, command=change_text)</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment"># lower button and label</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;butHideShow = NtkButton(winMain, 10, 220, 110, 50,</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                         content=butcaptions[0], command=change_status)</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;butHideShow.config(bcolor=<span class="stringliteral">&quot;#C0C0FF&quot;</span>)</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;labExplain = NtkLabel(winMain, 130, 220, -10, 50)</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;labExplain.config(bcolor=<span class="stringliteral">&quot;#C0C0FF&quot;</span>)</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;labExplain.set_content(explstates[0])</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;mainloop()</div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -1,23 +1,42 @@
-## \fnamespace Ntk.py
-#  The main file of the library
+# This file is part of Ntk - A simple tkinter wrapper.
+#    Copyright (C) 2021  Nicola Cassetta
+#    See <https://github.com/ncassetta/Ntk>
 #
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Lesser General Public License as published
+#    by the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Lesser General Public License for more details.
+#
+#    You should have received a copy of the Lesser GNU General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+## \file 
+#
+# The main file of the library
+#
+
 
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.filedialog as fd
 import tkinter.messagebox as mb
 import tkinter.colorchooser as cc
-from constants import *
+from .constants import *
 
-__version__ = 1.0
+__version__ = "1.0.0"
 
-##
-# \cond
+
+## @cond IGNORE
 #####################################################################
 ###################    M I X I N   C L A S S E S
 #####################################################################
-##
-# \endcond
+## @endcond
 
 
 
@@ -712,7 +731,8 @@ class NtkHorFrame(NtkWidget, NtkContainer, tk.LabelFrame):
         \param content a string you can put as label"""        
         NtkWidget.__init__(self, parent, x, y, w, h, 0,
                             tk.LabelFrame.__init__)         # pad argument is ignored
-        self.config(background=parent.cget("background"), relief=FLAT)
+        if not isinstance(parent, NtkNotebook):
+            self.config(background=parent.cget("background"), relief=FLAT)
         NtkContainer.__init__(self)
         self.init_content(content)
  
@@ -735,7 +755,8 @@ class NtkVerFrame(NtkWidget, NtkContainer, tk.LabelFrame):
         \param content a string you can put as label"""                        
         NtkWidget.__init__(self, parent, x, y, w, h, 0,
                             tk.LabelFrame.__init__)         # pad argument is ignored
-        self.config(background=parent.cget("background"), relief=FLAT)
+        if not isinstance(parent, NtkNotebook):
+            self.config(background=parent.cget("background"), relief=FLAT)
         NtkContainer.__init__(self)
         self.init_content(content)
         
@@ -876,7 +897,8 @@ class NtkRowFrame(NtkWidget, NtkContainer, tk.LabelFrame):
         \param content a string you can put as label"""
         NtkWidget.__init__(self, parent, x, y, w, h, 0,
                             tk.LabelFrame.__init__)         # pad argument is ignored
-        self.config(background=parent.cget("background"), relief=FLAT)
+        if not isinstance(parent, NtkNotebook):
+            self.config(background=parent.cget("background"), relief=FLAT)
         NtkContainer.__init__(self)
         self.init_content(content)
         self._rows = []
@@ -1000,7 +1022,7 @@ class NtkButton(NtkWidget, tk.Button):
 
 class NtkCanvas(tk.Canvas):
     """Canvas widget to display graphical elements like lines or text. This widget
-    is unchanged from tkinter one (except for the constructor).
+    is unchanged from tkinter (except for the constructor).
 
     **Common options** (see \ref ATTRIBUTES)
 
@@ -2143,7 +2165,8 @@ class NtkSpinbox(NtkWidget, tk.Spinbox):
 
 
 class NtkText(NtkWidget, tk.Text):
-    """Text widget which can display text in various forms.
+    """Text widget which can display formatted text. This widget is
+    almost unchanged with respect to tkinter.
 
     **Common options** (see \ref ATTRIBUTES)
     
@@ -2158,19 +2181,22 @@ class NtkText(NtkWidget, tk.Text):
          xscrollcommand, yscrollcommand
          
     see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/text.html">anzeljg reference</a>
-    for the class **tkinter.Spinbox**
-    \see \ref NtkText.py example file""" 
+    for the class **tkinter.Text**.""" 
 
     def __init__(self, parent, x, y, w, h, pad=0):
+        """The constructor. It produces a text widget with an automatic vertical
+        scrollbar.
+        \param parent the widget parent
+        \param x, y, w, h, pad see \ref PLACING_WIDGETS"""
+        
         NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Text.__init__)
-        self.config(relief=SUNKEN)
         self._get_parent_config()
         self._vscroll = tk.Scrollbar(self, orient=VERTICAL)
         self.config(yscrollcommand=self._vscroll.set)
         self._vscroll.config(command=self.yview)        
                
     def append_text(self, t):
-        """Append the text t to the end."""
+        """Appends the text t to the end."""
         self.insert(END, t)
         self._auto_yscroll()
     
@@ -2212,8 +2238,14 @@ class NtkText(NtkWidget, tk.Text):
 class NtkNotebook(NtkWidget, ttk.Notebook):
     """Ttk Notebook widget which manages a collection of windows and displays
     a single one at a time. Each child window is associated with a tab,
-    which the user may select to change the currently-displayed window."""
+    which the user may select to change the currently-displayed window.
+    See <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/ttk-Notebook.html"anzeljg
+    reference</a> for the class **ttk.Notebook**.
+    \warning being this a ttk widget you cannot use the config() method on it."""
     def __init__(self, parent, x, y, w, h, pad=0):
+        """The constructor.
+        \param parent the widget parent
+        \param x, y, w, h, pad see \ref PLACING_WIDGETS"""        
         NtkWidget.__init__(self, parent, x, y, w, h, pad, ttk.Notebook.__init__)
         self._get_parent_config()
         
@@ -2221,8 +2253,9 @@ class NtkNotebook(NtkWidget, ttk.Notebook):
 
 #####################################################################
 ############               E   N   D
-#####################################################################     
-
+#####################################################################
+        
+        
 if __name__ == "__main__":
     winMain = NtkMain(100, 100, 400, 250, "Ntk")
     labInfo = NtkLabel(winMain, CENTER, 20, 300, 100, content=

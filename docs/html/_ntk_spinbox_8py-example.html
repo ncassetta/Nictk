@@ -33,7 +33,7 @@
    <div id="projectname">Ntk
    &#160;<span id="projectnumber">1.0</span>
    </div>
-   <div id="projectbrief">A simplified version of tkinter</div>
+   <div id="projectbrief">An easy to use pyton GUI</div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -98,118 +98,136 @@ $(document).ready(function(){initNavTree('_ntk_spinbox_8py-example.html',''); in
 </div><!--header-->
 <div class="contents">
 <p>Example of the use of <a class="el" href="class_ntk_1_1_ntk_spinbox.html" title="Spinbox widget, which allows to choose from a list of strings or type one.">Ntk.NtkSpinbox</a> widget: you can set the mode (normal, readonly and autoadd) and the wrap property.</p>
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="keyword">import</span> _setup           <span class="comment"># allows import from parent folder</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="keyword">import</span> Ntk</div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keyword">from</span> <a class="code" href="namespace_ntk_1_1constants.html">Ntk.constants</a> <span class="keyword">import</span> *</div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"># Italian cities</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;CITIES = (<span class="stringliteral">&quot;Bari&quot;</span>, <span class="stringliteral">&quot;Bologna&quot;</span>, <span class="stringliteral">&quot;Firenze&quot;</span>, <span class="stringliteral">&quot;Milano&quot;</span>, <span class="stringliteral">&quot;Napoli&quot;</span>, <span class="stringliteral">&quot;Palermo&quot;</span>,</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;         <span class="stringliteral">&quot;Roma&quot;</span>, <span class="stringliteral">&quot;Torino&quot;</span>, <span class="stringliteral">&quot;Venezia&quot;</span>)</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;MODES = {<span class="stringliteral">&quot;normal&quot;</span>:<span class="stringliteral">&quot;You can change the Spinbox value clicking on buttons or typing in it and pressing &lt;RETURN&gt;&quot;</span>,</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;         <span class="stringliteral">&quot;readonly&quot;</span>:<span class="stringliteral">&quot;You can only use up and down buttons&quot;</span>,</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;         <span class="stringliteral">&quot;autoadd&quot;</span>:<span class="stringliteral">&quot;As Normal, but every new value you type is added to Spinboz list&quot;</span>}</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;WRAPS = [<span class="stringliteral">&quot;When you arrive at the end of the list you can continue from the beginning&quot;</span>,</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;         <span class="stringliteral">&quot;When you arrive at the end of the list you cannot go beyond&quot;</span>]</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">def </span>change_label(event):</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    w = event.widget</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keywordflow">if</span> w == spb1:</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        labSample.config(fcolor=<span class="stringliteral">&quot;dark blue&quot;</span>)</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        labSample.set_content(<span class="stringliteral">&quot;Selected city: &quot;</span> + w.get_content())</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keywordflow">else</span>:</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        labSample.config(fcolor=<span class="stringliteral">&quot;brown&quot;</span>)</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        labSample.set_content(<span class="stringliteral">&quot;Selected number: &quot;</span> + w.get_content())</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">def </span>change_mode(event):</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    opt = optMode.get()</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    labMode.set_content(MODES[opt])</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    spb1.mode(opt)</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">def </span>change_wrap(event):</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    opt = optWrap.get()</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    labWrap.set_content(WRAPS[0] <span class="keywordflow">if</span> opt <span class="keywordflow">else</span> WRAPS[1])</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    spb1.config(wrap=opt)</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;winMain = <a class="code" href="class_ntk_1_1_ntk_main.html">Ntk.NtkMain</a>(200, 150, 640, 480, <span class="stringliteral">&quot;Spinbox&quot;</span>)</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment"># main hor frame, containing left and right subframes</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;vfr1 = <a class="code" href="class_ntk_1_1_ntk_hor_frame.html">Ntk.NtkHorFrame</a>(winMain, 0, 0, FILL, -60)</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">#left frame</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;rfr1 = <a class="code" href="class_ntk_1_1_ntk_row_frame.html">Ntk.NtkRowFrame</a>(vfr1, 0, 0, <span class="stringliteral">&quot;50%&quot;</span>, FILL, content=<span class="stringliteral">&quot;Spinbox1&quot;</span>)</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;rfr1.config(bcolor=<span class="stringliteral">&quot;#B0D0D0&quot;</span>, relief=RIDGE )</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;rfr1.config_children(ALL, bcolor=<span class="stringliteral">&quot;#B0D0B0&quot;</span>)</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;rfr1.config_children(<a class="code" href="class_ntk_1_1_ntk_spinbox.html">Ntk.NtkSpinbox</a>, rbcolor=<span class="stringliteral">&quot;#A0C0A0&quot;</span>)</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;rfr1.add_row(40)</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;spb1 = <a class="code" href="class_ntk_1_1_ntk_spinbox.html">Ntk.NtkSpinbox</a>(rfr1, CENTER, 0, <span class="stringliteral">&quot;50%&quot;</span>, FILL, pad=(0, 3), limits=CITIES,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                      command=change_label)</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;rfr1.add_row(50)</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;labModeTitle = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(rfr1, 0, 0, FILL, FILL, pad=(0, 5),</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                            content=<span class="stringliteral">&quot;Spinbox modes&quot;</span>)</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;labModeTitle.config(bcolor=rfr1.get_config(<span class="stringliteral">&quot;bcolor&quot;</span>), relief=FLAT, anchor=S,</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                    font=(<span class="stringliteral">&quot;Arial&quot;</span>, 16))</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;rfr1.add_row(<span class="stringliteral">&quot;30%&quot;</span>)</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;vfrMode = <a class="code" href="class_ntk_1_1_ntk_ver_frame.html">Ntk.NtkVerFrame</a>(rfr1, 0, CENTER, <span class="stringliteral">&quot;40%&quot;</span>, <span class="stringliteral">&quot;80%&quot;</span>)</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;vfrMode.config(relief=SUNKEN)</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;optMode = Ntk.StringVar()</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;tempT = tuple(MODES.keys())</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;radMode1 = <a class="code" href="class_ntk_1_1_ntk_radiobutton.html">Ntk.NtkRadiobutton</a>(vfrMode, 0, PACK, FILL, <span class="stringliteral">&quot;33%&quot;</span>, content=tempT[0],</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                              variable=(optMode, tempT[0]), command=change_mode)</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;radMode2 = <a class="code" href="class_ntk_1_1_ntk_radiobutton.html">Ntk.NtkRadiobutton</a>(vfrMode, 0, PACK, FILL, <span class="stringliteral">&quot;33%&quot;</span>, content=tempT[1],</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                              variable=(optMode, tempT[1]), command=change_mode)</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;radMode3 = <a class="code" href="class_ntk_1_1_ntk_radiobutton.html">Ntk.NtkRadiobutton</a>(vfrMode, 0, PACK, FILL, <span class="stringliteral">&quot;33%&quot;</span>, content=tempT[2],</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                              variable=(optMode, tempT[2]), command=change_mode)</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;labMode = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(rfr1, PACK, CENTER, FILL, <span class="stringliteral">&quot;80%&quot;</span>, pad=(5, 0,10, 0))</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;labMode.config(anchor=NW)</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;rfr1.add_row(50)</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;labWrapTitle = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(rfr1, 0, 0, FILL, FILL, pad=(0, 5),</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                            content=<span class="stringliteral">&quot;Enable wrap&quot;</span>)</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;labWrapTitle.config(bcolor=rfr1.get_config(<span class="stringliteral">&quot;bcolor&quot;</span>), relief=FLAT, anchor=S,</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                    font=(<span class="stringliteral">&quot;Arial&quot;</span>, 16))</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;rfr1.add_row(<span class="stringliteral">&quot;30%&quot;</span>)</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;optWrap = Ntk.BooleanVar()</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;vfrWrap = <a class="code" href="class_ntk_1_1_ntk_ver_frame.html">Ntk.NtkVerFrame</a>(rfr1, 0, CENTER, <span class="stringliteral">&quot;40%&quot;</span>, <span class="stringliteral">&quot;80%&quot;</span>)</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;vfrWrap.config(relief=SUNKEN)</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;radWrap1 = <a class="code" href="class_ntk_1_1_ntk_radiobutton.html">Ntk.NtkRadiobutton</a>(vfrWrap, 0, PACK, FILL, <span class="stringliteral">&quot;50%&quot;</span>, content=<span class="stringliteral">&quot;True&quot;</span>,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                              variable=(optWrap, <span class="keyword">True</span>), command=change_wrap)</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;radWrap2 = <a class="code" href="class_ntk_1_1_ntk_radiobutton.html">Ntk.NtkRadiobutton</a>(vfrWrap, 0, PACK, FILL, <span class="stringliteral">&quot;50%&quot;</span>, content=<span class="stringliteral">&quot;False&quot;</span>,</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                              variable=(optWrap, <span class="keyword">False</span>), command=change_wrap)</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;labWrap = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(rfr1, PACK, CENTER, FILL, <span class="stringliteral">&quot;80%&quot;</span>, pad=(5, 0,10, 0))</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;labWrap.config(anchor=NW)</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment"># right frame</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;rfr2 = <a class="code" href="class_ntk_1_1_ntk_row_frame.html">Ntk.NtkRowFrame</a>(vfr1, PACK, 0, FILL, FILL, content=<span class="stringliteral">&quot;Spinbox2&quot;</span>)</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;rfr2.config(bcolor=<span class="stringliteral">&quot;#FFFFA0&quot;</span>, relief=RIDGE)</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;rfr2.add_row(40)</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;spb2 = <a class="code" href="class_ntk_1_1_ntk_spinbox.html">Ntk.NtkSpinbox</a>(rfr2, CENTER, 0, <span class="stringliteral">&quot;50%&quot;</span>, FILL, pad=(0,3),</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                      limits=(1.0, 10.0, 0.5), command=change_label)</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment"># This file is part of Ntk - A simple tkinter wrapper.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">#    Copyright (C) 2021  Nicola Cassetta</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">#    See &lt;https://github.com/ncassetta/Ntk&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">#    This program is free software: you can redistribute it and/or modify</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">#    it under the terms of the GNU Lesser General Public License as published</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">#    by the Free Software Foundation, either version 3 of the License, or</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">#    (at your option) any later version.</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">#    This program is distributed in the hope that it will be useful,</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">#    GNU Lesser General Public License for more details.</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">#    You should have received a copy of the Lesser GNU General Public License</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">#    along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">import</span> _setup           <span class="comment"># allows import from parent folder</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">import</span> Ntk</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">from</span> <a class="code" href="namespace_ntk_1_1constants.html">Ntk.constants</a> <span class="keyword">import</span> *</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"># Italian cities</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;CITIES = (<span class="stringliteral">&quot;Bari&quot;</span>, <span class="stringliteral">&quot;Bologna&quot;</span>, <span class="stringliteral">&quot;Firenze&quot;</span>, <span class="stringliteral">&quot;Milano&quot;</span>, <span class="stringliteral">&quot;Napoli&quot;</span>, <span class="stringliteral">&quot;Palermo&quot;</span>,</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;         <span class="stringliteral">&quot;Roma&quot;</span>, <span class="stringliteral">&quot;Torino&quot;</span>, <span class="stringliteral">&quot;Venezia&quot;</span>)</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;MODES = {<span class="stringliteral">&quot;normal&quot;</span>:<span class="stringliteral">&quot;You can change the Spinbox value clicking on buttons or typing in it and pressing &lt;RETURN&gt;&quot;</span>,</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;         <span class="stringliteral">&quot;readonly&quot;</span>:<span class="stringliteral">&quot;You can only use up and down buttons&quot;</span>,</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;         <span class="stringliteral">&quot;autoadd&quot;</span>:<span class="stringliteral">&quot;As Normal, but every new value you type is added to Spinboz list&quot;</span>}</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;WRAPS = [<span class="stringliteral">&quot;When you arrive at the end of the list you can continue from the beginning&quot;</span>,</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;         <span class="stringliteral">&quot;When you arrive at the end of the list you cannot go beyond&quot;</span>]</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">def </span>change_label(event):</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    w = event.widget</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordflow">if</span> w == spb1:</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        labSample.config(fcolor=<span class="stringliteral">&quot;dark blue&quot;</span>)</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        labSample.set_content(<span class="stringliteral">&quot;Selected city: &quot;</span> + w.get_content())</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordflow">else</span>:</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        labSample.config(fcolor=<span class="stringliteral">&quot;brown&quot;</span>)</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        labSample.set_content(<span class="stringliteral">&quot;Selected number: &quot;</span> + w.get_content())</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">def </span>change_mode(event):</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    opt = optMode.get()</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    labMode.set_content(MODES[opt])</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    spb1.mode(opt)</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keyword">def </span>change_wrap(event):</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    opt = optWrap.get()</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    labWrap.set_content(WRAPS[0] <span class="keywordflow">if</span> opt <span class="keywordflow">else</span> WRAPS[1])</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    spb1.config(wrap=opt)</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;winMain = <a class="code" href="class_ntk_1_1_ntk_main.html">Ntk.NtkMain</a>(200, 150, 640, 480, <span class="stringliteral">&quot;Spinbox&quot;</span>)</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"># main hor frame, containing left and right subframes</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;vfr1 = <a class="code" href="class_ntk_1_1_ntk_hor_frame.html">Ntk.NtkHorFrame</a>(winMain, 0, 0, FILL, -60)</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">#left frame</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;rfr1 = <a class="code" href="class_ntk_1_1_ntk_row_frame.html">Ntk.NtkRowFrame</a>(vfr1, 0, 0, <span class="stringliteral">&quot;50%&quot;</span>, FILL, content=<span class="stringliteral">&quot;Spinbox1&quot;</span>)</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;rfr1.config(bcolor=<span class="stringliteral">&quot;#B0D0D0&quot;</span>, relief=RIDGE )</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;rfr1.config_children(ALL, bcolor=<span class="stringliteral">&quot;#B0D0B0&quot;</span>)</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;rfr1.config_children(<a class="code" href="class_ntk_1_1_ntk_spinbox.html">Ntk.NtkSpinbox</a>, rbcolor=<span class="stringliteral">&quot;#A0C0A0&quot;</span>)</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;rfr1.add_row(40)</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;spb1 = <a class="code" href="class_ntk_1_1_ntk_spinbox.html">Ntk.NtkSpinbox</a>(rfr1, CENTER, 0, <span class="stringliteral">&quot;50%&quot;</span>, FILL, pad=(0, 3), limits=CITIES,</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                      command=change_label)</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;rfr1.add_row(50)</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;labModeTitle = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(rfr1, 0, 0, FILL, FILL, pad=(0, 5),</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                            content=<span class="stringliteral">&quot;Spinbox modes&quot;</span>)</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;labModeTitle.config(bcolor=rfr1.get_config(<span class="stringliteral">&quot;bcolor&quot;</span>), relief=FLAT, anchor=S,</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                    font=(<span class="stringliteral">&quot;Arial&quot;</span>, 16))</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;rfr1.add_row(<span class="stringliteral">&quot;30%&quot;</span>)</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;vfrMode = <a class="code" href="class_ntk_1_1_ntk_ver_frame.html">Ntk.NtkVerFrame</a>(rfr1, 0, CENTER, <span class="stringliteral">&quot;40%&quot;</span>, <span class="stringliteral">&quot;80%&quot;</span>)</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;vfrMode.config(relief=SUNKEN)</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;optMode = Ntk.StringVar()</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;tempT = tuple(MODES.keys())</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;radMode1 = <a class="code" href="class_ntk_1_1_ntk_radiobutton.html">Ntk.NtkRadiobutton</a>(vfrMode, 0, PACK, FILL, <span class="stringliteral">&quot;33%&quot;</span>, content=tempT[0],</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                              variable=(optMode, tempT[0]), command=change_mode)</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;radMode2 = <a class="code" href="class_ntk_1_1_ntk_radiobutton.html">Ntk.NtkRadiobutton</a>(vfrMode, 0, PACK, FILL, <span class="stringliteral">&quot;33%&quot;</span>, content=tempT[1],</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                              variable=(optMode, tempT[1]), command=change_mode)</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;radMode3 = <a class="code" href="class_ntk_1_1_ntk_radiobutton.html">Ntk.NtkRadiobutton</a>(vfrMode, 0, PACK, FILL, <span class="stringliteral">&quot;33%&quot;</span>, content=tempT[2],</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                              variable=(optMode, tempT[2]), command=change_mode)</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;labMode = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(rfr1, PACK, CENTER, FILL, <span class="stringliteral">&quot;80%&quot;</span>, pad=(5, 0,10, 0))</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;labMode.config(anchor=NW)</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;rfr1.add_row(50)</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;labWrapTitle = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(rfr1, 0, 0, FILL, FILL, pad=(0, 5),</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                            content=<span class="stringliteral">&quot;Enable wrap&quot;</span>)</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;labWrapTitle.config(bcolor=rfr1.get_config(<span class="stringliteral">&quot;bcolor&quot;</span>), relief=FLAT, anchor=S,</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                    font=(<span class="stringliteral">&quot;Arial&quot;</span>, 16))</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="comment">#bottom label</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;labSample = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(winMain, CENTER, PACK, 280, FILL, pad=(0, 5),</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                         content=<span class="stringliteral">&quot;Try the spinboxes!&quot;</span>)</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;labSample.config(bcolor=<span class="stringliteral">&quot;pink&quot;</span>, anchor=CENTER, font=(<span class="stringliteral">&quot;Arial&quot;</span>, 16))</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;radMode1.invoke()</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;radWrap2.invoke()</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;Ntk.mainloop()</div>
-<div class="ttc" id="aclass_ntk_1_1_ntk_hor_frame_html"><div class="ttname"><a href="class_ntk_1_1_ntk_hor_frame.html">Ntk.NtkHorFrame</a></div><div class="ttdoc">A container in which you can stack children widgets horizontally.</div><div class="ttdef"><b>Definition:</b> __init__.py:696</div></div>
-<div class="ttc" id="aclass_ntk_1_1_ntk_label_html"><div class="ttname"><a href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a></div><div class="ttdoc">Label widget which can display text and bitmaps.</div><div class="ttdef"><b>Definition:</b> __init__.py:1424</div></div>
-<div class="ttc" id="aclass_ntk_1_1_ntk_main_html"><div class="ttname"><a href="class_ntk_1_1_ntk_main.html">Ntk.NtkMain</a></div><div class="ttdoc">The main window of the app.</div><div class="ttdef"><b>Definition:</b> __init__.py:597</div></div>
-<div class="ttc" id="aclass_ntk_1_1_ntk_radiobutton_html"><div class="ttname"><a href="class_ntk_1_1_ntk_radiobutton.html">Ntk.NtkRadiobutton</a></div><div class="ttdoc">Radiobutton widget which shows only one of several buttons in on-state.</div><div class="ttdef"><b>Definition:</b> __init__.py:1824</div></div>
-<div class="ttc" id="aclass_ntk_1_1_ntk_row_frame_html"><div class="ttname"><a href="class_ntk_1_1_ntk_row_frame.html">Ntk.NtkRowFrame</a></div><div class="ttdoc">A container in which you can stack rows vertically.</div><div class="ttdef"><b>Definition:</b> __init__.py:852</div></div>
-<div class="ttc" id="aclass_ntk_1_1_ntk_spinbox_html"><div class="ttname"><a href="class_ntk_1_1_ntk_spinbox.html">Ntk.NtkSpinbox</a></div><div class="ttdoc">Spinbox widget, which allows to choose from a list of strings or type one.</div><div class="ttdef"><b>Definition:</b> __init__.py:2020</div></div>
-<div class="ttc" id="aclass_ntk_1_1_ntk_ver_frame_html"><div class="ttname"><a href="class_ntk_1_1_ntk_ver_frame.html">Ntk.NtkVerFrame</a></div><div class="ttdoc">A container in which you can stack children widgets vertically.</div><div class="ttdef"><b>Definition:</b> __init__.py:718</div></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;rfr1.add_row(<span class="stringliteral">&quot;30%&quot;</span>)</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;optWrap = Ntk.BooleanVar()</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;vfrWrap = <a class="code" href="class_ntk_1_1_ntk_ver_frame.html">Ntk.NtkVerFrame</a>(rfr1, 0, CENTER, <span class="stringliteral">&quot;40%&quot;</span>, <span class="stringliteral">&quot;80%&quot;</span>)</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;vfrWrap.config(relief=SUNKEN)</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;radWrap1 = <a class="code" href="class_ntk_1_1_ntk_radiobutton.html">Ntk.NtkRadiobutton</a>(vfrWrap, 0, PACK, FILL, <span class="stringliteral">&quot;50%&quot;</span>, content=<span class="stringliteral">&quot;True&quot;</span>,</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                              variable=(optWrap, <span class="keyword">True</span>), command=change_wrap)</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;radWrap2 = <a class="code" href="class_ntk_1_1_ntk_radiobutton.html">Ntk.NtkRadiobutton</a>(vfrWrap, 0, PACK, FILL, <span class="stringliteral">&quot;50%&quot;</span>, content=<span class="stringliteral">&quot;False&quot;</span>,</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                              variable=(optWrap, <span class="keyword">False</span>), command=change_wrap)</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;labWrap = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(rfr1, PACK, CENTER, FILL, <span class="stringliteral">&quot;80%&quot;</span>, pad=(5, 0,10, 0))</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;labWrap.config(anchor=NW)</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment"># right frame</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;rfr2 = <a class="code" href="class_ntk_1_1_ntk_row_frame.html">Ntk.NtkRowFrame</a>(vfr1, PACK, 0, FILL, FILL, content=<span class="stringliteral">&quot;Spinbox2&quot;</span>)</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;rfr2.config(bcolor=<span class="stringliteral">&quot;#FFFFA0&quot;</span>, relief=RIDGE)</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;rfr2.add_row(40)</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;spb2 = <a class="code" href="class_ntk_1_1_ntk_spinbox.html">Ntk.NtkSpinbox</a>(rfr2, CENTER, 0, <span class="stringliteral">&quot;50%&quot;</span>, FILL, pad=(0,3),</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                      limits=(1.0, 10.0, 0.5), command=change_label)</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment">#bottom label</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;labSample = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(winMain, CENTER, PACK, 280, FILL, pad=(0, 5),</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                         content=<span class="stringliteral">&quot;Try the spinboxes!&quot;</span>)</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;labSample.config(bcolor=<span class="stringliteral">&quot;pink&quot;</span>, anchor=CENTER, font=(<span class="stringliteral">&quot;Arial&quot;</span>, 16))</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;radMode1.invoke()</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;radWrap2.invoke()</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;Ntk.mainloop()</div>
+<div class="ttc" id="aclass_ntk_1_1_ntk_hor_frame_html"><div class="ttname"><a href="class_ntk_1_1_ntk_hor_frame.html">Ntk.NtkHorFrame</a></div><div class="ttdoc">A container in which you can stack children widgets horizontally.</div><div class="ttdef"><b>Definition:</b> __init__.py:716</div></div>
+<div class="ttc" id="aclass_ntk_1_1_ntk_label_html"><div class="ttname"><a href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a></div><div class="ttdoc">Label widget which can display text and bitmaps.</div><div class="ttdef"><b>Definition:</b> __init__.py:1447</div></div>
+<div class="ttc" id="aclass_ntk_1_1_ntk_main_html"><div class="ttname"><a href="class_ntk_1_1_ntk_main.html">Ntk.NtkMain</a></div><div class="ttdoc">The main window of the app.</div><div class="ttdef"><b>Definition:</b> __init__.py:617</div></div>
+<div class="ttc" id="aclass_ntk_1_1_ntk_radiobutton_html"><div class="ttname"><a href="class_ntk_1_1_ntk_radiobutton.html">Ntk.NtkRadiobutton</a></div><div class="ttdoc">Radiobutton widget which shows only one of several buttons in on-state.</div><div class="ttdef"><b>Definition:</b> __init__.py:1847</div></div>
+<div class="ttc" id="aclass_ntk_1_1_ntk_row_frame_html"><div class="ttname"><a href="class_ntk_1_1_ntk_row_frame.html">Ntk.NtkRowFrame</a></div><div class="ttdoc">A container in which you can stack rows vertically.</div><div class="ttdef"><b>Definition:</b> __init__.py:874</div></div>
+<div class="ttc" id="aclass_ntk_1_1_ntk_spinbox_html"><div class="ttname"><a href="class_ntk_1_1_ntk_spinbox.html">Ntk.NtkSpinbox</a></div><div class="ttdoc">Spinbox widget, which allows to choose from a list of strings or type one.</div><div class="ttdef"><b>Definition:</b> __init__.py:2043</div></div>
+<div class="ttc" id="aclass_ntk_1_1_ntk_ver_frame_html"><div class="ttname"><a href="class_ntk_1_1_ntk_ver_frame.html">Ntk.NtkVerFrame</a></div><div class="ttdoc">A container in which you can stack children widgets vertically.</div><div class="ttdef"><b>Definition:</b> __init__.py:739</div></div>
 <div class="ttc" id="anamespace_ntk_1_1constants_html"><div class="ttname"><a href="namespace_ntk_1_1constants.html">Ntk.constants</a></div><div class="ttdef"><b>Definition:</b> constants.py:1</div></div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->

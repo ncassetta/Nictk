@@ -33,7 +33,7 @@
    <div id="projectname">Ntk
    &#160;<span id="projectnumber">1.0</span>
    </div>
-   <div id="projectbrief">A simplified version of tkinter</div>
+   <div id="projectbrief">An easy to use pyton GUI</div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -99,14 +99,14 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="contents">
 <div class="textblock"><p>Ntk is a wrapper for <b>tkinter</b> written by Nicola Cassetta with the aim of simplifying its use for building graphical interfaces with Python.</p>
 <p>As is known, tkinter is the Python standard library already included in the language distribution; it derives from <b>Tcl/Tk</b> and maintains its nomenclature and conventions in names and parameters of the functions, so they are often difficult to remember. It also has three different geometry managers (<em>pack</em>, <em>grid</em> and <em>place</em>) for placing widgets, which can be confusing. One of the most popular features is its ability to easily resize widgets when the main window is resized, but this often leads to strange behavior. For example, the standard behavior of an Entry object (the text field widget) is to grow larger as we type text into it. If we packed other widgets to its right all of them will move. Another problem arises for widget dimensions, which are in pixel for some of them (for example Button, Canvas) and in charachters for other (Label, Entry).</p>
-<p>These things are not a problem for experienced developers, but can confuse people approaching the design of a GUI using tkinter. So I tried to simplify these problems by adopting some general principles:</p><ul>
-<li>All widgets have a similar constructor, which enable the user to easily position them, with sizes always specified in pixels.</li>
-<li>As in tkinter, widgets can change their position and size when the main window is resized.</li>
-<li>Some tkinter options for widget <b>config()</b> method have been renamed in a more coherent manner, so it is easier to remember them. Also the almost infinite series of <b>winfo_...</b> methods have been packed into the unique <b>get_winfo()</b> method, with a string parameter.</li>
-<li><p class="startli">I renamed also some functions, trying to mantain the <em>xxxx_yyyy</em> scheme recommended in PEP 8 (this, however, is not complete)</p>
-<p class="startli">You can start learning Ntk by reading the <a class="el" href="_o_v_e_r_v_i_e_w.html">Overview</a> section. </p>
-</li>
+<p>These things make tkinter not very easy to learn for people starting out in designing graphical interfaces with Python. So I tried to simplify these problems by adopting some general principles:</p><ul>
+<li>All widgets have a similar constructor, which enable the user to easily position them, with sizes always specified in pixels (as in tkinter, widgets can change their position and size when the main window is resized).</li>
+<li>Many options for the widget <b>config()</b> method have been renamed in a way that is easier to remember, and some of them have been replaced by dedicated methods. Also the almost infinite series of <b>winfo_...</b> methods have been packed into the unique <b>get_winfo()</b> method, with a string parameter.</li>
+<li>I renamed also some functions, trying to mantain the <em>xxxx_yyyy</em> scheme recommended in PEP 8 (this, however, is not complete).</li>
+<li>I simplified the binding of events to callback functions, introducing in many widgets a <em>command</em> parameter in the constructor and standardizing the callback paradigm.</li>
+<li>I simplified also the use of IntVar, StringVar, etc.</li>
 </ul>
+<p>You can start learning Ntk by reading the <a class="el" href="_o_v_e_r_v_i_e_w.html">Overview</a> section. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->

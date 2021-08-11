@@ -33,7 +33,7 @@
    <div id="projectname">Ntk
    &#160;<span id="projectnumber">1.0</span>
    </div>
-   <div id="projectbrief">A simplified version of tkinter</div>
+   <div id="projectbrief">An easy to use pyton GUI</div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -98,62 +98,80 @@ $(document).ready(function(){initNavTree('_widget_position_8py-example.html','')
 </div><!--header-->
 <div class="contents">
 <p>An example of the various modes to position a widget inside a parent container (remember that NtkMain and NtkWindow behave as vertical frames, i.e. pack widgets vertically). You can try to maximize, iconize and resize the window (dragging its borders with the mouse) to see the various behaviors of widgets when the parent is resized.</p>
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="keyword">import</span> _setup           <span class="comment"># allows import from parent folder</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="keyword">import</span> Ntk</div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keyword">from</span> <a class="code" href="namespace_ntk_1_1constants.html">Ntk.constants</a> <span class="keyword">import</span> *</div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"># Strings for the various labels</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;STR_LAB1 = <span class="stringliteral">&quot;&quot;&quot;Label 1 has absolute position:</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="stringliteral">x=0, y=0, w=400, h=50, pad=(10,5)&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;STR_LAB2 = <span class="stringliteral">&quot;&quot;&quot;Label 2 is packed under Label 1 and has relative width:</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="stringliteral">x=0, y=PACK, w=&quot;75%&quot;, h=50, pad=(10, 5)&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;STR_LAB3=<span class="stringliteral">&quot;&quot;&quot;Label 3 has absolute (from right) width and relative height:</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="stringliteral">x=0, y=PACK, w=-200, h=&quot;10%&quot;, pad=(10, 5)&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;STR_HOR1 = <span class="stringliteral">&quot;Hor Frame 1 is packed under Label 3. It fills parent width: x=0, y=PACK, w =FILL, h=180&quot;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;STR_LAB4 = <span class="stringliteral">&quot;&quot;&quot;Label 4 is a child of the frame:</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="stringliteral">x=&quot;10%&quot;, y=CENTER, w=&quot;40%&quot;, h=50, pad=(5,0)&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;STR_LAB5 =<span class="stringliteral">&quot;&quot;&quot;Label 5 is packeded right Label 4 in the frame:</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="stringliteral">x=PACK, y=CENTER, w=&quot;40%&quot;, h=50, pad=(5,0)&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;STR_LAB6 =<span class="stringliteral">&quot;&quot;&quot;Label 6 is packed under the frame, x and w are from right:</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="stringliteral">x=-400, h=PACK, w=-50, h=60, pad=(0,10)&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"># create the main window</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;winMain = <a class="code" href="class_ntk_1_1_ntk_main.html">Ntk.NtkMain</a>(50, 50, 800, 600, <span class="stringliteral">&quot;Ntk widget positioning example&quot;</span>)</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"># set the font for all children</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;winMain.config_children(<a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>, relief=RIDGE, font=(<span class="stringliteral">&quot;Arial&quot;</span>, 10))</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment"># create the children</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;lab1 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(winMain, 0, 0, 600, 50, pad=(10, 5), content=STR_LAB1)</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;lab1.config(bcolor=<span class="stringliteral">&quot;#A0B0C0&quot;</span>)</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;lab2 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(winMain, 0, PACK, <span class="stringliteral">&quot;75%&quot;</span>, 50, pad=(10, 5), content=STR_LAB2)</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;lab2.config(bcolor=<span class="stringliteral">&quot;#F0F080&quot;</span>)</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;lab3 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(winMain, 0, PACK, -200, <span class="stringliteral">&quot;10%&quot;</span>, pad=(10, 5), content=STR_LAB3)</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;lab3.config(bcolor=<span class="stringliteral">&quot;#C090E0&quot;</span>)</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;hfr1 = <a class="code" href="class_ntk_1_1_ntk_hor_frame.html">Ntk.NtkHorFrame</a>(winMain, 0, PACK, FILL, 180, content=STR_HOR1)</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;hfr1.config(bcolor=<span class="stringliteral">&quot;#C0C070&quot;</span>)</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment"># This file is part of Ntk - A simple tkinter wrapper.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">#    Copyright (C) 2021  Nicola Cassetta</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">#    See &lt;https://github.com/ncassetta/Ntk&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">#    This program is free software: you can redistribute it and/or modify</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">#    it under the terms of the GNU Lesser General Public License as published</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">#    by the Free Software Foundation, either version 3 of the License, or</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">#    (at your option) any later version.</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">#    This program is distributed in the hope that it will be useful,</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">#    GNU Lesser General Public License for more details.</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">#    You should have received a copy of the Lesser GNU General Public License</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">#    along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">import</span> _setup           <span class="comment"># allows import from parent folder</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">import</span> Ntk</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">from</span> <a class="code" href="namespace_ntk_1_1constants.html">Ntk.constants</a> <span class="keyword">import</span> *</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"># Strings for the various labels</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;STR_LAB1 = <span class="stringliteral">&quot;&quot;&quot;Label 1 has absolute position:</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="stringliteral">x=0, y=0, w=400, h=50, pad=(10,5)&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;STR_LAB2 = <span class="stringliteral">&quot;&quot;&quot;Label 2 is packed under Label 1 and has relative width:</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="stringliteral">x=0, y=PACK, w=&quot;75%&quot;, h=50, pad=(10, 5)&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;STR_LAB3=<span class="stringliteral">&quot;&quot;&quot;Label 3 has absolute (from right) width and relative height:</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="stringliteral">x=0, y=PACK, w=-200, h=&quot;10%&quot;, pad=(10, 5)&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;STR_HOR1 = <span class="stringliteral">&quot;Hor Frame 1 is packed under Label 3. It fills parent width: x=0, y=PACK, w =FILL, h=180&quot;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;STR_LAB4 = <span class="stringliteral">&quot;&quot;&quot;Label 4 is a child of the frame:</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="stringliteral">x=&quot;10%&quot;, y=CENTER, w=&quot;40%&quot;, h=50, pad=(5,0)&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;STR_LAB5 =<span class="stringliteral">&quot;&quot;&quot;Label 5 is packeded right Label 4 in the frame:</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="stringliteral">x=PACK, y=CENTER, w=&quot;40%&quot;, h=50, pad=(5,0)&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;STR_LAB6 =<span class="stringliteral">&quot;&quot;&quot;Label 6 is packed under the frame, x and w are from right:</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="stringliteral">x=-400, h=PACK, w=-50, h=60, pad=(0,10)&quot;&quot;&quot;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;lab4 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(hfr1, <span class="stringliteral">&quot;10%&quot;</span>, CENTER, <span class="stringliteral">&quot;40%&quot;</span>, 80, pad=(5,0), content=STR_LAB4)</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;lab4.config(bcolor=<span class="stringliteral">&quot;#E07080&quot;</span>)</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;lab5 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(hfr1, PACK, CENTER, <span class="stringliteral">&quot;40%&quot;</span>, 80, pad=(5, 0), content=STR_LAB5)</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;lab5.config(bcolor=<span class="stringliteral">&quot;#20F0C0&quot;</span>)</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;lab6 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(winMain, -600, PACK, -100, 60, pad=(0, 10), content=STR_LAB6)</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;lab6.config(bcolor=<span class="stringliteral">&quot;#70F060&quot;</span>)</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment"># create the main window</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;winMain = <a class="code" href="class_ntk_1_1_ntk_main.html">Ntk.NtkMain</a>(50, 50, 800, 600, <span class="stringliteral">&quot;Ntk widget positioning example&quot;</span>)</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment"># set the font for all children</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;winMain.config_children(<a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>, relief=RIDGE, font=(<span class="stringliteral">&quot;Arial&quot;</span>, 10))</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"># create the children</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;lab1 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(winMain, 0, 0, 600, 50, pad=(10, 5), content=STR_LAB1)</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;lab1.config(bcolor=<span class="stringliteral">&quot;#A0B0C0&quot;</span>)</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;lab7 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(winMain, 0, -70, FILL, 60, pad=10, content=</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                    <span class="stringliteral">&quot;Try to resize the window horizontally or vertically&quot;</span>)</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;lab7.config(bcolor=<span class="stringliteral">&quot;#6090F0&quot;</span>, anchor=CENTER)</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;Ntk.mainloop()</div>
-<div class="ttc" id="aclass_ntk_1_1_ntk_hor_frame_html"><div class="ttname"><a href="class_ntk_1_1_ntk_hor_frame.html">Ntk.NtkHorFrame</a></div><div class="ttdoc">A container in which you can stack children widgets horizontally.</div><div class="ttdef"><b>Definition:</b> __init__.py:696</div></div>
-<div class="ttc" id="aclass_ntk_1_1_ntk_label_html"><div class="ttname"><a href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a></div><div class="ttdoc">Label widget which can display text and bitmaps.</div><div class="ttdef"><b>Definition:</b> __init__.py:1424</div></div>
-<div class="ttc" id="aclass_ntk_1_1_ntk_main_html"><div class="ttname"><a href="class_ntk_1_1_ntk_main.html">Ntk.NtkMain</a></div><div class="ttdoc">The main window of the app.</div><div class="ttdef"><b>Definition:</b> __init__.py:597</div></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;lab2 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(winMain, 0, PACK, <span class="stringliteral">&quot;75%&quot;</span>, 50, pad=(10, 5), content=STR_LAB2)</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;lab2.config(bcolor=<span class="stringliteral">&quot;#F0F080&quot;</span>)</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;lab3 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(winMain, 0, PACK, -200, <span class="stringliteral">&quot;10%&quot;</span>, pad=(10, 5), content=STR_LAB3)</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;lab3.config(bcolor=<span class="stringliteral">&quot;#C090E0&quot;</span>)</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;hfr1 = <a class="code" href="class_ntk_1_1_ntk_hor_frame.html">Ntk.NtkHorFrame</a>(winMain, 0, PACK, FILL, 180, content=STR_HOR1)</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;hfr1.config(bcolor=<span class="stringliteral">&quot;#C0C070&quot;</span>)</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;lab4 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(hfr1, <span class="stringliteral">&quot;10%&quot;</span>, CENTER, <span class="stringliteral">&quot;40%&quot;</span>, 80, pad=(5,0), content=STR_LAB4)</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;lab4.config(bcolor=<span class="stringliteral">&quot;#E07080&quot;</span>)</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;lab5 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(hfr1, PACK, CENTER, <span class="stringliteral">&quot;40%&quot;</span>, 80, pad=(5, 0), content=STR_LAB5)</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;lab5.config(bcolor=<span class="stringliteral">&quot;#20F0C0&quot;</span>)</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;lab6 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(winMain, -600, PACK, -100, 60, pad=(0, 10), content=STR_LAB6)</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;lab6.config(bcolor=<span class="stringliteral">&quot;#70F060&quot;</span>)</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;lab7 = <a class="code" href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a>(winMain, 0, -70, FILL, 60, pad=10, content=</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                    <span class="stringliteral">&quot;Try to resize the window horizontally or vertically&quot;</span>)</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;lab7.config(bcolor=<span class="stringliteral">&quot;#6090F0&quot;</span>, anchor=CENTER)</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;Ntk.mainloop()</div>
+<div class="ttc" id="aclass_ntk_1_1_ntk_hor_frame_html"><div class="ttname"><a href="class_ntk_1_1_ntk_hor_frame.html">Ntk.NtkHorFrame</a></div><div class="ttdoc">A container in which you can stack children widgets horizontally.</div><div class="ttdef"><b>Definition:</b> __init__.py:716</div></div>
+<div class="ttc" id="aclass_ntk_1_1_ntk_label_html"><div class="ttname"><a href="class_ntk_1_1_ntk_label.html">Ntk.NtkLabel</a></div><div class="ttdoc">Label widget which can display text and bitmaps.</div><div class="ttdef"><b>Definition:</b> __init__.py:1447</div></div>
+<div class="ttc" id="aclass_ntk_1_1_ntk_main_html"><div class="ttname"><a href="class_ntk_1_1_ntk_main.html">Ntk.NtkMain</a></div><div class="ttdoc">The main window of the app.</div><div class="ttdef"><b>Definition:</b> __init__.py:617</div></div>
 <div class="ttc" id="anamespace_ntk_1_1constants_html"><div class="ttname"><a href="namespace_ntk_1_1constants.html">Ntk.constants</a></div><div class="ttdef"><b>Definition:</b> constants.py:1</div></div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->

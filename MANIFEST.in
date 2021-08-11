@@ -1,0 +1,2 @@
+include Examples/*.py
+global-exclude Examples/NtkMastermind*.py

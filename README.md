@@ -13,9 +13,9 @@ These things are not a problem for experienced developers, but can confuse peopl
  - All widgets have a similar constructor, which enable the user to easily position them, with sizes always specified in pixels.
  - As in tkinter, widgets can change their position and size when the main window is resized.
  - Some tkinter options for widget **config()** method have been renamed in a more coherent manner, so it is easier to remember them. Also the almost infinite series of **winfo_...** methods have been packed into the unique **get_winfo()** method, with a string parameter.
- - I renamed also some functions, trying to mantain the _xxxx_yyyy_ scheme recommended in PEP 8 (this, however, is not complete)
+ - I renamed also some functions, trying to mantain the <em>xxxx_yyyy</em> scheme recommended in PEP 8 (this, however, is not complete)
 
-This is the <a href="doc/html/index.html" target="_blank">link</a> to the documentation.
+This is the <a href="https://ncassetta.github.io/Ntk">link to the documentation</a>.
 
 This is an example of a "Hello world"
 

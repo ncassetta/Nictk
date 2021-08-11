@@ -25,7 +25,6 @@
 var NAVTREE =
 [
   [ "Ntk", "index.html", [
-    [ "Ntk", "md__c___users__nicola__python__ntk__r_e_a_d_m_e.html", null ],
     [ "Overview", "_o_v_e_r_v_i_e_w.html", "_o_v_e_r_v_i_e_w" ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -37,13 +36,16 @@ var NAVTREE =
         [ "Variables", "functions_vars.html", null ]
       ] ]
     ] ],
+    [ "Files", "files.html", [
+      [ "File List", "files.html", "files_dup" ]
+    ] ],
     [ "Examples", "examples.html", "examples" ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"_a_t_t_r_i_b_u_t_e_s.html"
+"____init_____8py.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

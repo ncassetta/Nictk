@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ntk_211',['Ntk',['../md__c___users__nicola__python__ntk__r_e_a_d_m_e.html',1,'']]]
+  ['how_20to_20install_215',['How to install',['../_i_n_s_t_a_l_l.html',1,'OVERVIEW']]]
 ];

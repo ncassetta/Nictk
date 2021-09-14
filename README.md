@@ -15,7 +15,8 @@ These things are not a problem for experienced developers, but can confuse peopl
  - Some tkinter options for widget **config()** method have been renamed in a more coherent manner, so it is easier to remember them. Also the almost infinite series of **winfo_...** methods have been packed into the unique **get_winfo()** method, with a string parameter.
  - I renamed also some functions, trying to mantain the <em>xxxx_yyyy</em> scheme recommended in PEP 8 (this, however, is not complete)
 
-This is the <a href="https://ncassetta.github.io/Ntk/docs">link to the documentation</a>.
+This is the <a href="https://ncassetta.github.io/Ntk/docs/html">link to the documentation</a>.
+This is <a href="/docs/html">another link</a>.
 
 This is an example of a "Hello world"
 

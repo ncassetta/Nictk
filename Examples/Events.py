@@ -16,10 +16,11 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-import _setup           # allows import from parent folder
-import Ntk
-from Ntk.constants import *
+# Allows import from parent folder. You can delete this if you install the package
+import _setup
 
+import Nictk as Ntk
+from Nictk.constants import *
 
 COL1 = "#A0C0E0"        # light blue
 COL2 = "#B0D0F0"        # lighter blue
@@ -27,9 +28,9 @@ COL3 = "#F0B0D0"        # pink
 COL4 = "#E0E0A0"        # light yellow
 
 
-class MyMain(Ntk.NtkMain):
+class MyMain(Ntk.Main):
     def __init__(self, x, y, w, h):
-        Ntk.NtkMain.__init__(self, x, y, w, h)
+        Ntk.Main.__init__(self, x, y, w, h)
         # these are used in self.change_title
         self.oldw, self.oldh = w, h
         self.afterid = None
@@ -38,12 +39,12 @@ class MyMain(Ntk.NtkMain):
         self.bind("<Configure>", self.change_title)
         
         # creates two upper labels
-        self.lab1 = Ntk.NtkLabel(self, 0, 0, FILL, "40%", pad=(20, 10))
+        self.lab1 = Ntk.Label(self, 0, 0, FILL, "40%", pad=(20, 10))
         self.lab1.config(bcolor=COL1, font=("Arial", 12), takefocus=True)
-        self.lab2 = Ntk.NtkLabel(self, 0, PACK, FILL, "40%", pad=(20, 10))
+        self.lab2 = Ntk.Label(self, 0, PACK, FILL, "40%", pad=(20, 10))
         self.lab2.config(bcolor=COL1, font=("Arial", 12), takefocus=True)
         # third (helper) label
-        self.labHelp = Ntk.NtkLabel(self, 0, PACK, FILL, FILL, pad=(20, 10))
+        self.labHelp = Ntk.Label(self, 0, PACK, FILL, FILL, pad=(20, 10))
         self.labHelp.set_content(self.helpstr)
         # text will scroll, so no line wrapping
         self.labHelp.config(wraplen=0)

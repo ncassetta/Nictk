@@ -16,8 +16,10 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-import _setup           # allows import from parent folder
-import Ntk
+# Allows import from parent folder. You can delete this if you install the package
+import _setup
+
+import Nictk as Ntk
 from tkinter import font
 from random import randrange
 
@@ -66,52 +68,52 @@ def change_cursor(event):
     
 
 # create the main window
-winMain = Ntk.NtkMain(200, 180, 640, 480, "Widget attributes")
+winMain = Ntk.Main(200, 180, 640, 480, "Widget attributes")
 # fill it with a rowframe
-rfr1 = Ntk.NtkRowFrame(winMain, 0, 0, "fill", "fill")
+rfr1 = Ntk.RowFrame(winMain, 0, 0, "fill", "fill")
 # main label with the sample phrase
 rfr1.add_row(120)
-labSample = Ntk.NtkLabel(rfr1, 0, 0, "fill", "fill", pad=10,
-                         content="This is a sample, because\nit demonstrates widget options")
+labSample = Ntk.Label(rfr1, 0, 0, "fill", "fill", pad=10,
+                      content="This is a sample, because\nit demonstrates widget options")
 # you must have an already created window to get fonts
 FONTS = font.families()[:min(15, len(font.families()))]
 # config other children widgets
-rfr1.config_children(Ntk.NtkLabel, bcolor="#E0F0C0", relief="solid", border=1)
-rfr1.config_children(Ntk.NtkSpinbox, rbcolor="#A0C0D0", relief="ridge", state="readonly")
+rfr1.config_children(Ntk.Label, bcolor="#E0F0C0", relief="solid", border=1)
+rfr1.config_children(Ntk.Spinbox, rbcolor="#A0C0D0", relief="ridge", state="readonly")
 
 # other widgets
 rfr1.add_row(50)
 rfr1.add_row(34)
-labBgcolor = Ntk.NtkLabel(rfr1, 0, 0, "20%", "fill", pad=(10,2,2,2), content="bcolor")
-spbBgcolor = Ntk.NtkSpinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=COLORS,
-                            command=change_bgcolor)
-labFgcolor = Ntk.NtkLabel(rfr1, "pack", 0, "20%", "fill", pad=(10,2,2,2), content="fcolor")
-spbFgcolor = Ntk.NtkSpinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=COLORS,
-                            command=change_fgcolor)
+labBgcolor = Ntk.Label(rfr1, 0, 0, "20%", "fill", pad=(10,2,2,2), content="bcolor")
+spbBgcolor = Ntk.Spinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=COLORS,
+                         command=change_bgcolor)
+labFgcolor = Ntk.Label(rfr1, "pack", 0, "20%", "fill", pad=(10,2,2,2), content="fcolor")
+spbFgcolor = Ntk.Spinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=COLORS,
+                         command=change_fgcolor)
 
 rfr1.add_row(34)
-labRelief = Ntk.NtkLabel(rfr1, 0, 0, "20%", "fill", pad=(10,2,2,2), content="relief")
-spbRelief = Ntk.NtkSpinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=RELIEFS,
-                           command=change_relief)
-labBorder = Ntk.NtkLabel(rfr1, "pack", 0, "20%", "fill", pad=(10,2,2,2), content="border")
-spbBorder = Ntk.NtkSpinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=(0, 6, 1),
-                           command=change_border)
+labRelief = Ntk.Label(rfr1, 0, 0, "20%", "fill", pad=(10,2,2,2), content="relief")
+spbRelief = Ntk.Spinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=RELIEFS,
+                        command=change_relief)
+labBorder = Ntk.Label(rfr1, "pack", 0, "20%", "fill", pad=(10,2,2,2), content="border")
+spbBorder = Ntk.Spinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=(0, 6, 1),
+                        command=change_border)
 
 rfr1.add_row(34)
-labAnchor = Ntk.NtkLabel(rfr1, 0, 0, "20%", "fill", pad=(10,2,2,2), content="anchor")
-spbAnchor = Ntk.NtkSpinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=ANCHORS,
-                           command=change_anchor)
-labJustify = Ntk.NtkLabel(rfr1, "pack", 0, "20%", "fill", pad=(10,2,2,2), content="justify")
-spbJustify = Ntk.NtkSpinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=JUSTIFIES,
-                            command=change_justify)
+labAnchor = Ntk.Label(rfr1, 0, 0, "20%", "fill", pad=(10,2,2,2), content="anchor")
+spbAnchor = Ntk.Spinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=ANCHORS,
+                        command=change_anchor)
+labJustify = Ntk.Label(rfr1, "pack", 0, "20%", "fill", pad=(10,2,2,2), content="justify")
+spbJustify = Ntk.Spinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=JUSTIFIES,
+                         command=change_justify)
 
 rfr1.add_row(34)
-labFont = Ntk.NtkLabel(rfr1, 0, 0, "20%", "fill", pad=(10,2,2,2), content="font")
-spbFont = Ntk.NtkSpinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=FONTS,
-                         command=change_font)
-labCursor = Ntk.NtkLabel(rfr1, "pack", 0, "20%", "fill", pad=(10,2,2,2), content="cursor")
-spbCursor = Ntk.NtkSpinbox(rfr1, "pack", "pack", "30%", "fill", pad=(2,2,10,2), limits=CURSORS,
-                           command=change_cursor)
+labFont = Ntk.Label(rfr1, 0, 0, "20%", "fill", pad=(10,2,2,2), content="font")
+spbFont = Ntk.Spinbox(rfr1, "pack", 0, "30%", "fill", pad=(2,2,10,2), limits=FONTS,
+                      command=change_font)
+labCursor = Ntk.Label(rfr1, "pack", 0, "20%", "fill", pad=(10,2,2,2), content="cursor")
+spbCursor = Ntk.Spinbox(rfr1, "pack", "pack", "30%", "fill", pad=(2,2,10,2), limits=CURSORS,
+                        command=change_cursor)
 
 # call the callbacks to set initial values
 change_anchor(None)

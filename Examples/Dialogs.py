@@ -16,9 +16,17 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
+# Allows import from parent folder. You can delete this if you install the package
 import _setup
-import Ntk
-from Ntk.constants import *
+
+import Nictk as Ntk
+from Nictk.constants import *
+
+
+# TODO:
+# 1) review widget dimensions
+# 2) save as and choose color doesn't report correcyt choose
+
 
 """The items of this dictionary are tuples with
    - the name of the function to call
@@ -50,22 +58,22 @@ def open_dialog(event):
             
 
 
-winMain = Ntk.NtkMain(200, 150, 600, 450, "Dialog sample")
+winMain = Ntk.Main(200, 150, 600, 450, "Dialog sample")
 winMain.config_children(ALL, font=("Arial", 16))
 # widgets are aligned with absolute coords
 
 # upper button
-butOpen= Ntk.NtkButton(winMain, CENTER, 20, 240, 80, pad=10,
+butOpen= Ntk.Button(winMain, CENTER, 20, 240, 80, pad=10,
                        content="Open a dialog box", command=open_dialog)
 butOpen.config(bcolor="#C0F0C0", fcolor="#2020C0")
 
 # combobox for choosing the dialog to open
-cmbType = Ntk.NtkCombobox(winMain, CENTER, PACK, 320, 80, pad=10,
+cmbType = Ntk.Combobox(winMain, CENTER, PACK, 320, 80, pad=10,
                       items=tuple(DIALOGS.keys()))
 
 diagResult = Ntk.StringVar(value="")
 # lower label for info
-labResult = Ntk.NtkLabel(winMain, CENTER, PACK, 320, 120, pad=10, content=diagResult)
+labResult = Ntk.Label(winMain, CENTER, PACK, 320, 120, pad=10, content=diagResult)
 labResult.config(bcolor="#FFFFC0", fcolor="#202060", relief=RIDGE, anchor=CENTER)
 
 Ntk.mainloop()

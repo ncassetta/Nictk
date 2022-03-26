@@ -27,7 +27,14 @@ import tkinter.ttk as ttk
 import tkinter.filedialog as fd
 import tkinter.messagebox as mb
 import tkinter.colorchooser as cc
-from constants import *
+
+# Prevents the "attempted relative import with no known parent package"
+# error when this file is executed
+if __name__ == "__main__":
+    from constants import *
+else:
+    from .constants import *
+    
 
 __version__ = "2.0.0"
 

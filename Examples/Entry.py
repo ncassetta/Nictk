@@ -16,9 +16,11 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-import _setup           # allows import from parent folder
-import Ntk
-from Ntk.constants import *
+# Allows import from parent folder. You can delete this if you install the package
+import _setup
+
+import Nictk as Ntk
+from Nictk.constants import *
 
 
 def get_focus(event):
@@ -53,19 +55,19 @@ def to_Celsius(event):
     entCelsius.set_content(cel)
     
 
-winMain = Ntk.NtkMain(100, 100, 300, 150, "C-F Conversion")
+winMain = Ntk.Main(100, 100, 300, 150, "C-F Conversion")
 winMain.config_children(ALL, font=("Arial", 12))
 
 # here we place  the widgets using absolute coords
-labCelsius = Ntk.NtkLabel(winMain, 20, 20, 100, 40, content="Celsius") 
+labCelsius = Ntk.Label(winMain, 20, 20, 100, 40, content="Celsius") 
 labCelsius.config(fcolor="red")
-entCelsius = Ntk.NtkEntry(winMain, 140, 20, 140, 40)
+entCelsius = Ntk.Entry(winMain, 140, 20, 140, 40)
 entCelsius.config(bcolor="light grey", fcolor="red", sbcolor="red", sfcolor="white")
 entCelsius.bind("<FocusIn>", get_focus)
 
-labFarenheit = Ntk.NtkLabel(winMain, 20, 70, 100, 40, content="Farenheit")
+labFarenheit = Ntk.Label(winMain, 20, 70, 100, 40, content="Farenheit")
 labFarenheit.config(fcolor="green")
-entFarenheit = Ntk.NtkEntry(winMain, 140, 70, 140, 40)
+entFarenheit = Ntk.Entry(winMain, 140, 70, 140, 40)
 entFarenheit.config(bcolor="light grey", fcolor="green", sbcolor="green", sfcolor="white")
 entFarenheit.bind("<FocusIn>", get_focus)
 

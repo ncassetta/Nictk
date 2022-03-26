@@ -16,8 +16,11 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-import _setup           # allows import from parent folder
-from Ntk import *
+# Allows import from parent folder. You can delete this if you install the package
+import _setup
+
+import Nictk as Ntk
+from Nictk.constants import *
 from time import *
 
 bcolors =  ("#FFFFFF", "#202060", "#D0D0A0", "#206020", "#FFA0A0", "#402000")
@@ -71,30 +74,30 @@ def change_status(event):
 
 
 
-winMain = NtkMain(200, 150, 400, 300, "Widget states sample")
+winMain = Ntk.Main(200, 150, 400, 300, "Widget states sample")
 # widgets are aligned with absolute coords
 
 # upper entry and button
-entText = NtkEntry(winMain, 0, 0, "fill", 60, pad=10)
+entText = Ntk.Entry(winMain, 0, 0, "fill", 60, pad=10)
 entText.config(font=("Arial", 14), bcolor=bcolors[0], fcolor=fcolors[0], dfcolor = dfcolors[0])
 
-butColor = NtkButton(winMain, CENTER, 70, 100, 30,
+butColor = Ntk.Button(winMain, CENTER, 70, 100, 30,
                       content="Change Color", command=change_color)
 
 # frame and its children
-hfr1 = NtkHorFrame(winMain, 0, 110, FILL, 80, content="This is a HorFrame")
+hfr1 = Ntk.HorFrame(winMain, 0, 110, FILL, 80, content="This is a HorFrame")
 hfr1.config(relief=RIDGE)
-labFrame= NtkLabel(hfr1, 0, 0, "70%", FILL, pad=(8, 8, 8, 28), content=texts[0])
+labFrame= Ntk.Label(hfr1, 0, 0, "70%", FILL, pad=(8, 8, 8, 28), content=texts[0])
 labFrame.config(fcolor="#FFFFC0", bcolor="#202060", dfcolor="#D0D0A0",
                      relief=RIDGE)
-butFrame= NtkButton(hfr1, PACK, 0, FILL, FILL, pad=(8, 8, 8, 28), content=
-                   "Click me", command=change_text)
+butFrame= Ntk.Button(hfr1, PACK, 0, FILL, FILL, pad=(8, 8, 8, 28), content=
+                     "Click me", command=change_text)
 
 # lower button and label
-butHideShow = NtkButton(winMain, 10, 220, 110, 50,
+butHideShow = Ntk.Button(winMain, 10, 220, 110, 50,
                          content=butcaptions[0], command=change_status)
 butHideShow.config(bcolor="#C0C0FF")
-labExplain = NtkLabel(winMain, 130, 220, -10, 50)
+labExplain = Ntk.Label(winMain, 130, 220, -10, 50)
 labExplain.config(bcolor="#C0C0FF")
 labExplain.set_content(explstates[0])
 

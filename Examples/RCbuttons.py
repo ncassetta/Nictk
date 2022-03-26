@@ -16,8 +16,10 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-import _setup           # allows import from parent folder
-import Ntk
+# Allows import from parent folder. You can delete this if you install the package
+import _setup
+
+import Nictk as Ntk
 
 
 def change_label_text(ev):
@@ -33,55 +35,55 @@ def change_label_text(ev):
 
 
 
-winMain = Ntk.NtkMain(200, 150, 600, 400, "Radio and Check Buttons")
+winMain = Ntk.Main(200, 150, 600, 400, "Radio and Check Buttons")
 winMain.config(bcolor="#FFFFA0")
 winMain.config_children("all", relief="groove")
 
 # we dispose our widgets in rows
-rfr1 = Ntk.NtkRowFrame(winMain, 0, 0, "fill", "fill")
+rfr1 = Ntk.RowFrame(winMain, 0, 0, "fill", "fill")
 rfr1.add_row(60)
 
 # main label: its content is updated by the callback
-labSample = Ntk.NtkLabel(rfr1, 0, 0, "fill", "fill", pad=10)
+labSample = Ntk.Label(rfr1, 0, 0, "fill", "fill", pad=10)
 rfr1.add_row(80)
 
 # creates pink checkbutton, and associates a StringVar to the button states 
 chk1Var = Ntk.StringVar()
-chk1 = Ntk.NtkCheckbutton(rfr1, 0, 0, "40%", "fill", pad=(10, 5, 5, 5),
-                          content="This button controls a StrVar, which can get values: 'Value: on' and 'Value: off",
-                          variable=(chk1Var, "Value: on", "Value: off"), command=change_label_text) 
+chk1 = Ntk.Checkbutton(rfr1, 0, 0, "40%", "fill", pad=(10, 5, 5, 5),
+                       content="This button controls a StrVar, which can get values: 'Value: on' and 'Value: off",
+                       variable=(chk1Var, "Value: on", "Value: off"), command=change_label_text) 
 chk1.config(bcolor="pink", abcolor="pink")
 chk1.select()
 # the label will be automatically updated with chk1Var content
-labChk1 = Ntk.NtkLabel(rfr1, "pack", 0, "fill", "fill", pad=(5, 5, 10, 5), content=chk1Var)
+labChk1 = Ntk.Label(rfr1, "pack", 0, "fill", "fill", pad=(5, 5, 10, 5), content=chk1Var)
 rfr1.add_row(80)
 
 # creates orange checkbutton, and associates an IntVar to the button states
 # (its offvalue and onvalue are set to 0 and 1) 
 chk2Var = Ntk.IntVar()
-chk2 = Ntk.NtkCheckbutton(rfr1, 0, 0, "40%", "fill", pad=(10, 5, 5, 5),
-                          content="This button controls an IntVar, which can get values: 0 and 1",
-                          variable=chk2Var, command=change_label_text)
+chk2 = Ntk.Checkbutton(rfr1, 0, 0, "40%", "fill", pad=(10, 5, 5, 5),
+                       content="This button controls an IntVar, which can get values: 0 and 1",
+                       variable=chk2Var, command=change_label_text)
 chk2.config(bcolor="orange", abcolor="orange")
 chk2.deselect()
 # the label will be automatically updated with chk2Var content
-labChk2 = Ntk.NtkLabel(rfr1, "pack", 0 , "fill", "fill", pad=(5, 5, 10, 5), content=chk2Var)
+labChk2 = Ntk.Label(rfr1, "pack", 0 , "fill", "fill", pad=(5, 5, 10, 5), content=chk2Var)
 rfr1.add_row(-10)
 
 # we need this to stack radiobuttons vertically
-frm3 = Ntk.NtkVerFrame(rfr1, 10, 10, -10, "fill")
+frm3 = Ntk.VerFrame(rfr1, 10, 10, -10, "fill")
 frm3.config(relief="groove")
 frm3.config_children("all", relief="flat")
 
 # common variable for all radiobuttons
 optVar = Ntk.IntVar()
 # radiobuttons
-rad1 = Ntk.NtkRadiobutton(frm3, 0, "pack", "fill", "33%", content="Option 1",
-                          variable=(optVar, 1), command=change_label_text)
-rad2 = Ntk.NtkRadiobutton(frm3, 0, "pack", "fill", "33%", content="Option 2",
-                          variable=(optVar, 2), command=change_label_text)
-rad3 = Ntk.NtkRadiobutton(frm3, 0, "pack", "fill", "33%", content="Option 3",
-                          variable=(optVar, 3), command=change_label_text)
+rad1 = Ntk.Radiobutton(frm3, 0, "pack", "fill", "33%", content="Option 1",
+                       variable=(optVar, 1), command=change_label_text)
+rad2 = Ntk.Radiobutton(frm3, 0, "pack", "fill", "33%", content="Option 2",
+                       variable=(optVar, 2), command=change_label_text)
+rad3 = Ntk.Radiobutton(frm3, 0, "pack", "fill", "33%", content="Option 3",
+                       variable=(optVar, 3), command=change_label_text)
 # sets rad2 at the beginning
 rad2.invoke()
 # clears the text set by the previous

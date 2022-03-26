@@ -16,9 +16,11 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-import _setup           # allows import from parent folder
-import Ntk
-from Ntk.constants import *
+# Allows import from parent folder. You can delete this if you install the package
+import _setup
+
+import Nictk as Ntk
+from Nictk.constants import *
 
 
 def changecolor(event):
@@ -38,15 +40,15 @@ def changecolor(event):
     labColor.set_content("Color:\n" + deccolor)
 
 
-winMain = Ntk.NtkMain(200, 150, 400, 300, "Scale widget sample")
+winMain = Ntk.Main(200, 150, 400, 300, "Scale widget sample")
 winMain.config_children(ALL, relief="solid", borderwidth=1, anchor=CENTER)
 
 # vertical frame for aligning the three scales and their labels in the left side
-vfr1 = Ntk.NtkVerFrame(winMain, 0, 0, "50%", FILL)
+vfr1 = Ntk.VerFrame(winMain, 0, 0, "50%", FILL)
 
 # red label and scale
-labRed = Ntk.NtkLabel(vfr1, 0, 0, FILL, 45, pad=(10, 15, 20, 5), content="Red")  
-sclRed = Ntk.NtkScale(vfr1, 0, PACK, FILL, 50, pad=(10, 0, 20, 5),
+labRed = Ntk.Label(vfr1, 0, 0, FILL, 45, pad=(10, 15, 20, 5), content="Red")  
+sclRed = Ntk.Scale(vfr1, 0, PACK, FILL, 50, pad=(10, 0, 20, 5),
                       limits=(0,255,1), command=changecolor)
 # bcolor: background and non selected cursor color
 # tcolor (through color): color of the cursor guide
@@ -54,21 +56,21 @@ sclRed = Ntk.NtkScale(vfr1, 0, PACK, FILL, 50, pad=(10, 0, 20, 5),
 sclRed.config(bcolor="red", tcolor="#FF8080", abcolor="#FFA0A0")
 
 # green label and scale
-labGreen = Ntk.NtkLabel(vfr1, 0, PACK, FILL, 45, pad=(10, 15, 20, 5),
+labGreen = Ntk.Label(vfr1, 0, PACK, FILL, 45, pad=(10, 15, 20, 5),
                         content="Green")  
-sclGreen = Ntk.NtkScale(vfr1, 0, PACK, FILL, 50, pad=(10, 0, 20, 5),
+sclGreen = Ntk.Scale(vfr1, 0, PACK, FILL, 50, pad=(10, 0, 20, 5),
                     limits=(0,255,1), command=changecolor)
 sclGreen.config(bcolor="green", tcolor="#80FF80", abcolor="#A0FFA0")
 
 # blue label and scale
-labBlue = Ntk.NtkLabel(vfr1, 0, PACK, FILL, 45, pad=(10, 15, 20, 5),
+labBlue = Ntk.Label(vfr1, 0, PACK, FILL, 45, pad=(10, 15, 20, 5),
                        content="Blue")  
-sclBlue = Ntk.NtkScale(vfr1, 0, PACK, FILL, 50, pad=(10, 0, 20, 5),
+sclBlue = Ntk.Scale(vfr1, 0, PACK, FILL, 50, pad=(10, 0, 20, 5),
                        limits=(0,255,1), command=changecolor)
 sclBlue.config(bcolor="blue", tcolor="#8080FF", abcolor="#A0A0FF")
 
 # color label in the right side
-labColor = Ntk.NtkLabel(winMain, "50%", 0, FILL, FILL, pad=15)
+labColor = Ntk.Label(winMain, "50%", 0, FILL, FILL, pad=15)
 labColor.config(anchor=CENTER, justify=CENTER)
 
 # call the callback for setting initial color to black

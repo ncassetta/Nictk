@@ -16,8 +16,10 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-import _setup           # allows import from parent folder
-from Ntk import *
+# Allows import from parent folder. You can delete this if you install the package
+import _setup
+
+import Nictk as Ntk
 
 winfo_options = ["atom", "atomname", "cells", "children", "class", "colormapfull", "containing", 
                  "depth", "exists", "fpixels", "geometry", "height", "id", "interps", "ismapped",
@@ -27,9 +29,9 @@ winfo_options = ["atom", "atomname", "cells", "children", "class", "colormapfull
                  "screenwidth", "server", "toplevel", "viewable", "visual", "visualid", "visualsavailable",
                  "vrootheight", "vrootwidth", "vrootx", "vrooty", "width", "x", "y"]
 
-winMain = NtkMain(100, 100, 800, 600, title="winfo demo")
-labTest = NtkLabel(winMain, 0, 0, "fill", 50, pad=(30, 10, 30, 10), content="labTest")
-txtTest = NtkText(winMain, 0, "pack", "fill", "fill", pad=(30, 5, 30, 10))
+winMain = Ntk.Main(100, 100, 800, 600, title="winfo demo")
+labTest = Ntk.Label(winMain, 0, 0, "fill", 50, pad=(30, 10, 30, 10), content="labTest")
+txtTest = Ntk.Text(winMain, 0, "pack", "fill", "fill", pad=(30, 5, 30, 10))
 
 for opt in winfo_options:
     try:
@@ -39,4 +41,4 @@ for opt in winfo_options:
     desc = "{:40}{:>30}".format('labTest.get_winfo("' + opt + '")', str(output))
     txtTest.append_text(desc + "\n")
 
-mainloop()
+Ntk.mainloop()

@@ -27,9 +27,9 @@ import tkinter.ttk as ttk
 import tkinter.filedialog as fd
 import tkinter.messagebox as mb
 import tkinter.colorchooser as cc
-from .constants import *
+from constants import *
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"
 
 
 ## @cond IGNORE
@@ -40,7 +40,7 @@ __version__ = "1.0.0"
 
 
 
-class NtkMisc:
+class Misc:
     """Base class for windows and widgets.
     It defines methods common for windows and interior widgets."""
 
@@ -69,8 +69,8 @@ class NtkMisc:
         if cnf is None:
             trans_cnf = None
         else:
-            if isinstance(self, (NtkButton, NtkCheckbutton, NtkCombobox, NtkListbox, NtkMenu, 
-                                 NtkRadiobutton, NtkScale, NtkSpinbox)) and "command" in cnf.keys():
+            if isinstance(self, (Button, Checkbutton, Combobox, Listbox, Menu, Radiobutton,
+                                 Scale, Spinbox)) and "command" in cnf.keys():
                 cmd = cnf.pop("command")
                 cback, value = ((cmd, None) if callable(cmd) else (cmd[0], cmd[1]))
                 # _commandwrap is the  __call__ wrapper for the command callback
@@ -78,9 +78,9 @@ class NtkMisc:
                 super().config(command=self._commandwrap)            
             trans_cnf = {}
             for k, v in cnf.items():
-                if k in NtkMisc._del_opt:
+                if k in Misc._del_opt:
                     raise ValueError
-                newk = NtkMisc._trans_opt[k] if k in NtkMisc._trans_opt else k
+                newk = Misc._trans_opt[k] if k in Misc._trans_opt else k
                 trans_cnf[newk] = v
                 # TODO: what other options must be config for the _extFrame???
         
@@ -98,7 +98,7 @@ class NtkMisc:
         return self.master
     
     def toplevel(self):
-        """Returns the widget toplevel container (a NtkWindow or NtkMain).
+        """Returns the widget toplevel container (a Window or Main).
         See \ref WIDGET_INFO"""
         return self.nametowidget(self.winfo_toplevel())
     
@@ -179,7 +179,7 @@ class NtkMisc:
         
 
 
-class NtkContainer:
+class Container:
     """Base class for widgets which can contain other widgets.
     Used only as mixin: you should not use it directly."""
     
@@ -196,10 +196,10 @@ class NtkContainer:
         in turn, the options will be inherited: if a resource receives a new
         value it replaces the previous one, otherwise it remains unchanged.
         \param which you can indicate <b>"all"</b> (or **ALL**) for all children,
-        or the name of a widget class (**not** a string, for example NtkEntry or
-        NtkButton) or a tuple of names for configuring only specific widgets.
+        or the name of a widget class (**not** a string, for example Entry or
+        Button) or a tuple of names for configuring only specific widgets.
         \param kw a list of named options for the resources to be configured
-        \see \ref NtkWindow.py \ref NtkSpinbox.py, \ref NtkRCbuttons.py
+        \see \ref Window.py \ref Spinbox.py, \ref RCbuttons.py
         example files"""
         l = [item["which"] for item in self._cnfchildren]
         if which not in l:
@@ -226,19 +226,19 @@ class NtkContainer:
 
 # Added by me to override tkinter Widget methods
 
-class NtkWidget(NtkMisc):
+class Widget(Misc):
     """Base class which defines methods common for all Ntk internal widgets
     (not windows nor menus). It overrides the tkinter class."""
     def __init__(self, parent, x, y, w, h, pad, ctor, **kw):
         """The constructor."""
         self._orig_dim = (x, y, w, h, pad)      # tk.Widget.__init__ does nothing
-        if isinstance(self, NtkCombobox):
+        if isinstance(self, Combobox):
             ctor(parent, kw["variable"], kw["values"], kw["command"]) 
         else:
             ctor(self, master=parent, **kw)
         self._calc_dimensions()                 # sets _curr_dim
         self._place_widget()
-        if isinstance(parent, (NtkRowFrame, NtkColFrame)): 
+        if isinstance(parent, (RowFrame, ColFrame)): 
             parent.get_active().children.append(self)       
         
     def hide(self):
@@ -262,7 +262,7 @@ class NtkWidget(NtkMisc):
             self.config(state=NORMAL)
         except (ValueError, tk.TclError):
             pass        
-        if isinstance(self, NtkContainer):
+        if isinstance(self, Container):
             for w in self.winfo_children():
                 w.activate()
                 
@@ -274,7 +274,7 @@ class NtkWidget(NtkMisc):
             self.config(state=DISABLED)
         except (ValueError, tk.TclError):
             pass        
-        if isinstance(self, NtkContainer):
+        if isinstance(self, Container):
             for w in self.winfo_children():
                 w.deactivate()        
         
@@ -285,49 +285,49 @@ class NtkWidget(NtkMisc):
         PhotoImage"""
         if isinstance(self, tk.LabelFrame) and isinstance(content, str):
             self.config(text=content)
-            self._cont_type = NtkWidget.TEXT
+            self._cont_type = Widget.TEXT
         else:
             if isinstance(content, str):
                 self.config(text=content, textvariable="")
                 self.textVar = None
-                self._cont_type = NtkWidget.TEXT
+                self._cont_type = Widget.TEXT
             elif isinstance(content, tk.StringVar):
                 self.config(textvariable=content)
                 if content is not self.textVar:
                     self.textVar = content
-                self._cont_type = NtkWidget.STRVAR        
+                self._cont_type = Widget.STRVAR        
             elif isinstance(content, tk.Variable):
                 self.config(textvariable=content)
                 if content is not self.textVar:
                     self.textVar = content
-                self._cont_type = NtkWidget.NUMVAR
+                self._cont_type = Widget.NUMVAR
             elif isinstance(content, tk.PhotoImage) or isinstance(content, tk.BitmapImage):
                 self.config(text="", textvariable="", image=content)
                 self.textVar = None
-                self._cont_type = NtkWidget.IMAGE
+                self._cont_type = Widget.IMAGE
             else:
                 self._cont_type = None
 
     def get_content(self):
         """Returns the content of the widget as a string."""
-        if self._cont_type == NtkWidget.STRVAR:
+        if self._cont_type == Widget.STRVAR:
             return self.textVar.get()
-        elif self._cont_type == NtkWidget.NUMVAR:
+        elif self._cont_type == Widget.NUMVAR:
             return str(self.textVar.get())        
-        elif  self._cont_type == NtkWidget.TEXT:
+        elif  self._cont_type == Widget.TEXT:
             return self.cget("text")
-        elif self._cont_type == NtkWidget.IMAGE:
+        elif self._cont_type == Widget.IMAGE:
             return self.cget("image")
         else:
             return ""    
     
     def set_content(self, content):
         """Set the content of the widget as a string."""
-        if self._cont_type in (NtkWidget.STRVAR, NtkWidget.NUMVAR):
+        if self._cont_type in (Widget.STRVAR, Widget.NUMVAR):
             self.textVar.set(content)
-        elif self._cont_type ==NtkWidget.TEXT:
+        elif self._cont_type ==Widget.TEXT:
             self.config(text=content)
-        elif self._cont_type == NtkWidget.IMAGE:
+        elif self._cont_type == Widget.IMAGE:
             self.config(image=content)
     
     def resize(self, x=None, y=None, w=None, h=None, pad=None):
@@ -363,13 +363,13 @@ class NtkWidget(NtkMisc):
             raise TypeError
             
         # set some local variables
-        if isinstance(self.parent(), NtkRowFrame):                                                 
+        if isinstance(self.parent(), RowFrame):                                                 
             parent = self.parent().get_active()
             offs_x, offs_y = 0, parent.winfo_y()
             offs_border = 2 * self.parent().cget("borderwidth")
             parent_w = parent.winfo_w() - offs_border
             parent_h = parent.winfo_h() - offs_border            
-        elif isinstance(self.parent(), (NtkColFrame)):                                              
+        elif isinstance(self.parent(), (ColFrame)):                                              
             parent = parent.get_active()
             offs_x, offs_y = parent.winfo_x(), 0
             offs_border = 2 * self.parent().cget("borderwidth")
@@ -389,9 +389,9 @@ class NtkWidget(NtkMisc):
         else:                                   # we are placing a new widget
             last_wdg = brothers[-1] if len(brothers) else None
         last_x, last_y = 0, 0
-        if isinstance(parent, (NtkHorFrame, _framerow))and last_wdg:
+        if isinstance(parent, (HorFrame, _framerow))and last_wdg:
             last_x = last_wdg.winfo_bx() + last_wdg.winfo_bw()
-        elif isinstance(parent, (NtkVerFrame, _framecol, NtkMain, NtkWindow)) and last_wdg:
+        elif isinstance(parent, (VerFrame, _framecol, Main, Window)) and last_wdg:
             last_y = last_wdg.winfo_by() + last_wdg.winfo_bh() 
         #print ("parent name:", parent.winfo_name(), "   width:", parent.winfo_width(), "height:", parent.winfo_height(),
                #"reqwidth:", parent.winfo_width(), "reqheight:", parent.winfo_height())
@@ -479,7 +479,7 @@ class NtkWidget(NtkMisc):
         w = self.winfo_w()
         h = self.winfo_h()
         self.place(x=x, y=y, width=w, height=h)       
-        if isinstance(self, (NtkLabel, NtkCheckbutton, NtkRadiobutton)):
+        if isinstance(self, (Label, Checkbutton, Radiobutton)):
             self.config(wraplength=self._calc_wrap())
         if hasattr(self, "_vscroll"):
             self._auto_yscroll()        
@@ -564,18 +564,18 @@ class _setitCommand:
 ###################    M A I N   W I N D O W S
 #####################################################################
 
-class BaseWindow(NtkMisc, NtkContainer):
-    """Base class for both NtkMain and NtkWindow.
+class BaseWindow(Misc, Container):
+    """Base class for both Main and Window.
     It implements some common methods."""
     
     def __init__(self, x, y, w, h, title=""):
-        """Common constructor for NtkMain and NtkWindow. It binds
+        """Common constructor for Main and Window. It binds
         the "<Configure>" event to the _resize_children() callback.
         \param x, y, w, h see \ref PLACING_WIDGETS
         \param title the window title"""
         self.geometry("{}x{}+{}+{}".format(w, h, x, y))
         self._curr_dim = (x, y, w, h, (0, 0, 0, 0))
-        NtkContainer.__init__(self)
+        Container.__init__(self)
         super().bind("<Configure>", self._resize_children) 
         #self.resizable(width=FALSE, height=FALSE)
         self.title(title)
@@ -615,11 +615,11 @@ class BaseWindow(NtkMisc, NtkContainer):
             
 
 
-class NtkMain(BaseWindow, tk.Tk):
+class Main(BaseWindow, tk.Tk):
     """The main window of the app.
     This is the main window (derived from the tkinter Tk class), and has an associated
     Tcl interpreter, so you cannot execute functions which Tcl calls before constructing
-    this. The NtkMain get destroyed only when your program ends.
+    this. The Main get destroyed only when your program ends.
     
     **Common options** (see \ref ATTRIBUTES)
     
@@ -642,13 +642,13 @@ class NtkMain(BaseWindow, tk.Tk):
 
 
                     
-class NtkWindow(BaseWindow, tk.Toplevel):
+class Window(BaseWindow, tk.Toplevel):
     """A common window (derived from the tkinter Toplevel class) which
     is directly managed by the windows manager.
     You can hide or show it mantaining all the internal widgets states,
     or destroy and re-create it if you want all widgets to be reinitialized.
     You can choose three possible modes for it: **normal**, 
-    **modal** or **persistent** (see NtkWindow.__init__())
+    **modal** or **persistent** (see Window.__init__())
     
     **Common options** (see \ref ATTRIBUTES)
     
@@ -661,7 +661,7 @@ class NtkWindow(BaseWindow, tk.Toplevel):
         
     see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/toplevel.html">anzeljg reference</a>)
     for the class **tkinter.Toplevel**
-    \see \ref NtkWindow.py example file"""
+    \see \ref Window.py example file"""
     
     def __init__(self, parent, x, y, w, h, title="", modal=NORMAL):
         """The constructor.
@@ -714,14 +714,14 @@ class NtkWindow(BaseWindow, tk.Toplevel):
 #######################     F R A M E S
 #####################################################################
 
-class NtkHorFrame(NtkWidget, NtkContainer, tk.LabelFrame):
+class HorFrame(Widget, Container, tk.LabelFrame):
     """A container in which you can stack children widgets horizontally.
     This is done by using PACK as the x parameter in their constructor. The
     frame is initialized with the same color of its parent and no border,
     being so invisible. However you can set a border and also a label to be
     shown on it.
     \warning setting a border reduces the space inside the frame
-    \see \ref NtkListbox.py, \ref NtkSpinbox.py example files"""
+    \see \ref Listbox.py, \ref Spinbox.py example files"""
     
     def __init__(self, parent, x, y, w, h, pad=0, content=""):
         """The constructor.
@@ -729,15 +729,15 @@ class NtkHorFrame(NtkWidget, NtkContainer, tk.LabelFrame):
         \param x, y, w, h see \ref PLACING_WIDGETS
         \param pad this is ignored, you cannot have a padding on frames
         \param content a string you can put as label"""        
-        NtkWidget.__init__(self, parent, x, y, w, h, 0,
-                            tk.LabelFrame.__init__)         # pad argument is ignored
-        if not isinstance(parent, NtkNotebook):
+        Widget.__init__(self, parent, x, y, w, h, 0,
+                        tk.LabelFrame.__init__)         # pad argument is ignored
+        if not isinstance(parent, Notebook):
             self.config(background=parent.cget("background"), relief=FLAT)
-        NtkContainer.__init__(self)
+        Container.__init__(self)
         self.init_content(content)
  
  
-class NtkVerFrame(NtkWidget, NtkContainer, tk.LabelFrame):
+class VerFrame(Widget, Container, tk.LabelFrame):
     """A container in which you can stack children widgets vertically.
     This is done by using PACK as the y parameter in their constructor. The
     frame is initialized with the same color of its parent and no border,
@@ -745,7 +745,7 @@ class NtkVerFrame(NtkWidget, NtkContainer, tk.LabelFrame):
     shown on it.
     \warning setting a border reduces the space inside the frame
     
-    See \ref NtkListbox.py, \ref NtkRCbuttons.py, \ref NtkScale.py example files"""
+    See \ref Listbox.py, \ref RCbuttons.py, \ref Scale.py example files"""
     
     def __init__(self, parent, x, y, w, h, pad=0, content=""):
         """The constructor.
@@ -753,26 +753,26 @@ class NtkVerFrame(NtkWidget, NtkContainer, tk.LabelFrame):
         \param x, y, w, h see \ref PLACING_WIDGETS
         \param pad this is ignored, you cannot have a padding on frames
         \param content a string you can put as label"""                        
-        NtkWidget.__init__(self, parent, x, y, w, h, 0,
-                            tk.LabelFrame.__init__)         # pad argument is ignored
-        if not isinstance(parent, NtkNotebook):
+        Widget.__init__(self, parent, x, y, w, h, 0,
+                        tk.LabelFrame.__init__)         # pad argument is ignored
+        if not isinstance(parent, Notebook):
             self.config(background=parent.cget("background"), relief=FLAT)
-        NtkContainer.__init__(self)
+        Container.__init__(self)
         self.init_content(content)
         
         
 class _framerow():
-    """ Internal class. It represents a row of a NtkRowFrame container, and you
+    """ Internal class. It represents a row of a RowFrame container, and you
     can pack widgets horizontally inside it."""
     def __init__(self, parent, h):
         """The constructor. It sets some internal variables and calculates the
         row dimensions. When a _framerow is constructed it becomes the active
         row in the parent: widgets created are added to this row
-        (see Ntk.NtkRowFrame).
-        \param parent the Ntk.NtkRowFrame to which the row belongs
+        (see Ntk.RowFrame).
+        \param parent the Ntk.RowFrame to which the row belongs
         \param h the height of the row (its width coincides with that of the
         parent; see \ref PLACING_WIDGETS for the various options you have"""
-        ## The parent NtkRowFrame
+        ## The parent RowFrame
         self.master = parent
         ## The ordinal number of the row (starting from 0)
         self.num = len(parent._rows)
@@ -783,7 +783,7 @@ class _framerow():
         self._calc_dimensions()
     
     def parent(self):
-        """Returns the parent NtkRowFrame."""
+        """Returns the parent RowFrame."""
         return self.master
     
     def winfo_children(self):
@@ -872,12 +872,12 @@ class _framecol:
 
 
 
-class NtkRowFrame(NtkWidget, NtkContainer, tk.LabelFrame):
+class RowFrame(Widget, Container, tk.LabelFrame):
     """A container in which you can stack rows vertically.
-    Each row behaves like a NtkHorFrame, allowing to stack children
+    Each row behaves like a HorFrame, allowing to stack children
     widgets horizontally (using PACK as the x parameter in their constructor).
     You can add rows to the frame, obtaining thus a disposition similar
-    to a matrix. When you add widgets you must indicate the NtkRowFrame
+    to a matrix. When you add widgets you must indicate the RowFrame
     object (**not** the row) as their parent. The widgets will be added to
     the active row, which is the last constructed or the one set with the
     set_active() method.
@@ -885,7 +885,7 @@ class NtkRowFrame(NtkWidget, NtkContainer, tk.LabelFrame):
     being so invisible. However you can set a border and also a label to be
     shown on it.
     \warning setting a border reduces the space inside the frame
-    \see \ref NtkRowFrame.py, \ref NtkCombobox.py \ref NtkWindow.py
+    \see \ref RowFrame.py, \ref Combobox.py \ref Window.py
     example files"""    
     
     def __init__(self, parent, x, y, w, h, pad=0, content=""):
@@ -895,11 +895,11 @@ class NtkRowFrame(NtkWidget, NtkContainer, tk.LabelFrame):
         \param x, y, w, h see \ref PLACING_WIDGETS
         \param pad this is ignored, you cannot have a padding on frames
         \param content a string you can put as label"""
-        NtkWidget.__init__(self, parent, x, y, w, h, 0,
+        Widget.__init__(self, parent, x, y, w, h, 0,
                             tk.LabelFrame.__init__)         # pad argument is ignored
-        if not isinstance(parent, NtkNotebook):
+        if not isinstance(parent, Notebook):
             self.config(background=parent.cget("background"), relief=FLAT)
-        NtkContainer.__init__(self)
+        Container.__init__(self)
         self.init_content(content)
         self._rows = []
         self._active = None
@@ -908,7 +908,7 @@ class NtkRowFrame(NtkWidget, NtkContainer, tk.LabelFrame):
         """Adds a row to the frame.
         Rows are stacked vertically from top to bottom. This also sets
         the new row as the active one: newly created widgets (which have
-        the NtkRowFrame as their parent) will belong to this row.
+        the RowFrame as their parent) will belong to this row.
         \param h the height of the row (the width coincides with the frame one);
         see \ref PLACING_WIDGETS for the various options you have"""
         self._rows.append(_framerow(self, h))
@@ -916,7 +916,7 @@ class NtkRowFrame(NtkWidget, NtkContainer, tk.LabelFrame):
         
     def set_active(self, n):
         """Sets the n-th row as active. Newly created widgets (which have
-        the NtkRowFrame as their parent) will belong to this row. When
+        the RowFrame as their parent) will belong to this row. When
         you use add_row() the newly created row is automatically set as
         active.
         \param n the row number (starting from 0)"""
@@ -937,14 +937,14 @@ class NtkRowFrame(NtkWidget, NtkContainer, tk.LabelFrame):
                     
  
 
-class NtkColFrame(NtkWidget, NtkContainer, tk.LabelFrame):
+class ColFrame(Widget, Container, tk.LabelFrame):
     # TODO: not yet implemented.
     pass
     #def __init__(self, parent, x, y, w, h, pad=0):
-        #NtkWidget.__init__(self, parent, x, y, w, h, 0,
+        #Widget.__init__(self, parent, x, y, w, h, 0,
                             #tk.LabelFrame.__init__)         # pad argument is ignored
         #self.config(background=parent.cget("background"), relief=FLAT)
-        #NtkContainer.__init__(self)
+        #Container.__init__(self)
         #self._cols = []
         #self._active = None
         
@@ -964,7 +964,7 @@ class NtkColFrame(NtkWidget, NtkContainer, tk.LabelFrame):
 
 
 
-class NtkButton(NtkWidget, tk.Button):
+class Button(Widget, tk.Button):
     """Button widget. You can set its content to a text, an image or
     a bitmap, and can associate a callback to its pressure in the
     constructor or with the command option in Ntk.Misc.config().
@@ -1009,7 +1009,7 @@ class NtkButton(NtkWidget, tk.Button):
          + a StringVar (which automatically updates the label when changed)
          + a BitmapImage or PhotoImage objects
         \param command see \ref EVENTS"""         
-        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Button.__init__)
+        Widget.__init__(self, parent, x, y, w, h, pad, tk.Button.__init__)
         self.config(anchor=CENTER, justify=LEFT)
         self._get_parent_config()
         self.textVar = None
@@ -1020,7 +1020,7 @@ class NtkButton(NtkWidget, tk.Button):
             
      
 
-class NtkCanvas(tk.Canvas):
+class Canvas(tk.Canvas):
     """Canvas widget to display graphical elements like lines or text. This widget
     is unchanged from tkinter (except for the constructor).
 
@@ -1051,13 +1051,13 @@ class NtkCanvas(tk.Canvas):
         """The constructor. You can specify here the initial content of the canvas.
         \param parent the widget parent
         \param x, y, w, h, pad see \ref PLACING_WIDGETS"""           
-        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Canvas.__init__)
+        Widget.__init__(self, parent, x, y, w, h, pad, tk.Canvas.__init__)
         #self.config(anchor=W, justify=LEFT, wraplength=self._calc_wrap())
         self._get_parent_config()
         
 
 
-class NtkCheckbutton(NtkWidget, tk.Checkbutton):
+class Checkbutton(Widget, tk.Checkbutton):
     """ Checkbutton widget which is either in on or off state.
     You can associate a variable to its states and a callback to
     be called when the state of the button changes.
@@ -1075,7 +1075,7 @@ class NtkCheckbutton(NtkWidget, tk.Checkbutton):
           
     see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/checkbutton.html">anzeljg reference</a>
     for the class **tkinter.Checkbutton**.
-    \see \ref NtkRCbuttons.py example file"""
+    \see \ref RCbuttons.py example file"""
     
     #Valid resource names: activebackground, activeforeground, anchor,
     #background, bd, bg, bitmap, borderwidth, command, cursor,
@@ -1104,7 +1104,7 @@ class NtkCheckbutton(NtkWidget, tk.Checkbutton):
          + a triple (_variable_, _onvalue_, _offvalue_) specifying the variable, its value
          for on and its value for off
         \param command see \ref EVENTS"""           
-        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Checkbutton.__init__)
+        Widget.__init__(self, parent, x, y, w, h, pad, tk.Checkbutton.__init__)
         self.config(anchor=W, justify=LEFT, wraplength=self._calc_wrap())
         self._get_parent_config()
         self.textVar=None
@@ -1182,7 +1182,7 @@ class NtkCheckbutton(NtkWidget, tk.Checkbutton):
             #self.__callback(self.__value, *args)
             ##self.__callback(*args)
 
-class NtkCombobox(NtkWidget, tk.OptionMenu):
+class Combobox(Widget, tk.OptionMenu):
     """Combobox which allows the user to select a value from a menu.
     It is the equivalent (renamed) of the OptionMenu class in tkinter
        
@@ -1197,7 +1197,7 @@ class NtkCombobox(NtkWidget, tk.OptionMenu):
         
     see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/optionmenu.html">anzeljg reference</a>
     for the class **tkinter.OptionMenu**
-    \see \ref NtkCombobox.py \ref NtkMenu example files"""
+    \see \ref Combobox.py \ref Menu.py example files"""
     
     def __init__(self, parent, x, y, w, h, pad=0, items=[], variable=None, command=None):
         """The constructor. You can specify here the label of the button, a Variable object
@@ -1218,7 +1218,7 @@ class NtkCombobox(NtkWidget, tk.OptionMenu):
         tk.Widget.__init__(self, parent, "menubutton")
         self.textVar = tk.StringVar() if not variable else variable 
         self.textVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
-        NtkWidget.__init__(self, parent, x, y, w, h, pad, self._init1_, variable=self.textVar,
+        Widget.__init__(self, parent, x, y, w, h, pad, self._init1_, variable=self.textVar,
                             values=items, command=command)
         self._get_parent_config()
         self._commandwrap = _setitCommand(self, command)
@@ -1230,9 +1230,9 @@ class NtkCombobox(NtkWidget, tk.OptionMenu):
               "highlightthickness": 2}
         self.config(kw)
         self.widgetName = 'tk_optionMenu'
-        menu = self.__menu = NtkMenu(self)
+        menu = self.__menu = Menu(self)
         self.menuname = menu._w
-        self._cont_type = NtkWidget.STRVAR
+        self._cont_type = Widget.STRVAR
         # we need to remember the callback if we want to add new entries later
         self.callback = None
         if command:
@@ -1244,8 +1244,8 @@ class NtkCombobox(NtkWidget, tk.OptionMenu):
         variable.set(values[0] if len(values) else "")
         
     def get_menu(self):
-        """Returns the internal NtkMenu object. You can then
-        apply to it the NtkMenu methods."""
+        """Returns the internal Menu object. You can then
+        apply to it the Menu methods."""
         return self.__menu
     
     def get_item(self, index):
@@ -1329,8 +1329,8 @@ class NtkCombobox(NtkWidget, tk.OptionMenu):
         \param index you can specify an int (the menu item index) or
         a string (the label of the item)
         \param option the option we want to know (as a string)"""
-        if option in NtkMisc._trans_opt:
-            option = NtkMisc._trans_opt["option"]        
+        if option in Misc._trans_opt:
+            option = Misc._trans_opt["option"]        
         return self.__menu.tk.call(self["menu"]._w, 'entrycget', index, '-' + option)
     
     def config_item(self, index, cnf=None, **kw):
@@ -1341,13 +1341,13 @@ class NtkCombobox(NtkWidget, tk.OptionMenu):
         trans_kw = {}
         if isinstance(cnf, dict):
             for k, v in cnf.items():
-                if k in NtkMisc._trans_opt:
-                    trans_kw[NtkMisc._trans_opt[k]] = v
+                if k in Misc._trans_opt:
+                    trans_kw[Misc._trans_opt[k]] = v
                 else:
                     trans_kw[k] = v        
         for k, v in kw.items():
-            if k in NtkMisc._trans_opt:
-                trans_kw[NtkMisc._trans_opt[k]] = v
+            if k in Misc._trans_opt:
+                trans_kw[Misc._trans_opt[k]] = v
             else:
                 trans_kw[k] = v        
         return self.__menu._configure(('entryconfigure', index), {}, **trans_kw)
@@ -1369,7 +1369,7 @@ class NtkCombobox(NtkWidget, tk.OptionMenu):
 
 
 
-class NtkEntry(NtkWidget, tk.Entry):
+class Entry(Widget, tk.Entry):
     """Entry widget which allows displaying simple text.
 
     **Common options** (see \ref ATTRIBUTES)
@@ -1386,7 +1386,7 @@ class NtkEntry(NtkWidget, tk.Entry):
 
     see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/entry.html">anzeljg reference</a>
     for the class **tkinter.Entry**
-    \see \ref NtkEntry.py example file"""
+    \see \ref Entry.py example file"""
         
     #Valid resource names: background, bd, bg, borderwidth, cursor,
     #exportselection, fg, font, foreground, highlightbackground,
@@ -1409,7 +1409,7 @@ class NtkEntry(NtkWidget, tk.Entry):
          + a string: an internal StringVar is created
          + a StringVar: this become the associated StringVar
         \param command see \ref EVENTS"""           
-        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Entry.__init__)
+        Widget.__init__(self, parent, x, y, w, h, pad, tk.Entry.__init__)
         self._get_parent_config()
         self.textVar = tk.StringVar(value=content) if isinstance(content, str) else content
         self.init_content(self.textVar)
@@ -1421,7 +1421,7 @@ class NtkEntry(NtkWidget, tk.Entry):
     def config(self, cnf=None, **kw):
         """Configures resources of a widget.
         We need to redefine this for this class. See
-        Ntk.NtkWidget.config()."""
+        Ntk.Widget.config()."""
         
         if isinstance(cnf, dict):
             cnf.update(kw)
@@ -1438,14 +1438,14 @@ class NtkEntry(NtkWidget, tk.Entry):
     def get_config(self, key):
         """Returns the value for the _key_ resource.
         We need to redefine this for this class. See
-        Ntk.NtkWidget.get_config()."""
+        Ntk.Widget.get_config()."""
         if key == "command":
             return _commandwrap
         return self.cget(key)    
 
-# class Frame substituted by NtkHorFrame, NtkVerFrame   
+# class Frame substituted by HorFrame, VerFrame   
     
-class NtkLabel(NtkWidget, tk.Label):
+class Label(Widget, tk.Label):
     """Label widget which can display text and bitmaps.
 
     **Common options** (see \ref ATTRIBUTES)
@@ -1484,7 +1484,7 @@ class NtkLabel(NtkWidget, tk.Label):
          + a tkinter.Variable object (which automatically updates the label when
          changed)
          + a BitmapImage or PhotoImage objects"""
-        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Label.__init__)
+        Widget.__init__(self, parent, x, y, w, h, pad, tk.Label.__init__)
         self.config(anchor=W, justify=LEFT, relief=SUNKEN, wraplength=self._calc_wrap())
         self._get_parent_config()
         self.textVar = None
@@ -1496,7 +1496,7 @@ class NtkLabel(NtkWidget, tk.Label):
         return 0 if self.cget("wraplen") == 0 else self.winfo_w() - 1  
         
     
-class NtkListbox(NtkWidget, tk.Listbox):
+class Listbox(Widget, tk.Listbox):
     """Listbox widget which can display a list of strings. It allows you to choose one
     or more of them and to associate a callback to the choice event. Moreover it adds
     and removes automatically a vertical scrollbar if the list becomes larger than the
@@ -1519,7 +1519,7 @@ class NtkListbox(NtkWidget, tk.Listbox):
     of strings (see selection_mode() and get_selection_mode()). If you want to
     know what is selected use the get_selected() method (which always returns
     a tuple, eventually empty).
-    \see \ref NtkListbox.py example file """
+    \see \ref Listbox.py example file """
 
         #Valid resource names: background, bd, bg, borderwidth, cursor,
         #exportselection, fg, font, foreground, height, highlightbackground,
@@ -1534,7 +1534,7 @@ class NtkListbox(NtkWidget, tk.Listbox):
         \param x, y, w, h, pad see \ref PLACING_WIDGETS
         \param items you can specify here the list of items as strings
         \param command see \ref EVENTS"""           
-        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Listbox.__init__)
+        Widget.__init__(self, parent, x, y, w, h, pad, tk.Listbox.__init__)
         self.config(justify=LEFT, activestyle="none", exportselection=False)
         self._get_parent_config()
         self._vscroll = tk.Scrollbar(self, orient=VERTICAL)
@@ -1551,7 +1551,7 @@ class NtkListbox(NtkWidget, tk.Listbox):
     def config(self, cnf=None, **kw):
         """Configures resources of the widget.
         We need to redefine this for this class. See
-        Ntk.NtkWidget.config()."""
+        Ntk.Widget.config()."""
         
         if isinstance(cnf, dict):
             cnf.update(kw)
@@ -1570,7 +1570,7 @@ class NtkListbox(NtkWidget, tk.Listbox):
     def get_config(self, key):
         """Returns the value for the _key_ resource.
         We need to redefine this for this class. See
-        Ntk.NtkWidget.get_config()."""
+        Ntk.Widget.get_config()."""
         if key == "command":
             return _commandwrap
         return self.cget(key)    
@@ -1704,7 +1704,7 @@ class NtkListbox(NtkWidget, tk.Listbox):
 
 
 ### UNUSED ??? ###
-# Used by NtkMenu
+# Used by Menu
 #class _setitMenu:
     #"""Internal class. It wraps the command in the widget Menu."""
     #def __init__(self, value, callback=None):
@@ -1715,7 +1715,7 @@ class NtkListbox(NtkWidget, tk.Listbox):
             #self.__callback(self.__value, *args)
             ##self.__callback(*args)     
         
-class NtkMenu(NtkMisc, tk.Menu):
+class Menu(Misc, tk.Menu):
     """Menu widget which allows displaying menu bars, pull-down menus and pop-up menus.
     
     **Common options** (see \ref ATTRIBUTES)
@@ -1729,7 +1729,7 @@ class NtkMenu(NtkMisc, tk.Menu):
     
     see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/menu.html">anzeljg reference</a>
     for the class **tkinter.Menu**
-    \see \ref NtkMenu.py example file"""
+    \see \ref Menu.py example file"""
         
         #Valid resource names: activebackground, activeborderwidth,
         #activeforeground, background, bd, bg, borderwidth, cursor,
@@ -1739,16 +1739,16 @@ class NtkMenu(NtkMisc, tk.Menu):
     def __init__(self, parent, label=None, popup=False):
         """The constructor. It creates an empty menu, and you can add to it
         commands, checkbuttons, radiobuttons and separators.
-        \param parent the menu parent; if it is an instance of NtkMenu this menu will be
+        \param parent the menu parent; if it is an instance of Menu this menu will be
         added to it as a cascade, if it is a window this is set as its menubar  (but see
         below)
         \param label the menu text
         \param popup if True this is a popup menu, and will not be added to its parent
         """          
         tk.Menu.__init__(self, parent, tearoff=0)
-        if isinstance(parent, NtkMenu):
+        if isinstance(parent, Menu):
             parent.add_cascade(label=label, menu=self)
-        elif isinstance(parent, (NtkMain, NtkWindow)) and not popup:
+        elif isinstance(parent, (Main, Window)) and not popup:
             parent.config(menu=self)
         self._len = 0
 
@@ -1802,8 +1802,8 @@ class NtkMenu(NtkMisc, tk.Menu):
         """Returns the resource value of a menu item.
         \param index the item index as an int (starting from 0)
         \param option the option we wantto know as a string"""
-        if option in NtkMisc._trans_opt:
-            option = NtkMisc._trans_opt["option"]
+        if option in Misc._trans_opt:
+            option = Misc._trans_opt["option"]
         return self.tk.call(self._w, 'entrycget', index, '-' + option)
     
     def entry_config(self, index, cnf=None, **kw):
@@ -1812,13 +1812,13 @@ class NtkMenu(NtkMisc, tk.Menu):
         trans_kw = {}
         if isinstance(cnf, dict):
             for k, v in cnf.items():
-                if k in NtkMisc._trans_opt:
+                if k in Misc._trans_opt:
                     trans_kw[_trans_opt[k]] = v
                 else:
                     trans_kw[k] = v        
         for k, v in kw.items():
-            if k in NtkMisc._trans_opt:
-                trans_kw[NtkMisc._trans_opt[k]] = v
+            if k in Misc._trans_opt:
+                trans_kw[Misc._trans_opt[k]] = v
             else:
                 trans_kw[k] = v        
         return self._configure(('entryconfigure', index), None, trans_kw)
@@ -1845,7 +1845,7 @@ class NtkMenu(NtkMisc, tk.Menu):
 # MenuButton and Message obsolete in tkinter
 
 
-class NtkRadiobutton(NtkWidget, tk.Radiobutton):
+class Radiobutton(Widget, tk.Radiobutton):
     """Radiobutton widget which shows only one of several buttons in on-state.
     If you want a group of mutually exclusive radiobuttons you must associate
     to them (in the constructor or by the set_variable() method) the same
@@ -1866,7 +1866,7 @@ class NtkRadiobutton(NtkWidget, tk.Radiobutton):
          
     see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/listbox.html">anzeljg reference</a>
     for the class **tkinter.Radiobutton**
-    \see \ref NtkRCbuttons.py example file""" 
+    \see \ref RCbuttons.py example file""" 
 
         #Valid resource names: activebackground, activeforeground, anchor,
         #background, bd, bg, bitmap, borderwidth, command, cursor,
@@ -1892,7 +1892,7 @@ class NtkRadiobutton(NtkWidget, tk.Radiobutton):
         give here this parameters you can set it later with the set_variable() method (otherwise
         the button won't be mutually exclusive with others).
         \param command see \ref EVENTS"""         
-        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Radiobutton.__init__)
+        Widget.__init__(self, parent, x, y, w, h, pad, tk.Radiobutton.__init__)
         self.config(anchor=W, justify=LEFT, wraplength=self._calc_wrap())
         self._get_parent_config()
         self.init_content(content)
@@ -1922,7 +1922,7 @@ class NtkRadiobutton(NtkWidget, tk.Radiobutton):
 
     
 
-class NtkScale(NtkWidget, tk.Scale):
+class Scale(Widget, tk.Scale):
     """Scale widget which can display a numerical scale.
     You can associate an InTVar or DoubleVar to its state and a callback to
     be called when the state of the scale changes.
@@ -1940,7 +1940,7 @@ class NtkScale(NtkWidget, tk.Scale):
           
     see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/scale.html">anzeljg reference</a>
     for th class **tkinter.scale**
-    \see \ref NtkScale.py example file"""
+    \see \ref Scale.py example file"""
     
 
         #Valid resource names: activebackground, background, bigincrement, bd,
@@ -1963,7 +1963,7 @@ class NtkScale(NtkWidget, tk.Scale):
          + None: a DoubleVar is automatically created
          + an IntVar or DoubleVar object
         \param command see \ref EVENTS"""        
-        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Scale.__init__)
+        Widget.__init__(self, parent, x, y, w, h, pad, tk.Scale.__init__)
         hv = HORIZONTAL if self.winfo_w() >= self.winfo_h() else VERTICAL  
         self.config(orient=hv)
         if isinstance(limits, (list, tuple)):
@@ -2008,10 +2008,10 @@ class NtkScale(NtkWidget, tk.Scale):
 
 
 
-class NtkScrollbar(tk.Scrollbar):
+class Scrollbar(tk.Scrollbar):
     """Scrollbar widget which displays a slider at a certain position.
-    This is unchanged with respect to tkinter. Some widgets (NtkListbox,
-    NtkText) have an auto-scrollbar feature, which adds or remove the
+    This is unchanged with respect to tkinter. Some widgets (Listbox,
+    Text) have an auto-scrollbar feature, which adds or remove the
     vertical scrollbar if the text exceed the widget height, so you
     don't have to add this manually.
     
@@ -2041,7 +2041,7 @@ class NtkScrollbar(tk.Scrollbar):
 
 
 
-class NtkSpinbox(NtkWidget, tk.Spinbox):
+class Spinbox(Widget, tk.Spinbox):
     """Spinbox widget, which allows to choose from a list of strings or
     type one. You can set it in a readonly state for disabling typing
     into it and enable the autoadd feature, which automatically adds
@@ -2067,7 +2067,7 @@ class NtkSpinbox(NtkWidget, tk.Spinbox):
          
     see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/listbox.html">anzeljg reference</a>
     for the class **tkinter.Spinbox**
-    \see \ref NtkSpinbox.py example file""" 
+    \see \ref Spinbox.py example file""" 
     
     #def trace_text(self, *args):
         #self.event_generate("<<CHANGEDVAR>>")
@@ -2089,7 +2089,7 @@ class NtkSpinbox(NtkWidget, tk.Spinbox):
         choosen item (numbers are  converted into strings); if you leave None an
         internal StringVar is created
         \param command see \ref EVENTS"""        
-        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Spinbox.__init__)
+        Widget.__init__(self, parent, x, y, w, h, pad, tk.Spinbox.__init__)
         #self.config(relief=SUNKEN)
         if isinstance(limits, (list, tuple)):
             if isinstance(limits[0], str):
@@ -2164,7 +2164,7 @@ class NtkSpinbox(NtkWidget, tk.Spinbox):
 
 
 
-class NtkText(NtkWidget, tk.Text):
+class Text(Widget, tk.Text):
     """Text widget which can display formatted text. This widget is
     almost unchanged with respect to tkinter.
 
@@ -2189,7 +2189,7 @@ class NtkText(NtkWidget, tk.Text):
         \param parent the widget parent
         \param x, y, w, h, pad see \ref PLACING_WIDGETS"""
         
-        NtkWidget.__init__(self, parent, x, y, w, h, pad, tk.Text.__init__)
+        Widget.__init__(self, parent, x, y, w, h, pad, tk.Text.__init__)
         self._get_parent_config()
         self._vscroll = tk.Scrollbar(self, orient=VERTICAL)
         self.config(yscrollcommand=self._vscroll.set)
@@ -2235,7 +2235,7 @@ class NtkText(NtkWidget, tk.Text):
 
 
 
-class NtkNotebook(NtkWidget, ttk.Notebook):
+class Notebook(Widget, ttk.Notebook):
     """Ttk Notebook widget which manages a collection of windows and displays
     a single one at a time. Each child window is associated with a tab,
     which the user may select to change the currently-displayed window.
@@ -2246,7 +2246,7 @@ class NtkNotebook(NtkWidget, ttk.Notebook):
         """The constructor.
         \param parent the widget parent
         \param x, y, w, h, pad see \ref PLACING_WIDGETS"""        
-        NtkWidget.__init__(self, parent, x, y, w, h, pad, ttk.Notebook.__init__)
+        Widget.__init__(self, parent, x, y, w, h, pad, ttk.Notebook.__init__)
         self._get_parent_config()
         
         
@@ -2257,13 +2257,13 @@ class NtkNotebook(NtkWidget, ttk.Notebook):
         
         
 if __name__ == "__main__":
-    winMain = NtkMain(100, 100, 400, 250, "Ntk")
-    labInfo = NtkLabel(winMain, CENTER, 20, 300, 100, content=
+    winMain = Main(100, 100, 400, 250, "Ntk")
+    labInfo = Label(winMain, CENTER, 20, 300, 100, content=
 """Ntk - A simple tkinter wrapper
 Version {:}
-Copyright Nicola Cassetta 2021""".format(__version__))
+Copyright Nicola Cassetta 2021-2022""".format(__version__))
     labInfo.config(anchor=CENTER, relief=RIDGE, bcolor="white", justify=CENTER)
-    butClose = NtkButton(winMain, CENTER, 180, 60, 30, content="Exit",
+    butClose = Button(winMain, CENTER, 180, 60, 30, content="Exit",
                          command=lambda ev: winMain.destroy())
     mainloop()
 

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['doublevar_461',['DoubleVar',['../class_ntk_1_1tkinter____init_____1_1_double_var.html',1,'Ntk::tkinter__init__']]]
+  ['entry_0',['Entry',['../class_nictk_1_1_entry.html',1,'Nictk']]]
 ];

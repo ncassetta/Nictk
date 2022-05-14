@@ -2,7 +2,7 @@
 /// A basic example: the classic 'Hello, world!' with a button which hides and shows it.
 ///
 /// \example WidgetPosition.py
-/// An example of the various modes to position a widget inside a parent container (remember that NtkMain and NtkWindow behave as vertical frames, i.e. pack widgets vertically). You can try to maximize, iconize and resize the window (dragging its borders with the mouse) to see the various behaviors of widgets when the parent is resized.
+/// An example of the various modes to position a widget inside a parent container (remember that Nictk.Main and Nictk.Window behave as vertical frames, i.e. pack widgets vertically). You can try to maximize, iconize and resize the window (dragging its borders with the mouse) to see the various behaviors of widgets when the parent is resized.
 ///
 /// \example WidgetOptions.py
 /// An example of the most common widget options.
@@ -17,33 +17,33 @@
 /// An example showing how to manage various types of events, with a scrolling text obtained with the after() method.
 ///
 /// \example winfo.py
-/// An example showing all the options for the Ntk.NtkMisc.get_winfo() method (inherited by windows and interior widgets).
+/// An example showing all the options for the Nictk.Misc.get_winfo() method (inherited by windows and interior widgets).
 ///
-/// \example NtkWindow.py
-/// An example wich creates a Ntk.NtkWindow, shows and hides it and can change its mode (normal, modal or persistent).
+/// \example Window.py
+/// An example wich creates a Nictk.Window, shows and hides it and can change its mode (normal, modal or persistent).
 ///
-/// \example NtkRowFrame.py
-/// An example of the use of the NtkRowFrame container. You can add to it rows (with the add_row() method) which behave as horizontal frames (i.e. you can pack widget horizontally). You can set rows height as absolute, relative (percentual) or "absolute from bottom" values.
+/// \example RowFrame.py
+/// An example of the use of the Nictk.RowFrame container. You can add to it rows (with the add_row() method) which behave as horizontal frames (i.e. you can pack widget horizontally). You can set rows height as absolute, relative (percentual) or "absolute from bottom" values.
 ///
-/// \example NtkCombobox.py
-/// Example of various operations on the Ntk.NtkCombobox widget.
+/// \example Combobox.py
+/// Example of various operations on the Nictk.Combobox widget.
 ///
-/// \example NtkEntry.py
-/// Example of the use of Ntk.NtkEntry widget, with binding to various events.
+/// \example Entry.py
+/// Example of the use of Nictk.Entry widget, with binding to various events.
 ///
-/// \example NtkListbox.py
-/// Example of the use of the Ntk.NtkListbox widget, with various operations on it and showing its auto add scrollbar feature.
+/// \example Listbox.py
+/// Example of the use of the Nictk.Listbox widget, with various operations on it and showing its auto add scrollbar feature.
 ///
-/// \example NtkMenu.py
+/// \example Menu.py
 /// Various forms of menus: menubar, combobox, popup.
 ///
-/// \example NtkRCbuttons.py
-/// An example of the use of classes Ntk.NtkCheckbutton and Ntk.NtkRadiobutton widgets. They have both a Variable object associated (which automatically updates a label) and a callback with command option. We used a Ntk.NtkRowFrame and the strings "pack", "fill", etc. (alternative to constants PACK, FILL ...) for positioning the widgets.
+/// \example RCbuttons.py
+/// An example of the use of classes Nictk.Checkbutton and Nictk.Radiobutton widgets. They have both a Variable object associated (which automatically updates a label) and a callback with command option. We used a Nictk.RowFrame and the strings "pack", "fill", etc. (alternative to constants PACK, FILL ...) for positioning the widgets.
 ///
-/// \example NtkScale.py
-/// Example of the use of Ntk.NtkScale widget.
-/// \example NtkSpinbox.py
-/// Example of the use of Ntk.NtkSpinbox widget: you can set the mode (normal, readonly and autoadd) and the wrap property.
+/// \example Scale.py
+/// Example of the use of Nictk.Scale widget.
+/// \example Spinbox.py
+/// Example of the use of Nictk.Spinbox widget: you can set the mode (normal, readonly and autoadd) and the wrap property.
 
 
 

@@ -1,6 +1,6 @@
-# This file is part of Ntk - A simple tkinter wrapper.
+# This file is part of Nictk - A simple tkinter wrapper.
 #    Copyright (C) 2021  Nicola Cassetta
-#    See <https://github.com/ncassetta/Ntk>
+#    See <https://github.com/ncassetta/Nictk>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Lesser General Public License as published
@@ -199,7 +199,7 @@ class Container:
     def config_children(self, which, **kw):
         """Configures resources for all children.
         All widgets which will be added to the container will be configured
-        with the selected values. If a child container calls config_children()
+        with the given values. If a child container calls config_children()
         in turn, the options will be inherited: if a resource receives a new
         value it replaces the previous one, otherwise it remains unchanged.
         \param which you can indicate <b>"all"</b> (or **ALL**) for all children,
@@ -234,7 +234,7 @@ class Container:
 # Added by me to override tkinter Widget methods
 
 class Widget(Misc):
-    """Base class which defines methods common for all Ntk internal widgets
+    """Base class which defines methods common for all Nictk internal widgets
     (not windows nor menus). It overrides the tkinter class."""
     def __init__(self, parent, x, y, w, h, pad, ctor, **kw):
         """The constructor."""
@@ -289,7 +289,7 @@ class Widget(Misc):
         """Sets the content type for the widget. The set_content() and
         get_content() methods will behave according to the type chosen
         \param content can be a string, a StringVar or an image (BitmapImage,
-        PhotoImage"""
+        PhotoImage)."""
         if isinstance(self, tk.LabelFrame) and isinstance(content, str):
             self.config(text=content)
             self._cont_type = Widget.TEXT
@@ -316,7 +316,8 @@ class Widget(Misc):
                 self._cont_type = None
 
     def get_content(self):
-        """Returns the content of the widget as a string."""
+        """Returns the content of the widget as a string.
+        If the content is an image returns the string "image"."""
         if self._cont_type == Widget.STRVAR:
             return self.textVar.get()
         elif self._cont_type == Widget.NUMVAR:
@@ -329,7 +330,9 @@ class Widget(Misc):
             return ""    
     
     def set_content(self, content):
-        """Set the content of the widget as a string."""
+        """Set the content of the widget.
+        \param content you must supply a content compatible
+        with that given in init_content()."""
         if self._cont_type in (Widget.STRVAR, Widget.NUMVAR):
             self.textVar.set(content)
         elif self._cont_type ==Widget.TEXT:
@@ -470,7 +473,7 @@ class Widget(Misc):
         
     def _update_dimensions(self):
         """Internal function.
-        Updates widget dimension when their parent is resized."""
+        Updates the widget dimensions when the parent is resized."""
         #print("_update_dimensions called on", self.winfo_name())
         self._calc_dimensions()
         if self.winfo_ismapped():
@@ -492,8 +495,9 @@ class Widget(Misc):
             self._auto_yscroll()        
             
     def _auto_yscroll(self):
-        """Internal function. Adds or hides a vertical scrollbar if the
-        vertical size of the widget changes."""
+        """Internal function.
+        Adds or hides a vertical scrollbar if the vertical size of
+        the widget changes."""
         if hasattr(self, "_vscroll"):
             self.update_idletasks()             # needed for updating the yview
             offs, size = self.yview()
@@ -775,8 +779,8 @@ class _framerow():
         """The constructor. It sets some internal variables and calculates the
         row dimensions. When a _framerow is constructed it becomes the active
         row in the parent: widgets created are added to this row
-        (see Ntk.RowFrame).
-        \param parent the Ntk.RowFrame to which the row belongs
+        (see Nictk.RowFrame).
+        \param parent the Nictk.RowFrame to which the row belongs
         \param h the height of the row (its width coincides with that of the
         parent; see \ref PLACING_WIDGETS for the various options you have"""
         ## The parent RowFrame
@@ -974,7 +978,7 @@ class ColFrame(Widget, Container, tk.LabelFrame):
 class Button(Widget, tk.Button):
     """Button widget. You can set its content to a text, an image or
     a bitmap, and can associate a callback to its pressure in the
-    constructor or with the command option in Ntk.Misc.config().
+    constructor or with the command option in Nictk.Misc.config().
     
     **Common options** (see \ref ATTRIBUTES)
     
@@ -1428,7 +1432,7 @@ class Entry(Widget, tk.Entry):
     def config(self, cnf=None, **kw):
         """Configures resources of a widget.
         We need to redefine this for this class. See
-        Ntk.Widget.config()."""
+        Nictk.Widget.config()."""
         
         if isinstance(cnf, dict):
             cnf.update(kw)
@@ -1445,7 +1449,7 @@ class Entry(Widget, tk.Entry):
     def get_config(self, key):
         """Returns the value for the _key_ resource.
         We need to redefine this for this class. See
-        Ntk.Widget.get_config()."""
+        Nictk.Widget.get_config()."""
         if key == "command":
             return _commandwrap
         return self.cget(key)    
@@ -1558,7 +1562,7 @@ class Listbox(Widget, tk.Listbox):
     def config(self, cnf=None, **kw):
         """Configures resources of the widget.
         We need to redefine this for this class. See
-        Ntk.Widget.config()."""
+        Nictk.Widget.config()."""
         
         if isinstance(cnf, dict):
             cnf.update(kw)
@@ -1577,7 +1581,7 @@ class Listbox(Widget, tk.Listbox):
     def get_config(self, key):
         """Returns the value for the _key_ resource.
         We need to redefine this for this class. See
-        Ntk.Widget.get_config()."""
+        Nictk.Widget.get_config()."""
         if key == "command":
             return _commandwrap
         return self.cget(key)    
@@ -1610,7 +1614,8 @@ class Listbox(Widget, tk.Listbox):
          + an int (beginning from 0, if the int is greater than the list size
          it becomes the end of the list)
          + a string already in the options list (items will be inserted BEFORE it)
-         + one of the constants "active", "anchor", "end"
+         + one of the constants "active", "anchor", "end" (or their aliases
+         ACTIVE, ANCHOR, END)
         \param *items one or more strings (the item labels) to be
         inserted"""    
         index = self.index(index)
@@ -1623,7 +1628,7 @@ class Listbox(Widget, tk.Listbox):
         \param index1, index2 the first and last items to be deleted;
         if you leave _index2_ = None only _index1_ will be deleted.
         see insert()
-        \note be careful: if you specify two strings ALL items between
+        \note be careful: if you specify two strings **all** items between
         them will be deleted"""        
         index1 = self.index(index1)
         if index2 != None:
@@ -1635,7 +1640,8 @@ class Listbox(Widget, tk.Listbox):
         """Returns the index of a menu item. If the item is
         not in the  mnenu returns None.
         \param ind a string (the label of the menu item), or one of the
-        constants "active", "anchor", "end" """
+        constants "active", "anchor", "end" (or their aliases
+        ACTIVE, ANCHOR, END)"""
         if isinstance(ind, str) and ind not in ("active", "anchor", "end"):
             return self.get(0, END).index(ind)
         elif isinstance(ind, int) and ind >= self.size():
@@ -1649,7 +1655,8 @@ class Listbox(Widget, tk.Listbox):
         \param item can be
          + an int (the index of the selected element starting from 0)
          + a string already in the list
-         + one of the constants "active", "anchor", "end"
+         + one of the constants "active", "anchor", "end" (or their aliases
+         ACTIVE, ANCHOR, END)
          + a tuple of previous ones. In this case the items
         are selected only if the select mode is "multiple" or
         "extended" """
@@ -2140,10 +2147,10 @@ class Spinbox(Widget, tk.Spinbox):
     
     def mode(self, mode, wrap=None, validate=None):
         """Sets the spinbox mode to one of these three:
-        - normal you can get the content by clicking the arrow keys or
+        - "normal2 you can get the content by clicking the arrow keys or
           typing in the texr field
-        - readonly: you can only click the arrow key
-        - autoadd: (only if values are string) as normal, but inserts
+        - "readonly": you can only click the arrow key
+        - "autoadd": (only if values are string) as normal, but inserts
           every new typed word into the list""" 
           
         if mode in ("normal", "readonly"):
@@ -2262,18 +2269,21 @@ class Notebook(Widget, ttk.Notebook):
 ############               E   N   D
 #####################################################################
         
+   
+""" \cond EXCLUDED """
         
 if __name__ == "__main__":
-    winMain = Main(100, 100, 400, 250, "Ntk")
+    winMain = Main(100, 100, 360, 200, "Nictk")
     labInfo = Label(winMain, CENTER, 20, 300, 100, content=
-"""Ntk - A simple tkinter wrapper
+"""Nictk - A simple tkinter wrapper
 Version {:}
 Copyright Nicola Cassetta 2021-2022""".format(__version__))
     labInfo.config(anchor=CENTER, relief=RIDGE, bcolor="white", justify=CENTER)
-    butClose = Button(winMain, CENTER, 180, 60, 30, content="Exit",
+    butClose = Button(winMain, CENTER, 140, 80, 40, content="Exit",
                          command=lambda ev: winMain.destroy())
     mainloop()
 
+""" \endcond """
 
 
 

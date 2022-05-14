@@ -7,13 +7,13 @@ var examples =
     [ "Dialogs.py", "_dialogs_8py-example.html", null ],
     [ "Events.py", "_events_8py-example.html", null ],
     [ "winfo.py", "winfo_8py-example.html", null ],
-    [ "NtkWindow.py", "_ntk_window_8py-example.html", null ],
-    [ "NtkRowFrame.py", "_ntk_row_frame_8py-example.html", null ],
-    [ "NtkCombobox.py", "_ntk_combobox_8py-example.html", null ],
-    [ "NtkEntry.py", "_ntk_entry_8py-example.html", null ],
-    [ "NtkListbox.py", "_ntk_listbox_8py-example.html", null ],
-    [ "NtkMenu.py", "_ntk_menu_8py-example.html", null ],
-    [ "NtkRCbuttons.py", "_ntk_r_cbuttons_8py-example.html", null ],
-    [ "NtkScale.py", "_ntk_scale_8py-example.html", null ],
-    [ "NtkSpinbox.py", "_ntk_spinbox_8py-example.html", null ]
+    [ "Window.py", "_window_8py-example.html", null ],
+    [ "RowFrame.py", "_row_frame_8py-example.html", null ],
+    [ "Combobox.py", "_combobox_8py-example.html", null ],
+    [ "Entry.py", "_entry_8py-example.html", null ],
+    [ "Listbox.py", "_listbox_8py-example.html", null ],
+    [ "Menu.py", "_menu_8py-example.html", null ],
+    [ "RCbuttons.py", "_r_cbuttons_8py-example.html", null ],
+    [ "Scale.py", "_scale_8py-example.html", null ],
+    [ "Spinbox.py", "_spinbox_8py-example.html", null ]
 ];

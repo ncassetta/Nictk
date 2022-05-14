@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['variable_20objects_92',['Variable objects',['../_v_a_r_i_a_b_l_e_s.html',1,'OVERVIEW']]],
-  ['visible_93',['visible',['../class_ntk_1_1_ntk_widget.html#a478bf5249256ef875bca4c0a3724923d',1,'Ntk::NtkWidget']]]
+  ['unbind_0',['unbind',['../class_nictk_1_1_base_window.html#a43bd7643fc355fafd9233643d8c35481',1,'Nictk.BaseWindow.unbind()'],['../class_nictk_1_1_spinbox.html#a43bd7643fc355fafd9233643d8c35481',1,'Nictk.Spinbox.unbind()']]]
 ];

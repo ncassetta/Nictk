@@ -1,36 +1,36 @@
 var hierarchy =
 [
-    [ "_framerow", "class_ntk_1_1__framerow.html", null ],
-    [ "_setitCommand", "class_ntk_1_1__setit_command.html", null ],
-    [ "NtkCanvas", "class_ntk_1_1_ntk_canvas.html", null ],
-    [ "NtkContainer", "class_ntk_1_1_ntk_container.html", [
-      [ "BaseWindow", "class_ntk_1_1_base_window.html", [
-        [ "NtkMain", "class_ntk_1_1_ntk_main.html", null ],
-        [ "NtkWindow", "class_ntk_1_1_ntk_window.html", null ]
+    [ "_framerow", "class_nictk_1_1__framerow.html", null ],
+    [ "_setitCommand", "class_nictk_1_1__setit_command.html", null ],
+    [ "Canvas", "class_nictk_1_1_canvas.html", null ],
+    [ "Container", "class_nictk_1_1_container.html", [
+      [ "BaseWindow", "class_nictk_1_1_base_window.html", [
+        [ "Main", "class_nictk_1_1_main.html", null ],
+        [ "Window", "class_nictk_1_1_window.html", null ]
       ] ],
-      [ "NtkHorFrame", "class_ntk_1_1_ntk_hor_frame.html", null ],
-      [ "NtkRowFrame", "class_ntk_1_1_ntk_row_frame.html", null ],
-      [ "NtkVerFrame", "class_ntk_1_1_ntk_ver_frame.html", null ]
+      [ "HorFrame", "class_nictk_1_1_hor_frame.html", null ],
+      [ "RowFrame", "class_nictk_1_1_row_frame.html", null ],
+      [ "VerFrame", "class_nictk_1_1_ver_frame.html", null ]
     ] ],
-    [ "NtkMisc", "class_ntk_1_1_ntk_misc.html", [
-      [ "BaseWindow", "class_ntk_1_1_base_window.html", null ],
-      [ "NtkMenu", "class_ntk_1_1_ntk_menu.html", null ],
-      [ "NtkWidget", "class_ntk_1_1_ntk_widget.html", [
-        [ "NtkButton", "class_ntk_1_1_ntk_button.html", null ],
-        [ "NtkCheckbutton", "class_ntk_1_1_ntk_checkbutton.html", null ],
-        [ "NtkCombobox", "class_ntk_1_1_ntk_combobox.html", null ],
-        [ "NtkEntry", "class_ntk_1_1_ntk_entry.html", null ],
-        [ "NtkHorFrame", "class_ntk_1_1_ntk_hor_frame.html", null ],
-        [ "NtkLabel", "class_ntk_1_1_ntk_label.html", null ],
-        [ "NtkListbox", "class_ntk_1_1_ntk_listbox.html", null ],
-        [ "NtkNotebook", "class_ntk_1_1_ntk_notebook.html", null ],
-        [ "NtkRadiobutton", "class_ntk_1_1_ntk_radiobutton.html", null ],
-        [ "NtkRowFrame", "class_ntk_1_1_ntk_row_frame.html", null ],
-        [ "NtkScale", "class_ntk_1_1_ntk_scale.html", null ],
-        [ "NtkSpinbox", "class_ntk_1_1_ntk_spinbox.html", null ],
-        [ "NtkText", "class_ntk_1_1_ntk_text.html", null ],
-        [ "NtkVerFrame", "class_ntk_1_1_ntk_ver_frame.html", null ]
+    [ "Misc", "class_nictk_1_1_misc.html", [
+      [ "BaseWindow", "class_nictk_1_1_base_window.html", null ],
+      [ "Menu", "class_nictk_1_1_menu.html", null ],
+      [ "Widget", "class_nictk_1_1_widget.html", [
+        [ "Button", "class_nictk_1_1_button.html", null ],
+        [ "Checkbutton", "class_nictk_1_1_checkbutton.html", null ],
+        [ "Combobox", "class_nictk_1_1_combobox.html", null ],
+        [ "Entry", "class_nictk_1_1_entry.html", null ],
+        [ "HorFrame", "class_nictk_1_1_hor_frame.html", null ],
+        [ "Label", "class_nictk_1_1_label.html", null ],
+        [ "Listbox", "class_nictk_1_1_listbox.html", null ],
+        [ "Notebook", "class_nictk_1_1_notebook.html", null ],
+        [ "Radiobutton", "class_nictk_1_1_radiobutton.html", null ],
+        [ "RowFrame", "class_nictk_1_1_row_frame.html", null ],
+        [ "Scale", "class_nictk_1_1_scale.html", null ],
+        [ "Spinbox", "class_nictk_1_1_spinbox.html", null ],
+        [ "Text", "class_nictk_1_1_text.html", null ],
+        [ "VerFrame", "class_nictk_1_1_ver_frame.html", null ]
       ] ]
     ] ],
-    [ "NtkScrollbar", "class_ntk_1_1_ntk_scrollbar.html", null ]
+    [ "Scrollbar", "class_nictk_1_1_scrollbar.html", null ]
 ];

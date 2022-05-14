@@ -1,6 +1,6 @@
-# This file is part of Ntk - A simple tkinter wrapper.
+# This file is part of Nictk - A simple tkinter wrapper.
 #    Copyright (C) 2021  Nicola Cassetta
-#    See <https://github.com/ncassetta/Ntk>
+#    See <https://github.com/ncassetta/Nictk>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Lesser General Public License as published
@@ -101,4 +101,4 @@ labExplain = Ntk.Label(winMain, 130, 220, -10, 50)
 labExplain.config(bcolor="#C0C0FF")
 labExplain.set_content(explstates[0])
 
-mainloop()
+Ntk.mainloop()

@@ -1,6 +1,6 @@
-# This file is part of Ntk - A simple tkinter wrapper.
+# This file is part of Nictk - A simple tkinter wrapper.
 #    Copyright (C) 2021  Nicola Cassetta
-#    See <https://github.com/ncassetta/Ntk>
+#    See <https://github.com/ncassetta/Nictk>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Lesser General Public License as published
@@ -17,9 +17,9 @@
 
 ## \file
 #
-# String constants to use as parameters in various Ntk methods. You may want
+# String constants to use as parameters in various Nictk methods. You may want
 # to add a
-# \code from Ntk.constants import * \endcode
+# \code from Nictk.constants import * \endcode
 # for saving some keystroke.
 
 

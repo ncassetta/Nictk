@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['widgets_20properties_219',['Widgets properties',['../_a_t_t_r_i_b_u_t_e_s.html',1,'OVERVIEW']]]
+  ['variable_20objects_0',['Variable objects',['../_v_a_r_i_a_b_l_e_s.html',1,'OVERVIEW']]]
 ];

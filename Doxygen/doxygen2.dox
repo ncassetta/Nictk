@@ -4,9 +4,9 @@
 ///
 /// ## Setting and getting option values
 ///
-/// In **tkinter** you can use the config() method (or its alias configure()) to set the value of an option and the getc() method to get it. In Ntk I kept the Ntk.NtkMisc.config() method (while configure() was removed) to set the values and renamed getc() into Ntk.NtkMisc.get_config() (NtkMisc is a general class inherited both by containers and internal widgets).
+/// In **tkinter** you can use the config() method (or its alias configure()) to set the value of an option and the getc() method to get it. In Nictk I kept the Nictk.Misc.config() method (while configure() was removed) to set the values and renamed getc() into Nictk.Misc.get_config() (Misc is a general class inherited both by containers and internal widgets).
 ///
-/// The Ntk.NtkWidget.config() method has this signature:
+/// The Nictk.Widget.config() method has this signature:
 ///
 /// \code{.py}
 /// def config(self, cnf=None, **kw):
@@ -15,12 +15,12 @@
 /// and you can usually call it with any number of keyword arguments, for example:
 ///
 /// \code{.py}
-/// >>> import Ntk
-/// >>> lab = Ntk.NtkLabel(None, 0, 0, 100, 20)
+/// >>> import Nictk as Ntk
+/// >>> lab = Ntk.Label(None, 0, 0, 100, 20)
 /// >>> lab.config(anchor="ne", relief="solid", justify="left")
 /// \endcode
 ///
-/// The Ntk.NtkWidget.get_config() has:
+/// The Nictk.Widget.get_config() has:
 ///
 /// \code{.py}
 /// def get_config(self, key):
@@ -34,11 +34,11 @@
 /// 'ne'
 /// \endcode
 ///
-/// A common tedious situation is the need to repeat the same settings on a large number of widgets (this led to the introduction of **ttk** with its  themed widgets). In Ntk I introduced the Ntk.NtkContainer.config_children() method. When creating a container (a window or a frame) you can call this method before adding child widgets, and all of them will inherit the options set in the method. Examples of the use of this method are in many example files.
+/// A common tedious situation is the need to repeat the same settings on a large number of widgets (this led to the introduction of **ttk** with its  themed widgets). In Nictk I introduced the Nictk.Container.config_children() method. When creating a container (a window or a frame) you can call this method before adding child widgets, and all of them will inherit the options set in the method. Examples of the use of this method are in many example files.
 ///
 /// This is an (incomplete) list of the most useful options, however in the tkinter docstrings there is always a list of **all** accepted options.
 ///
-/// \note All Ntk constants in capital letters correspond to the same string in lowercase; so, for example, CENTER = "center" etc. You may want to put a \code from Ntk.constants import * \endcode statement to type them without the modue prefix.
+/// \note All Nictk constants in capital letters correspond to the same string in lowercase; so, for example, CENTER = "center" etc. You may want to put a \code from Nictk.constants import * \endcode statement to type them without the module prefix.
 /// 
 /// ## Colors ##
 ///
@@ -46,11 +46,11 @@
 /// + by a string <b>"#RRGGBB"</b> where **RR**, **GG**, **BB** are the hexadecimal values for Red, Green, Blue;
 /// + by his name (also as a string) in the following <a href="http://www.science.smith.edu/dftwiki/index.php/File:TkInterColorCharts.png" target="_blank">table of colors</a>.
 ///
-/// These are the color attributes (with the widgets which accept them): in %Ntk they has been renamed for a better coherence, but, if you want, you can continue to use the old names.
+/// These are the color attributes (with the widgets which accept them): in %Nictk they has been renamed for a better coherence, but, if you want, you can continue to use the old names.
 ///
 /// <table>
 ///   <tr >
-///     <th>New %Ntk name</th>
+///     <th>New %Nictk name</th>
 ///     <th>Old tkinter name</th>
 ///     <th>Meaning</th>
 ///     <th>Applies to</th>
@@ -58,12 +58,12 @@
 ///     <td>abcolor</td>
 ///     <td>activebackground</td>
 ///     <td>Active background: the color of the backgrouhd when the widget is in active state (the mouse is over it) This property seems to be OS dependent: it doesn't work for some widgets</td>
-///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkLabel, Ntk.NtkMenu, Ntk.NtkRadiobutton, Ntk.NtkScale, Ntk.NtkScrollbar, Ntk.NtkSpinbox</td>
+///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Label, Nictk.Menu, Nictk.Radiobutton, Nictk.Scale, Nictk.Scrollbar, Nictk.Spinbox</td>
 ///   </tr><tr>
 ///     <td>afcolor</td>
 ///     <td>activeforeground</td>
 ///     <td>Active foreground: see above</td>
-///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkLabel, Ntk.NtkMenu, Ntk.NtkRadiobutton</td>
+///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Label, Nictk.Menu, Nictk.Radiobutton</td>
 ///   </tr><tr>
 ///     <td>bcolor</td>
 ///     <td>background, bg</td>
@@ -73,42 +73,42 @@
 ///     <td>dfcolor</td>
 ///     <td>disabledforeground</td>
 ///     <td>Disabled foreground: the color of the text when the widget is in disabled state</td>
-///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkLabel, Ntk.NtkMenu, Ntk.NtkRadiobutton, Ntk.NtkSpinbox</td>
+///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Label, Nictk.Menu, Nictk.Radiobutton, Nictk.Spinbox</td>
 ///   </tr><tr>
 ///     <td>fcolor</td>
 ///     <td>foreground, fg</td>
 ///     <td>Foreground: the color of the text when the widget is in normal state</td>
-///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkEntry, Ntk.NtkLabel, Ntk.NtkListbox, Ntk.NtkMenu, Ntk.NtkRadiobutton, Ntk.NtkScale, Ntk.NtkSpinbox, Ntk.NtkText</td>
+///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Entry, Nictk.Label, Nictk.Listbox, Nictk.Menu, Nictk.Radiobutton, Nictk.Scale, Nictk.Spinbox, Nictk.Text</td>
 ///   </tr><tr>
 ///     <td>hbcolor</td>
 ///     <td>highlightbackground</td>
 ///     <td>Highlight background: the background color when the text is highlighted</td>
-///     <td>All widgets, except Ntk.NtkMenu</td>
+///     <td>All widgets, except Nictk.Menu</td>
 ///   </tr><tr>
 ///     <td>hfcolor</td>
 ///     <td>highlightcolor</td>
 ///     <td>Highlight foreground: the color of the text when it is highlighted</td>
-///     <td>All widgets, except Ntk.NtkMenu</td>
+///     <td>All widgets, except Nictk.Menu</td>
 ///   </tr><tr>
 ///     <td>rbcolor</td>
 ///     <td>readonlybackground</td>
 ///     <td>Readonly background: the background color when the widget is in readonly state</td>
-///     <td>Ntk.NtkSpinbox</td>
+///     <td>Nictk.Spinbox</td>
 ///   </tr><tr>
 ///     <td>sbcolor</td>
 ///     <td>selectbackground</td>
 ///     <td>Select background: the background color of a selected text</td>
-///     <td>Ntk.NtkCanvas, Ntk.NtkEntry, Ntk.NtkListbox, Ntk.NtkSpinbox, Ntk.NtkText</td>
+///     <td>Nictk.Canvas, Nictk.Entry, Nictk.Listbox, Nictk.Spinbox, Nictk.Text</td>
 ///   </tr><tr>
 ///     <td>sfcolor</td>
 ///     <td>selectforeground</td>
 ///     <td>Select foreground: the text color when it is selected</td>
-///     <td>Ntk.NtkCanvas, Ntk.NtkEntry, Ntk.NtkListbox, Ntk.NtkSpinbox, Ntk.NtkText</td>
+///     <td>Nictk.Canvas, Nictk.Entry, Nictk.Listbox, Nictk.Spinbox, Nictk.Text</td>
 ///   </tr><tr>
 ///     <td>tcolor</td>
 ///     <td>throughcolor</td>
 ///     <td>Through color: the color of the guide where the cursor slides</td></td>
-///     <td>Ntk.NtkScale, Ntk.NtkScrollbar</td>
+///     <td>Nictk.Scale, Nictk.Scrollbar</td>
 ///   </tr>
 /// </table>
 ///
@@ -119,7 +119,7 @@
 ///
 /// <table>
 ///   <tr >
-///     <th>New %Ntk name</th>
+///     <th>New %Nictk name</th>
 ///     <th>Old tkinter name</th>
 ///     <th>Meaning</th>
 ///     <th>Applies to</th>
@@ -127,7 +127,7 @@
 ///     <td>anchor</td>
 ///     <td></td>
 ///     <td>The text position inside the widget, you can choose between **N, E, NW, SE, S, SW, W, NE, CENTER**</td>
-///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkLabel, Ntk.NtkRadiobutton</td>
+///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Label, Nictk.Radiobutton</td>
 ///   </tr><tr>
 ///     <td>borderwidth</td>
 ///     <td>borderwidth, bd</td>
@@ -142,12 +142,12 @@
 ///     <td>font</td>
 ///     <td></td>
 ///     <td>You can indicate a font for widget text. See <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/fonts.html" target="_blank" here for a complete reference about fonts </td>
-///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkEntry, Ntk.NtkLabel, Ntk.NtkListbox, Ntk.NtkMenu, Ntk.NtkRadiobutton, Ntk.NtkScale, Ntk.NtkSpinbox, Ntk.NtkText</td>
+///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Entry, Nictk.Label, Nictk.Listbox, Nictk.Menu, Nictk.Radiobutton, Nictk.Scale, Nictk.Spinbox, Nictk.Text</td>
 ///   </tr><tr>
 ///     <td>justify</td>
 ///     <td></td>
 ///     <td>This option is for widgets which allow multiline text: you can choose between **LEFT, RIGHT, CENTER**</td>
-///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkEntry, Ntk.NtkLabel, Ntk.NtkRadiobutton, Ntk.NtkSpinbox</td>
+///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Entry, Nictk.Label, Nictk.Radiobutton, Nictk.Spinbox</td>
 ///   </tr><tr>
 ///     <td>relief</td>
 ///     <td></td>
@@ -163,7 +163,7 @@
 ///     <td>hborder</td>
 ///     <td>highlightthickness</td>
 ///     <td>Enables (with 1) or disabes (0) the dotted rectangle around the text when the widget has the focus</td>
-///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkEntry, Ntk.NtkLabel, Ntk.NtkListbox, Ntk.NtkRadiobutton, Ntk.NtkSpinbox, Ntk.NtkText</td>
+///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Entry, Nictk.Label, Nictk.Listbox, Nictk.Radiobutton, Nictk.Spinbox, Nictk.Text</td>
 ///   </tr>
 /// </table>
 ///
@@ -172,7 +172,7 @@
 ///
 /// ## Changed widget options 
 ///
-/// The use of these widgets is changed in Ntk with respect to **tkinter**:
+/// The use of these widgets is changed in Nictk with respect to **tkinter**:
 ///
 /// <table>
 ///   <tr >
@@ -181,47 +181,47 @@
 ///     <th>Applies to</th>
 ///   </tr><tr>
 ///     <td>height, width</td>
-///     <td>These are disabled in %Ntk. You must give the widgets dimensions in their constructor. If you want to change them after the construction use the Ntk.NtkWidget.resize() method.</td>
+///     <td>These are disabled in %Nictk. You must give the widgets dimensions in their constructor. If you want to change them after the construction use the Nictk.Widget.resize() method.</td>
 ///     <td></td>
 ///   </tr><tr>
 ///     <td>command</td>
-///     <td>This associates some widget event (as clicking a button or pressing RETURN in an entry) with a callback. In %Ntk it has been enhanced and you can also associate a value to this; moreover you can do this in the constructor and so you need to use this option only if you want to change the callback. For details see \ref EVENTS.</td>
-///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkCombobox, Ntk.NtkEntry, Ntk.NtkListbox, Ntk.NtkMenu, Ntk.NtkRadiobutton, Ntk.NtkScale, Ntk.NtkSpinbox</td>
+///     <td>This associates some widget event (as clicking a button or pressing RETURN in an entry) with a callback. In %Nictk it has been enhanced and you can also associate a value to this; moreover you can do this in the constructor and so you need to use this option only if you want to change the callback. For details see \ref EVENTS.</td>
+///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Combobox, Nictk.Entry, Nictk.Listbox, Nictk.Menu, Nictk.Radiobutton, Nictk.Scale, Nictk.Spinbox</td>
 ///   </tr><tr>
 ///     <td>state</td>
-///     <td>This can switch between <b>"normal"</b> and <b>"disabled"</b> state. In %Ntk is simpler to use Ntk.NtkWidget.activate() and Ntk.NtkWidget.deactivate() methods. The Ntk.NtkSpinbox widget has a third option <b>"readonly"</b>, which you can set with the Ntk:NtkSpinbox.set_state() method</td>
-///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkCombobox, Ntk.NtkEntry, Ntk.NtkLabel, Ntk.NtkListbox, Ntk.NtkMenu, Ntk.NtkRadiobutton, Ntk.NtkScale, Ntk.NtkSpinbox</td>
+///     <td>This can switch between <b>"normal"</b> and <b>"disabled"</b> state. In %Nictk is simpler to use Nictk.Widget.activate() and Nictk.Widget.deactivate() methods. The Nictk.Spinbox widget has a third option <b>"readonly"</b>, which you can set with the Nictk.Spinbox.set_state() method</td>
+///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Combobox, Nictk.Entry, Nictk.Label, Nictk.Listbox, Nictk.Menu, Nictk.Radiobutton, Nictk.Scale, Nictk.Spinbox</td>
 ///   </tr><tr>
 ///     <td>text</td>
-///     <td>You can use this to set the text of some widget, but is simpler to use the Ntk.NtkWidget.set_ontent() and Ntk.NtkWidget.get_content() methods</td>
-///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkLabel, Ntk.NtkRadiobutton</td>
+///     <td>You can use this to set the text of some widget, but is simpler to use the Nictk.Widget.set_content() and Nictk.Widget.get_content() methods</td>
+///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Label, Nictk.Radiobutton</td>
 ///   </tr><tr>
 ///     <td>variable</td>
-///     <td>In many widgets you can associate a tk.Variable object to the widget directly in the constructor. If you want to change the variable after the widget has been created you can use the NtkWidget.set_variable() method</td>
-///     <td>Ntk.NtkCheckbutton, Ntk.NtkRadiobutton</td>
+///     <td>In many widgets you can associate a tk.Variable object to the widget directly in the constructor. If you want to change the variable after the widget has been created you can use the Nictk.Widget.set_variable() method</td>
+///     <td>Nictk.Checkbutton, Nictk.Radiobutton</td>
 ///   </tr><tr>
 ///     <td>wraplength</td>
-///     <td>This is the text wrap length in widgets which allow multiline text. %Ntk sets automatically this value (even if the widget is resized). So you can only indicate 0 (text not wrapped) or non zero (default: automatic wrap).</td>
-///     <td>Ntk.NtkButton, Ntk.NtkCheckbutton, Ntk.NtkLabel, Ntk.NtkRadiobutton</td>
+///     <td>This is the text wrap length in widgets which allow multiline text. %Nictk sets automatically this value (even if the widget is resized). So you can only indicate 0 (text not wrapped) or non zero (default: automatic wrap).</td>
+///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Label, Nictk.Radiobutton</td>
 ///   </tr>
 /// </table>
 ///
 ///
 /// ## The widget content
 ///
-/// Some widget (as Ntk.NtkEntry) can hold a text as their content, other (as Ntk.NtkLabel) can hold a text or an image. Moreover, many of them allows the user to associate a tkinter.Variable object (see \ref VARIABLES). This is done in **tkinter** by mean of the properties _text_, _image_, _textvariable_ and _variable_.
+/// Some widget (as Nictk.Entry) can hold a text as their content, other (as Nictk.Label) can hold a text or an image. Moreover, many of them allows the user to associate a tkinter.Variable object (see \ref VARIABLES). This is done in **tkinter** by mean of the properties _text_, _image_, _textvariable_ and _variable_.
 ///
-/// In Ntk I introduced the methods Ntk.NtkWidget.set_content() and Ntk.NtkWidget.get_content() which simplify setting and getting these options and usually make it unnecessary to use config() for them.
+/// In Nictk I introduced the methods Nictk.Widget.set_content() and Nictk.Widget.get_content() which simplify setting and getting these options and usually make it unnecessary to use config() for them.
 
 
 
 /// \page WIDGET_INFO Getting widget informations
 ///
-/// As said in the previous section, you can query many widget properties with the Ntk.NtkMisc.get_config() method.
+/// As said in the previous section, you can query many widget properties with the Nictk.Misc.get_config() method.
 ///
 /// ## The get_winfo() method
 ///
-/// For other properties **tkinter** has a long list of _winfo_... methods (one for every property we want to know). I reorganized them in one method Ntk.NtkMisc.get_winfo() which, similarly to Ntk.NtkMisc.get_config(), accepts the property as a string. For a list of all accepted options see the example file \ref winfo.py.
+/// For other properties **tkinter** has a long list of _winfo_... methods (one for every property we want to know). I reorganized them in one method Nictk.Misc.get_winfo() which, similarly to Nictk.Misc.get_config(), accepts the property as a string. For a list of all accepted options see the example file \ref winfo.py.
 /// For the meaning of various tkinter winfo_... methods you can see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/universal.html" target="_blank">this page</a>, which elencates all tkinter general methods common to all widgets.
 ///
 /// \anchor dimensions
@@ -229,7 +229,7 @@
 ///
 /// In **tkinter** we can use the functions winfo_x (), winfo_y () etc. to find the dimensions of a widget, but these often create confusion, because they return the correct values only when the widget has been placed by the geometry manager.
 ///
-/// In Ntk I left the general _winfo_... pattern only for methods getting widget dimensions, adding some new methods. These have been rewritten to always report the exact value, expressed in pixels. These are the methods (they all belong to the clas Ntk.NtkMisc, inerithed by windows and internal widgets):
+/// In Nictk I left the general _winfo_... pattern only for methods getting widget dimensions, adding some new methods. These have been rewritten to always report the exact value, expressed in pixels. These are the methods (they all belong to the clas Nictk.Misc, inerithed by windows and internal widgets):
 ///
 /// <table>
 ///   <tr>
@@ -299,22 +299,22 @@
 /// + <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/binding-levels.html" target="_blank">The **bind()**, **bind_class()** and **bind_all()** methods</a>
 /// - <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/event-sequences.html" target="_blank">How to specify the event to bind</a>
 ///
-/// In Ntk I made these changes:
+/// In Nictk I made these changes:
 /// + Both the _bind()_ method and the _command_ option pass a **tkinter.Event** object to the callback. In the case of the _command_ the event is a <b>\<\<VirtualEvent>></b> and has only the following attributes:
 ///   + .widget
 ///   + .x
 ///   + .y
 ///   + .value (see below)
 /// + I added the _command_ option to some other widgets: this is a list of the widgets which support it:
-///   + Ntk.NtkButton (when the button is pressed)
-///   + Ntk.NtkCheckbutton (when the button changes its state)
-///   + Ntk.NtkCombobox (when an item is selected)
-///   + Ntk.NtkEntry (when Return is pressed)
-///   + Ntk.NtkListbox (when an item is selected)
-///   + Ntk.NtkRadiobutton (when the button is selected)
-///   + Ntk.NtkScale (when the scale index changes)
-///   + Ntk.NtkScrollbar (when the scrollbar is moved)
-///   + Ntk.NtkSpinbox (when an item is selected, with arrow buttons or with Return)
+///   + Nictk.Button (when the button is pressed)
+///   + Nictk.Checkbutton (when the button changes its state)
+///   + Nictk.Combobox (when an item is selected)
+///   + Nictk.Entry (when Return is pressed)
+///   + Nictk.Listbox (when an item is selected)
+///   + Nictk.Radiobutton (when the button is selected)
+///   + Nictk.Scale (when the scale index changes)
+///   + Nictk.Scrollbar (when the scrollbar is moved)
+///   + Nictk.Spinbox (when an item is selected, with arrow buttons or with Return)
 /// + For the _command_ option you have the following choices:
 ///   + command=_callback_ this only binds the callback to the event
 ///   + command=(_callback_, _value_) setting a tuple callback - value the Event passed to the callback will contain the given value in the .value attribute (otherwise this will be set to None)
@@ -329,7 +329,7 @@
 ///
 /// For more details on these objects you can see the <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/control-variables.html" target="_blank">anzeljg reference</a>.
 ///
-/// This is a summary of how these variables are treated in Ntk:
+/// This is a summary of how these variables are treated in Nictk:
 ///
 /// <table>
 ///   <tr>
@@ -337,27 +337,27 @@
 ///     <th>Notes</th>
 ///     <th>Writing and reading</th>
 ///   </tr><tr>
-///     <td>Ntk.NtkButton, Ntk.NtkLabel</td>
+///     <td>Nictk.Button, Nictk.Label</td>
 ///     <td>You can set a **StringVar** in the _content_ parameter of its constructor; this is shown as the widget label, and the widget will be updated if the variable changes.</td>
-///     <td>You can set or get the value both with the Ntk.NtkWidget.set_content() and Ntk.NtkWidget.get_content methods, or with the variable **set()** and **get()** methods</td>
+///     <td>You can set or get the value both with the Nictk.Widget.set_content() and Nictk.Widget.get_content methods, or with the variable **set()** and **get()** methods</td>
 ///   </tr><tr>
-///     <td>Ntk.NtkCheckbutton</td>
+///     <td>Nictk.Checkbutton</td>
 ///     <td>You have two parameters in the constructor: in _content_ you can set a **StringVar** which will control the button label, in _variable_ you can set a variable of any kind and its values corrisponding to the on and off state.</td>
-///     <td>You can set and get the button label with the Ntk.NtkWidget.set_content() and Ntk.NtkWidget.get_content methods, and the button state (on/off) with Ntk.NtkCheckButton.set_value() and Ntk.NtkCheckbutton.get_value() methods. Moreover you can use the variables set()** and **get()** methods</td>
+///     <td>You can set and get the button label with the Nictk.Widget.set_content() and Nictk.Widget.get_content methods, and the button state (on/off) with Nictk.CheckButton.set_value() and Nictk.Checkbutton.get_value() methods. Moreover you can use the variables set()** and **get()** methods</td>
 ///   </tr><tr>
-///     <td>Ntk.NtkCombobox, Ntk.NtkEntry</td>
+///     <td>Nictk.Combobox, Nictk.Entry</td>
 ///     <td>You can set a **StringVar** in the _variable_ parameter of its constructor; this will hold the selected item (or the entry text).</td>
 ///     <td>As above.</td>
 ///   </tr><tr>
-///     <td>Ntk.NtkRadiobutton</td>
+///     <td>Nictk.Radiobutton</td>
 ///     <td>You must assign all buttons of the same mutually exclusive group the same variable (of any type), giving each button a different value (in the constructor parameter _variable_. Pressing a button will assign the variable the value associated with the button, and turn off all the other buttons in the group.</td>
 ///     <td>There are no widget methods, you must use the variable set()** and **get()** methods</td>
 ///   </tr><tr>
-///     <td>Ntk.NtkScale</td>
+///     <td>Nictk.Scale</td>
 ///     <td>You can set a **IntVar** or **DoubleVar**  in the _variable_ parameter of its constructor; this will hold the widget selected value.</td>
 ///     <td><You get the selected value with the Ntk.NtkScale.get_value(), or can use the variables set()** and **get()** methods</td>
 ///   </tr><tr>
-///     <td>Ntk.NtkSpinbox</td>
+///     <td>Nictk.Spinbox</td>
 ///     <td>get_winfo("width")</td>
 ///     <td>The widget width</td>
 ///   </tr>
@@ -377,44 +377,44 @@
 ///     <th>Notes</th>
 ///     <th>Returns</th>
 ///   </tr><tr>
-///     <td>Ntk.mb.askokcancel</td>
+///     <td>Nictk.mb.askokcancel</td>
 ///     <td>Opens a dialog box with tho buttons "Ok", "Cancel".</td>
 ///     <td>**True** for "Ok" and **False** for "Cancel".</td>
 ///   </tr><tr>
-///     <td>Ntk.mb.askquestion</td>
+///     <td>Nictk.mb.askquestion</td>
 ///     <td>Opens a dialog box with two buttons "Yes", "No".</td>
 ///     <td>"yes" or "no".</td>
 ///   </tr><tr>
-///     <td>Ntk.mb.askretrycancel</td>
+///     <td>Nictk.mb.askretrycancel</td>
 ///     <td>Opens a dialog box with two buttons "Retry", "Cancel".</td>
 ///     <td>**True** for "Retry" and **False** for "Cancel".</td>
 ///   </tr><tr>
-///     <td>Ntk.mb.askyesno</td>
+///     <td>Nictk.mb.askyesno</td>
 ///     <td>Same of askquestion.</td>
 ///     <td>**True** for "Yes" and **False** for "No".</td>
 ///   </tr><tr>
-///     <td>Ntk.mb.showerror</td>
+///     <td>Nictk.mb.showerror</td>
 ///     <td>Opens a dialog box with an error icon and only the button "Ok".</td>
 ///     <td>Always "ok".</td>
 ///   </tr><tr>
-///     <td>Ntk.mb.showinfo</td>
+///     <td>Nictk.mb.showinfo</td>
 ///     <td>Opens a dialog box with an info icon and only the button "Ok".</td>
 ///     <td>Always "ok".</td>
 ///   </tr><tr>
-///     <td>Ntk.mb.showwarning</td>
+///     <td>Nictk.mb.showwarning</td>
 ///     <td>Opens a dialog box with a warning icon and only the button "Ok".</td>
 ///     <td>Always "ok".</td>
 ///   </tr><tr>
-///     <td>Ntk.fd.askopenfilename</td>
+///     <td>Nictk.fd.askopenfilename</td>
 ///     <td>Opens the file dialog "Open file" where you can choose a file.</td>
 ///     <td>The complete path of the chosen file, or an empty string if you press "Cancel".</td>
 ///   </tr>
 ///   </tr><tr>
-///     <td>Ntk.fd.asksaveasfilename</td>
+///     <td>Nictk.fd.asksaveasfilename</td>
 ///     <td>Opens the file dialog "Save as file" where you can choose a file.</td>
 ///     <td>The complete path of the chosen file, or an empty string if you press "Cancel".</td>
 ///   </tr><tr>
-///     <td>Ntk.cc.askcolor</td>
+///     <td>Nictk.cc.askcolor</td>
 ///     <td>Opens a color chooser file dialog.</td>
 ///     <td>A duple, with in the first element three integers R, G, B, in the second a tkinter Color object, or (None, None) if you press "Cancel"</td>
 ///   </tr>

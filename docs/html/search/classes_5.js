@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['frame_465',['Frame',['../class_ntk_1_1tkinter____init_____1_1_frame.html',1,'Ntk::tkinter__init__']]]
+  ['label_0',['Label',['../class_nictk_1_1_label.html',1,'Nictk']]],
+  ['listbox_1',['Listbox',['../class_nictk_1_1_listbox.html',1,'Nictk']]]
 ];

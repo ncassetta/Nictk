@@ -45,6 +45,7 @@ This is an example of a "Hello world"
     #enter the control loop
     Ntk.mainloop()
 
-<p align="center">
-<img source="Hello.PNG">
-</p>
+Picture:
+--------
+
+<img src="Hello.PNG" width="525" height="437" alt="Test image" title="Hello.py" align="middle" />

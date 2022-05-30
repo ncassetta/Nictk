@@ -1,2 +1,3 @@
 include Examples/*.py
-global-exclude Examples/NtkMastermind*.py
+include Doxygen/Doxyfile
+include Doxygen/*.*

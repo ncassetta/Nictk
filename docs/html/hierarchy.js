@@ -2,7 +2,6 @@ var hierarchy =
 [
     [ "_framerow", "class_nictk_1_1__framerow.html", null ],
     [ "_setitCommand", "class_nictk_1_1__setit_command.html", null ],
-    [ "Canvas", "class_nictk_1_1_canvas.html", null ],
     [ "Container", "class_nictk_1_1_container.html", [
       [ "BaseWindow", "class_nictk_1_1_base_window.html", [
         [ "Main", "class_nictk_1_1_main.html", null ],
@@ -17,6 +16,7 @@ var hierarchy =
       [ "Menu", "class_nictk_1_1_menu.html", null ],
       [ "Widget", "class_nictk_1_1_widget.html", [
         [ "Button", "class_nictk_1_1_button.html", null ],
+        [ "Canvas", "class_nictk_1_1_canvas.html", null ],
         [ "Checkbutton", "class_nictk_1_1_checkbutton.html", null ],
         [ "Combobox", "class_nictk_1_1_combobox.html", null ],
         [ "Entry", "class_nictk_1_1_entry.html", null ],

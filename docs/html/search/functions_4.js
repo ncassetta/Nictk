@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['deactivate_0',['deactivate',['../class_nictk_1_1_widget.html#a2d696bdfbd4246718adc08224abb4a1a',1,'Nictk::Widget']]],
-  ['delete_1',['delete',['../class_nictk_1_1_combobox.html#a909365daf08109f7ac719d32794e6248',1,'Nictk.Combobox.delete()'],['../class_nictk_1_1_listbox.html#a909365daf08109f7ac719d32794e6248',1,'Nictk.Listbox.delete()'],['../class_nictk_1_1_menu.html#a909365daf08109f7ac719d32794e6248',1,'Nictk.Menu.delete()']]]
+  ['enabled_0',['enabled',['../class_nictk_1_1_widget.html#a05cd4cd28b324f262fefe1a1782bd992',1,'Nictk::Widget']]],
+  ['entry_5fconfig_1',['entry_config',['../class_nictk_1_1_menu.html#a3beac87dcf5d3ab6d126a36dae639d7f',1,'Nictk::Menu']]],
+  ['entry_5fget_5fconfig_2',['entry_get_config',['../class_nictk_1_1_menu.html#a7430ac3ec229aa58d9ffcfe41b52893d',1,'Nictk::Menu']]],
+  ['entry_5fset_5fvariable_3',['entry_set_variable',['../class_nictk_1_1_menu.html#a0bc80399e566271fdde8c47cd7876cff',1,'Nictk::Menu']]]
 ];

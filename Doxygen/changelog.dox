@@ -1,0 +1,27 @@
+/// \defgroup CHANGELOG Change Log
+///
+/// Changes in various versions
+///
+/// ## Version 1.0.0 (Aug 11, 2021) ##
+///
+/// Initial version.
+///
+/// ## Version 1.0.1 (Sep 15, 2021) ##
+///
+/// Solved a problem with documentation by inserting the .nojekyll file and allowing doxygen documentation to be linked.
+///
+/// ## Version 2.0.0 (May 14, 2022) ##
+///
+/// Renamed Ntk inti Nictk and published it as a Python package (with an \_\_init__.py main file). Dropped the Ntk prefix from widget names, so this version is incompatible with 1.0.1. Also the example files were renamed without the Ntk prefix.
+///
+/// **Documentation**
+/// + Updated all the .dox files to reflect the changes as above and recompiled with doxygen
+///
+/// **Examples**
+/// + Updated all the files to reflect the changes above.
+/// + Changed some file name (from NtkWindow.py to Window.py, etc.)
+/// + Dropped the duplicate Hello2.py
+///
+/// **Bugfix**
+/// + (\_\_init__.py:31-36) corrected a problem importing the constants module
+///

@@ -1,4 +1,0 @@
-var classsrc_1_1_ntk_scrollbar =
-[
-    [ "__init__", "classsrc_1_1_ntk_scrollbar.html#a07cb34010aa603d9baa2124fadfca6c6", null ]
-];

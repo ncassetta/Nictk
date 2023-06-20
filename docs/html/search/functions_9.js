@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mode_0',['mode',['../class_nictk_1_1_spinbox.html#aa33a4f7dc79fd6fb9f3a6e95a1d8dd77',1,'Nictk::Spinbox']]]
+  ['onclose_0',['onclose',['../class_nictk_1_1_base_window.html#ac015d4f5b8101ce45bb27c77cc8d0435',1,'Nictk::BaseWindow']]]
 ];

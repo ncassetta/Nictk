@@ -1,5 +1,5 @@
 # This file is part of Nictk - A simple tkinter wrapper.
-#    Copyright (C) 2021  Nicola Cassetta
+#    Copyright (C) 2021-2023 Nicola Cassetta
 #    See <https://github.com/ncassetta/Nictk>
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -36,7 +36,7 @@ else:
     from .constants import *
     
 
-__version__ = "2.0.0"
+__version__ = "2.1.0"
 
 
 ## @cond IGNORE
@@ -49,15 +49,17 @@ __version__ = "2.0.0"
 
 class Misc:
     """Base class for windows and widgets.
-    It defines methods common for windows and interior widgets."""
+    It defines methods common for windows and interior widgets, it is used only
+    as a mixin (you should not use it directly). It doesn't inherit from tk.Misc,
+    because it's always mixed in with other classes that already do it."""
 
     _trans_opt =  { "abcolor":"activebackground", "afcolor":"activeforeground",
-                    "bcolor":"background", "dfcolor":"disabledforeground",
-                    "fcolor":"foreground", "hbcolor":"highlightbackground",
-                    "hfcolor":"highlightcolor", "hborder":"highlightthickness",
-                    "ibcolor":"insertbackground", "rbcolor":"readonlybackground",
-                    "sbcolor":"selectbackground", "sfcolor":"selectforeground",
-                    "tcolor":"troughcolor"}
+                    "bcolor":"background", "dbcolor":"disabledbackground",
+                    "dfcolor":"disabledforeground", "fcolor":"foreground",
+                    "hbcolor":"highlightbackground", "hfcolor":"highlightcolor",
+                    "hborder":"highlightthickness", "ibcolor":"insertbackground",
+                    "rbcolor":"readonlybackground", "sbcolor":"selectbackground",
+                    "sfcolor":"selectforeground", "tcolor":"troughcolor"}
     
     _del_opt = ["width", "height"]
 
@@ -114,10 +116,7 @@ class Misc:
         \param opt if you leave None the method returns a list of
         all its options as strings. If you give an option (string)
         returns **True** or **False**"""
-        if not opt:
-            return self.keys()
-        else:
-            return True if opt in self.keys() else False
+        return opt in self.keys() if opt else self.keys()
             
     def get_winfo(self, key):
         """Returns the widget info for the item _key_.
@@ -152,11 +151,11 @@ class Misc:
         aliased by winfo_h(). See winfo_x() for details."""
         return self._curr_dim[3] - self._curr_dim[4][1] - self._curr_dim[4][3]
     
-    ## Alias for winfo_width.
+    ## Aliases
     winfo_w = winfo_width
-    
-    ## Alias for winfo_height. 
+    """Alias for winfo_width()."""
     winfo_h = winfo_height
+    """Alias for winfo_height().
        
     def winfo_bx(self):
         """Returns the x coordinate of the widget bounding box topleft corner.
@@ -183,89 +182,85 @@ class Misc:
         """Returns the list of the four pad amounts (E-N-W-S) of the widget
         with respect to its bounding box."""
         return self._curr_dim[4]
-    
-    def _bind(self, what, sequence, func, add, needcleanup=1):
-        """Internal function."""
-        if isinstance(func, str):
-            self.tk.call(what + (sequence, func))
-        elif func:
-            funcid = self._register(func, self._substitute,
-                        needcleanup)
-            cmd = ('%sif {"[%s %s]" == "break"} break\n'
-                   %
-                   (add and '+' or '',
-                funcid, self._subst_format_str))
-            self.tk.call(what + (sequence, cmd))
-            return funcid
-        elif sequence:
-            return self.tk.call(what + (sequence,))
-        else:
-            return self.tk.splitlist(self.tk.call(what))    
-    
+        
     def bind(self, sequence=None, func=None, add=None):
-        """Bind to this widget at event SEQUENCE a call to function FUNC.
-
-        SEQUENCE is a string of concatenated event
-        patterns. An event pattern is of the form
-        <MODIFIER-MODIFIER-TYPE-DETAIL> where MODIFIER is one
-        of Control, Mod2, M2, Shift, Mod3, M3, Lock, Mod4, M4,
-        Button1, B1, Mod5, M5 Button2, B2, Meta, M, Button3,
-        B3, Alt, Button4, B4, Double, Button5, B5 Triple,
-        Mod1, M1. TYPE is one of Activate, Enter, Map,
-        ButtonPress, Button, Expose, Motion, ButtonRelease
-        FocusIn, MouseWheel, Circulate, FocusOut, Property,
-        Colormap, Gravity Reparent, Configure, KeyPress, Key,
-        Unmap, Deactivate, KeyRelease Visibility, Destroy,
-        Leave and DETAIL is the button number for ButtonPress,
-        ButtonRelease and DETAIL is the Keysym for KeyPress and
-        KeyRelease. Examples are
-        <Control-Button-1> for pressing Control and mouse button 1 or
-        <Alt-A> for pressing A and the Alt key (KeyPress can be omitted).
-        An event pattern can also be a virtual event of the form
-        <<AString>> where AString can be arbitrary. This
-        event can be generated by event_generate.
-        If events are concatenated they must appear shortly
-        after each other.
-
-        FUNC will be called if the event sequence occurs with an
-        instance of Event as argument. If the return value of FUNC is
-        "break" no further bound function is invoked.
-
-        An additional boolean parameter ADD specifies whether FUNC will
-        be called additionally to the other bound function or whether
-        it will replace the previous function.
-
-        Bind will return an identifier to allow deletion of the bound function with
-        unbind without memory leak.
-
-        If FUNC or SEQUENCE is omitted the bound function or list
-        of bound events are returned."""
-
+        """Redefines the tk.Misc.bind() method.
+        This allows events bound with the bind() method (and not only with the
+        command option, as in tkinter) to be ignored when the widget is in DISABLED
+        state"""
+        
+        if isinstance(self, BaseWindow):
+        # windows have the <Configure> event bounded to resize_children()
+        # callback. This is always executed so doesn't need a _setitBind wrapper
+            if sequence == "<Configure>":
+                add=True
+            return super()._bind(('bind', self._w), sequence, func, add)
+        if isinstance(self, Spinbox) and sequence == "<Key-Return>":
+        # Spinbox has the <Key-Return> event bounded to auto_add()
+            add=True        
+               
         _bindwrap = _setitBind(self, func) if func else func
-        return super()._bind(('bind', self._w), sequence, _bindwrap, add)
+        return self._bind(('bind', self._w), sequence, _bindwrap, add)
     
+    def unbind(self, sequence, funcid=None):
+        """Redefines the tk.Misc.unbind() method.
+        This allows a correct unbinding for some class with particular
+        bindings."""
+        super().unbind(sequence, funcid)
+        if isinstance(self, BaseWindow) and sequence == "<Configure>" and not funcid:
+            # mantain binding of the Configure event to resize_children() for windows
+            self.bind("<Configure>", self._resize_children)
+        if isinstance(self, Spinbox) and sequence == "<Key-Return>" and not funcid:
+            # mantain binding of the Key-Return event to the command callback
+            self.bind("<Key-Return>", self._commandwrap)
+
+
+## TODO: must I redefine these also?            
+    #def bind_all(self, sequence=None, func=None, add=None):
+        #"""Bind to all widgets at an event SEQUENCE a call to function FUNC.
+        #An additional boolean parameter ADD specifies whether FUNC will
+        #be called additionally to the other bound function or whether
+        #it will replace the previous function. See bind for the return value."""
+        #return self._bind(('bind', 'all'), sequence, func, add, 0)
+
+    #def unbind_all(self, sequence):
+        #"""Unbind for all widgets for event SEQUENCE all functions."""
+        #self.tk.call('bind', 'all' , sequence, '')
+
+    #def bind_class(self, className, sequence=None, func=None, add=None):
+        #"""Bind to widgets with bindtag CLASSNAME at event
+        #SEQUENCE a call of function FUNC. An additional
+        #boolean parameter ADD specifies whether FUNC will be
+        #called additionally to the other bound function or
+        #whether it will replace the previous function. See bind for
+        #the return value."""
+
+        #return self._bind(('bind', className), sequence, func, add, 0)
+
+    #def unbind_class(self, className, sequence):
+        #"""Unbind for all widgets with bindtag CLASSNAME for event SEQUENCE
+        #all functions."""
+        #self.tk.call('bind', className , sequence, '')
     
+            
     
 # Used by various widgets for calling with command with an event parameter. 
 class _setitBind:
-    """Internal class. It wraps the command in widgets which have a command option."""
+    """Internal class. It wraps the function call for events bound to a widget by
+    the bind() method, allowing to ignore the event when the widget is in the
+    DISABLED state."""
     
     def __init__(self, widget, callback=None):
         """The constructor.
         \param widget the widget which will generate the call (it will be retrieved as the
         .widget attribute of the generated event)
-        \param callback the callback
-        \param value an optional value, which will retrieved as the .value attribute of
-        the generated event)
-        \param variable an IntVar, StringVar, DoubleVar or BooleanVar which will get the
-        value when the callback is called"""
+        \param callback the callback"""
         self._widget = widget
         self._callback = callback
         
     def __call__(self, event):
         """The call method."""       
         if self._widget.get_config("state") != DISABLED and self._callback:
-            print ("_setitCommand.__call__ with callback =", self._callback)
             self._callback(event)
     
         
@@ -368,7 +363,11 @@ class Widget(Misc):
             pass        
         if isinstance(self, Container):
             for w in self.winfo_children():
-                w.deactivate()        
+                w.deactivate()
+                
+    def enabled(self):
+        """Returns True if the widget is enabled."""
+        return self.get_config("state") == NORMAL
         
     def init_content(self, content):
         """Sets the content type for the widget. The set_content() and
@@ -674,34 +673,12 @@ class BaseWindow(Misc, Container):
         self.geometry("{}x{}+{}+{}".format(w, h, x, y))
         self._curr_dim = (x, y, w, h, (0, 0, 0, 0))
         Container.__init__(self)
-        tk.Misc.bind(self, "<Configure>", self._resize_children) 
+        self.bind("<Configure>", self._resize_children) 
         #self.resizable(width=FALSE, height=FALSE)
         self.title(title)
         # used for onclose()
         self._commandwrap = None
         
-    # we must redefine bind() and unbind(): if the user is binding to "<Configure>"
-    # event we must mantain the binding to _resize_children
-    
-    def bind(self, sequence=None, func=None, add=None):
-        """Redefines the tkinter.Misc.bind() method for this class. We need
-        this for mantainng the binding to the "<Configure>" event with the
-        _resize_children() callback."""
-        # If sequence has more than one event, they must happen in sequence
-        # for the func is triggered. So sequence="<Configure><Enter>" does not
-        # affect <Configure>
-        if sequence == "<Configure>":
-            return tk.Misc.bind(self, sequence, func, add=True)
-        else:
-            return tk.Misc.bind(self,  sequence, func, add)
-               
-    def unbind(self, sequence, funcid=None):
-        """Redefines the tkinter.Misc.unbind() method for this class. We need
-        this for mantainng the binding to the "<Configure>" event with the
-        _resize_children() callback."""
-        super().unbind(sequence, funcid)
-        if sequence == "<Configure>" and not funcid:
-            super().bind("<Configure>", self._resize_children)
             
     def onclose(self, command):
         """Defines a callback to call when the window is closed.
@@ -2088,7 +2065,7 @@ class Scale(Widget, tk.Scale):
             self.config(from_=limits[0], to=limits[1])
             if len(limits) == 3:
                 self.config(bigincrement=limits[2])
-        self.valueVar = tk.DoubleVar() if not variable else variable 
+        self.valueVar = DoubleVar() if not variable else variable 
         self.valueVar.set(str(limits[0]))
         self.valueVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
         self.config(variable=self.valueVar)
@@ -2233,27 +2210,7 @@ class Spinbox(Widget, tk.Spinbox):
         if command:
             self.config(command=command)
             self.bind("<Key-Return>", self._autoadd)            
-        
-        
-    def bind(self, sequence=None, func=None, add=None):
-        """Redefines the Misc.bind() method for this class.
-        We need it because the constructor binds the Key-Return
-        event to the command callback."""
-        # If sequence has more than one event, they must happen in sequence
-        # for the func is triggered. So sequence="<Configure><Enter>" does not
-        # affect <Configure>
-        if sequence == "<Key-Return>":
-            return super().bind(sequence, func, add=True)
-        else:
-            return super().bind(sequence, func, add)
                
-    def unbind(self, sequence, funcid=None):
-        """Redefines the Misc.unbind method for this class.
-        We need it because the constructor binds the Key-Return
-        event to the command callback."""
-        super().unbind(sequence, funcid)
-        if sequence == "<Key-Return>" and not funcid:
-            super().bind("<Key-Return>", self._commandwrap)                   
     
     def mode(self, mode, wrap=None, validate=None):
         """Sets the spinbox mode to one of these three:

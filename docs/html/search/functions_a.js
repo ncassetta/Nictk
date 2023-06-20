@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['onclose_0',['onclose',['../class_nictk_1_1_base_window.html#ac015d4f5b8101ce45bb27c77cc8d0435',1,'Nictk::BaseWindow']]]
+  ['parent_0',['parent',['../class_nictk_1_1_misc.html#a35061dd226fbf32b76578ca1f0759ce1',1,'Nictk.Misc.parent()'],['../class_nictk_1_1__framerow.html#a35061dd226fbf32b76578ca1f0759ce1',1,'Nictk._framerow.parent()']]]
 ];

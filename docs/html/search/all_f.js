@@ -11,7 +11,7 @@ var searchData=
   ['set_5fmodal_8',['set_modal',['../class_nictk_1_1_window.html#a722a76252b6cf1799558c3667addd195',1,'Nictk::Window']]],
   ['set_5fselect_5fmode_9',['set_select_mode',['../class_nictk_1_1_listbox.html#ab6988d3986f931397178643f00e2b8ae',1,'Nictk::Listbox']]],
   ['set_5ftext_10',['set_text',['../class_nictk_1_1_text.html#a0d5d26f8ca9bae6f7deb142910e67ea5',1,'Nictk::Text']]],
-  ['set_5fvalue_11',['set_value',['../class_nictk_1_1_checkbutton.html#ac01cbacf7a5cb07b63523385c1f0a50d',1,'Nictk::Checkbutton']]],
+  ['set_5fvalue_11',['set_value',['../class_nictk_1_1_checkbutton.html#ac01cbacf7a5cb07b63523385c1f0a50d',1,'Nictk.Checkbutton.set_value()'],['../class_nictk_1_1_scale.html#ac01cbacf7a5cb07b63523385c1f0a50d',1,'Nictk.Scale.set_value()']]],
   ['set_5fvariable_12',['set_variable',['../class_nictk_1_1_checkbutton.html#a33a1e34ce290cbd2155c627407d78186',1,'Nictk.Checkbutton.set_variable()'],['../class_nictk_1_1_radiobutton.html#acc3b1559e87a4137f3f7418c35c581d7',1,'Nictk.Radiobutton.set_variable()'],['../class_nictk_1_1_scale.html#a3f343a79c4388ed2e490d668aaf696b5',1,'Nictk.Scale.set_variable()']]],
   ['show_13',['show',['../class_nictk_1_1_widget.html#ab4f4398c3f210fe4ea6e720401357691',1,'Nictk.Widget.show()'],['../class_nictk_1_1_window.html#ab4f4398c3f210fe4ea6e720401357691',1,'Nictk.Window.show()']]],
   ['size_14',['size',['../class_nictk_1_1_menu.html#a6d620a10dad91cadcb542e6098ada619',1,'Nictk::Menu']]],

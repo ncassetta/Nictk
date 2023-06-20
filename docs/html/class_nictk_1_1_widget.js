@@ -3,6 +3,7 @@ var class_nictk_1_1_widget =
     [ "__init__", "class_nictk_1_1_widget.html#a0b1ade65a71aec7fc3038759c5504252", null ],
     [ "activate", "class_nictk_1_1_widget.html#a8f9705707225e3a806138596d5edae0d", null ],
     [ "deactivate", "class_nictk_1_1_widget.html#a2d696bdfbd4246718adc08224abb4a1a", null ],
+    [ "enabled", "class_nictk_1_1_widget.html#a05cd4cd28b324f262fefe1a1782bd992", null ],
     [ "get_content", "class_nictk_1_1_widget.html#a65d29e6d70075b87f436320c53644a38", null ],
     [ "hide", "class_nictk_1_1_widget.html#ac3c535fd36dc5473ff98017920898352", null ],
     [ "init_content", "class_nictk_1_1_widget.html#a3257d1aa90919210a6c812ef4bc5727e", null ],

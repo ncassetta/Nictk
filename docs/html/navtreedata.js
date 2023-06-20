@@ -26,6 +26,7 @@ var NAVTREE =
 [
   [ "Nictk", "index.html", [
     [ "Overview", "_o_v_e_r_v_i_e_w.html", "_o_v_e_r_v_i_e_w" ],
+    [ "Modules", "modules.html", "modules" ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],

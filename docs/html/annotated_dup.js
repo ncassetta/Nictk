@@ -2,6 +2,7 @@ var annotated_dup =
 [
     [ "Nictk", null, [
       [ "_framerow", "class_nictk_1_1__framerow.html", "class_nictk_1_1__framerow" ],
+      [ "_setitBind", "class_nictk_1_1__setit_bind.html", "class_nictk_1_1__setit_bind" ],
       [ "_setitCommand", "class_nictk_1_1__setit_command.html", "class_nictk_1_1__setit_command" ],
       [ "BaseWindow", "class_nictk_1_1_base_window.html", "class_nictk_1_1_base_window" ],
       [ "Button", "class_nictk_1_1_button.html", "class_nictk_1_1_button" ],

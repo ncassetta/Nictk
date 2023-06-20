@@ -1,6 +1,7 @@
 var hierarchy =
 [
     [ "_framerow", "class_nictk_1_1__framerow.html", null ],
+    [ "_setitBind", "class_nictk_1_1__setit_bind.html", null ],
     [ "_setitCommand", "class_nictk_1_1__setit_command.html", null ],
     [ "Container", "class_nictk_1_1_container.html", [
       [ "BaseWindow", "class_nictk_1_1_base_window.html", [

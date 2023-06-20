@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['clear_0',['clear',['../class_nictk_1_1_text.html#ad149341d7d849ff957baee565b19c123',1,'Nictk::Text']]],
-  ['config_1',['config',['../class_nictk_1_1_misc.html#a2d54713324cd11381174e566e685fee6',1,'Nictk.Misc.config()'],['../class_nictk_1_1_entry.html#a2d54713324cd11381174e566e685fee6',1,'Nictk.Entry.config()'],['../class_nictk_1_1_listbox.html#a2d54713324cd11381174e566e685fee6',1,'Nictk.Listbox.config()']]],
-  ['config_5fchildren_2',['config_children',['../class_nictk_1_1_container.html#a8dc8fba4c3a98ff4ec976aca34e6d32b',1,'Nictk::Container']]],
-  ['config_5fitem_3',['config_item',['../class_nictk_1_1_combobox.html#af01a3733216fada21418014c6399820c',1,'Nictk::Combobox']]]
+  ['deactivate_0',['deactivate',['../class_nictk_1_1_widget.html#a2d696bdfbd4246718adc08224abb4a1a',1,'Nictk::Widget']]],
+  ['delete_1',['delete',['../class_nictk_1_1_combobox.html#a909365daf08109f7ac719d32794e6248',1,'Nictk.Combobox.delete()'],['../class_nictk_1_1_listbox.html#a909365daf08109f7ac719d32794e6248',1,'Nictk.Listbox.delete()'],['../class_nictk_1_1_menu.html#a909365daf08109f7ac719d32794e6248',1,'Nictk.Menu.delete()']]]
 ];

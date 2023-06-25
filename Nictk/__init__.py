@@ -151,11 +151,10 @@ class Misc:
         aliased by winfo_h(). See winfo_x() for details."""
         return self._curr_dim[3] - self._curr_dim[4][1] - self._curr_dim[4][3]
     
-    ## Aliases
+    ## Alias for winfo_width()
     winfo_w = winfo_width
-    """Alias for winfo_width()."""
+    ## Alias for winfo_height()
     winfo_h = winfo_height
-    """Alias for winfo_height().
        
     def winfo_bx(self):
         """Returns the x coordinate of the widget bounding box topleft corner.
@@ -215,7 +214,7 @@ class Misc:
             self.bind("<Key-Return>", self._commandwrap)
 
 
-## TODO: must I redefine these also?            
+# TODO: must I redefine these also?            
     #def bind_all(self, sequence=None, func=None, add=None):
         #"""Bind to all widgets at an event SEQUENCE a call to function FUNC.
         #An additional boolean parameter ADD specifies whether FUNC will
@@ -382,32 +381,33 @@ class Widget(Misc):
         else:
             if isinstance(content, str):
                 self.config(text=content, textvariable="")
-                self.textVar = None
+                self._textVar = None
                 self._cont_type = Widget.TEXT
             elif isinstance(content, tk.StringVar):
                 self.config(textvariable=content)
-                if content is not self.textVar:
-                    self.textVar = content
+                if content is not self._textVar:
+                    self._textVar = content
                 self._cont_type = Widget.STRVAR        
             elif isinstance(content, tk.Variable):
                 self.config(textvariable=content)
-                if content is not self.textVar:
-                    self.textVar = content
+                if content is not self._textVar:
+                    self._textVar = content
                 self._cont_type = Widget.NUMVAR
             elif isinstance(content, tk.PhotoImage) or isinstance(content, tk.BitmapImage):
                 self.config(text="", textvariable="", image=content)
-                self.textVar = None
+                self._textVar = None
                 self._cont_type = Widget.IMAGE
             else:
                 self._cont_type = None
+                self._textVar = None
 
     def get_content(self):
         """Returns the content of the widget as a string.
         If the content is an image returns the string "image"."""
         if self._cont_type == Widget.STRVAR:
-            return self.textVar.get()
+            return self._textVar.get()
         elif self._cont_type == Widget.NUMVAR:
-            return str(self.textVar.get())        
+            return str(self._textVar.get())        
         elif  self._cont_type == Widget.TEXT:
             return self.cget("text")
         elif self._cont_type == Widget.IMAGE:
@@ -420,7 +420,7 @@ class Widget(Misc):
         \param content you must supply a content compatible
         with that given in init_content()."""
         if self._cont_type in (Widget.STRVAR, Widget.NUMVAR):
-            self.textVar.set(content)
+            self._textVar.set(content)
         elif self._cont_type ==Widget.TEXT:
             self.config(text=content)
         elif self._cont_type == Widget.IMAGE:
@@ -1087,7 +1087,7 @@ class Button(Widget, tk.Button):
         Widget.__init__(self, parent, x, y, w, h, pad, tk.Button.__init__)
         self.config(anchor=CENTER, justify=LEFT)
         self._get_parent_config()
-        self.textVar = None
+        self._textVar = None			# Errors if you omit this!
         self.init_content(content)
         self._commandwrap = None
         if command:
@@ -1182,23 +1182,23 @@ class Checkbutton(Widget, tk.Checkbutton):
         Widget.__init__(self, parent, x, y, w, h, pad, tk.Checkbutton.__init__)
         self.config(anchor=W, justify=LEFT, wraplength=self._calc_wrap())
         self._get_parent_config()
-        self.textVar=None
+        self._textVar = None			# Errors if you omit this!
         self.init_content(content)
         if variable:
             if isinstance(variable, (tuple, list)) and len(variable) == 3 and \
                isinstance(variable[0], tk.Variable):
                 self.config(variable=variable[0], onvalue=variable[1], offvalue=variable[2])
-                self.valueVar = variable
+                self._valueVar = variable
             elif isinstance(variable, tk.Variable):
                 self.config(variable=variable)
                 if isinstance(variable, StringVar):
                     self.config(onvalue="1", offvalue="0")
                 else:
                     self.config(onvalue=1, offvalue=0)
-                self.valueVar = variable
+                self._valueVar = variable
         else:
-            self.valueVar = IntVar()
-            self.config(variable=self.valueVar, onvalue=1, offvalue=0)
+            self._valueVar = IntVar()
+            self.config(variable=self._valueVar, onvalue=1, offvalue=0)
         self._commandwrap = None
         if command:
             self.config(command=command)
@@ -1226,7 +1226,7 @@ class Checkbutton(Widget, tk.Checkbutton):
         to change them later."""
         if variable:
             self.config(index, variable=variable)
-            self.valueVar = variable
+            self._valueVar = variable
         if offvalue:
             self.entry_config(index, offvalue=offvalue)
         if onvalue:
@@ -1236,14 +1236,14 @@ class Checkbutton(Widget, tk.Checkbutton):
         """Returns the actual value associated to the button state.
         \note for this class the get_content() method returns the button
         label, NOT the button status value"""
-        return self.valueVar.get()
+        return self._valueVar.get()
     
     def set_value(self):
         """Changes the actual value associated to the button state and
         updates the widget.
         \note for this class the get_content() method returns the button
         label, NOT the button status value"""
-        return self.valueVar.set()    
+        return self._valueVar.set()    
     
     def _calc_wrap(self):               # Used to calculate text wraplength when resized 
         """Internal function. It calculates the text wraplength when the widget
@@ -1298,9 +1298,9 @@ class Combobox(Widget, tk.OptionMenu):
         
         # MUST be here, so it initializes master if None
         tk.Widget.__init__(self, parent, "menubutton")
-        self.textVar = tk.StringVar() if not variable else variable 
-        self.textVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
-        Widget.__init__(self, parent, x, y, w, h, pad, self._init1_, variable=self.textVar,
+        self._textVar = tk.StringVar() if not variable else variable 
+        self._textVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
+        Widget.__init__(self, parent, x, y, w, h, pad, self._init1_, variable=self._textVar,
                             values=items, command=command)
         self._get_parent_config()
         self._commandwrap = _setitCommand(self, command)
@@ -1344,6 +1344,7 @@ class Combobox(Widget, tk.OptionMenu):
             lst.append(self.__menu.entrycget(i, "label"))
         return tuple(lst)
     
+    # TODO: rename this into set_selection?
     def set_content(self, index, invoke=True):
         """Selects a menu item.
         \param index here you can specify:
@@ -1355,18 +1356,18 @@ class Combobox(Widget, tk.OptionMenu):
         \param invoke if True the associated callback will be executed"""
         if isinstance(index, int):
             text = self.__menu.entrycget(index, "label")
-            self.textVar.set(text)
+            self._textVar.set(text)
             if invoke:
                 self.invoke(text)
         else:
             if len(index):
                 ind = self.index(index)
                 if ind != None:
-                    self.textVar.set(index)
+                    self._textVar.set(index)
                     if invoke:
                         self.invoke(index)
             else:
-                self.textVar.set("")
+                self._textVar.set("")
             
         
     # TODO activate_entry and deactivate_entry ?        
@@ -1380,7 +1381,7 @@ class Combobox(Widget, tk.OptionMenu):
         appended"""
         for item in items:
             self.__menu.add_command(label=item,
-                command=_setitCommand(self, self.callback, item, self.textVar))
+                command=_setitCommand(self, self.callback, item, self._textVar))
         
     def insert(self, index, *items):
         """Inserts one or more items to the list of options at a given
@@ -1394,7 +1395,7 @@ class Combobox(Widget, tk.OptionMenu):
         for i in range(len(items)):
             item = items[i]
             self.__menu.insert_command(index + i, label=item,
-                command=_setitCommand(self, self.callback, item, self.textVar))
+                command=_setitCommand(self, self.callback, item, self._textVar))
     
     def delete(self, index1, index2=None):
         """Deletes menu items between index1 and index2 (included).
@@ -1493,9 +1494,9 @@ class Entry(Widget, tk.Entry):
         \param command see \ref EVENTS"""           
         Widget.__init__(self, parent, x, y, w, h, pad, tk.Entry.__init__)
         self._get_parent_config()
-        self.textVar = tk.StringVar(value=content) if isinstance(content, str) else content
-        self.init_content(self.textVar)
-        self.textVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
+        self._textVar = tk.StringVar(value=content) if isinstance(content, str) else content
+        self.init_content(self._textVar)
+        self._textVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
         self._commandwrap = None
         if command:
             self.config(command=command)
@@ -1569,7 +1570,7 @@ class Label(Widget, tk.Label):
         Widget.__init__(self, parent, x, y, w, h, pad, tk.Label.__init__)
         self.config(anchor=W, justify=LEFT, relief=SUNKEN, wraplength=self._calc_wrap())
         self._get_parent_config()
-        self.textVar = None
+        self._textVar = None			# Errors if you omit this!
         self.init_content(content)
         
     def _calc_wrap(self):               # Used to calculate text wraplength when resized
@@ -2065,10 +2066,10 @@ class Scale(Widget, tk.Scale):
             self.config(from_=limits[0], to=limits[1])
             if len(limits) == 3:
                 self.config(bigincrement=limits[2])
-        self.valueVar = DoubleVar() if not variable else variable 
-        self.valueVar.set(str(limits[0]))
-        self.valueVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
-        self.config(variable=self.valueVar)
+        self._valueVar = DoubleVar() if not variable else variable 
+        self._valueVar.set(str(limits[0]))
+        self._valueVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
+        self.config(variable=self._valueVar)
         self._cont_type = None
         self._get_parent_config()
         self._commandwrap = None
@@ -2082,15 +2083,15 @@ class Scale(Widget, tk.Scale):
         to change them later."""
         if variable:
             self.config(variable=variable)
-            self.valueVar = variable
+            self._valueVar = variable
         if from_:
             self.config(from_=from_)
-            if self.valueVar.get() < from_:
-                self.valueVar.set(from_)
+            if self._valueVar.get() < from_:
+                self._valueVar.set(from_)
         if to:
             self.config(to=to)
-            if self.valueVar.get() > to:
-                self.valueVar.set(to)            
+            if self._valueVar.get() > to:
+                self._valueVar.set(to)            
         if increment:
             self.config(bigincrement=increment)
         
@@ -2098,13 +2099,13 @@ class Scale(Widget, tk.Scale):
         """Returns the actual value associated to the scale.
         \note for this class the get_content() method returns
         an empty string"""
-        return self.valueVar.get()
+        return self._valueVar.get()
     
     def set_value(self):
         """Sets actual value associated to the scale and updates
         the widget.
         \note for this class the set_content() method does nothing."""
-        return self.valueVar.set()     
+        return self._valueVar.set()     
             
 
 
@@ -2199,11 +2200,11 @@ class Spinbox(Widget, tk.Spinbox):
                 self.config(from_=limits[0], to=limits[1])
                 if len(limits) == 3:
                     self.config(increment=limits[2])
-        self.textVar = tk.StringVar() if not variable else variable
-        self.init_content(self.textVar)
+        self._textVar = tk.StringVar() if not variable else variable
+        self.init_content(self._textVar)
         if limits:
-            self.textVar.set(str(limits[0]))
-        self.textVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
+            self._textVar.set(str(limits[0]))
+        self._textVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
         self._get_parent_config()
         self._commandwrap = None
         self._autoaddflag = False
@@ -2232,14 +2233,14 @@ class Spinbox(Widget, tk.Spinbox):
             self.config(validate=validate)
     
     def _autoadd(self, event):
-        s = self.textVar.get()
+        s = self._textVar.get()
         values = self.cget("values")
         if self._autoaddflag and len(values) and len(s):
             values = values.split()
             if s not in values:
                 values.append(s)
                 self.config(values=values)
-                self.textVar.set(s)
+                self._textVar.set(s)
         if self._commandwrap:
             self._commandwrap()    
 
@@ -2344,7 +2345,7 @@ if __name__ == "__main__":
     labInfo = Label(winMain, CENTER, 20, 300, 100, content=
 """Nictk - A simple tkinter wrapper
 Version {:}
-Copyright Nicola Cassetta 2021-2022""".format(__version__))
+Copyright Nicola Cassetta 2021-2023""".format(__version__))
     labInfo.config(anchor=CENTER, relief=RIDGE, bcolor="white", justify=CENTER)
     butClose = Button(winMain, CENTER, 140, 80, 40, content="Exit",
                          command=lambda ev: winMain.destroy())

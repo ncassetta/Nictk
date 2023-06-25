@@ -13,6 +13,9 @@
 /// \example Dialogs.py
 /// A sample of all dialog boxes.
 ///
+/// \example Eventbinds.py
+/// This file demonstrates the new features introduct with version 2.1.0 regarding the binding of events and the DISABLED state for widgets.
+///
 /// \example Events.py
 /// An example showing how to manage various types of events, with a scrolling text obtained with the after() method.
 ///

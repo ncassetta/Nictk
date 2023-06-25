@@ -1,16 +1,17 @@
 Metadata-Version: 2.1
-Name: Nictk-pkg-python-gui
-Version: 2.0.0
-Summary: A simple to use Python GUI
+Name: Nictk
+Version: 2.1.0
+Summary: An easy to use GUI for Python
 Home-page: https://github.com/ncassetta/Nictk
 Author: Nicola Cassetta
-Author-email: ncassetta@tiscali.it
-Project-URL: Bug Tracker, https://github.com/ncassetta/Nictk/issues
+Author-email: Nicola Cassetta <ncassetta@tiscali.it>
+Project-URL: Homepage, https://github.com/ncassetta/Nictk
+Project-URL: Documentation, https://ncassetta.github.io/Nictk/docs/html/
 Keywords: GUI,tkinter,graphic :: interface
 Classifier: Programming Language :: Python :: 3
-Classifier: License :: GNU :: LGPL-3.0
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)
 Classifier: Operating System :: OS Independent
-Requires-Python: >=3.4
+Requires-Python: >=3.6
 Description-Content-Type: text/markdown
 License-File: COPYING
 License-File: COPYING.LESSER

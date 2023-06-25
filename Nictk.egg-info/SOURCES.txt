@@ -7,12 +7,14 @@ setup.cfg
 ./Nictk/__init__.py
 ./Nictk/constants.py
 Doxygen/Doxyfile
+Doxygen/changelog.dox
 Doxygen/doxygen1.dox
 Doxygen/doxygen2.dox
 Doxygen/examples.dox
 Examples/Combobox.py
 Examples/Dialogs.py
 Examples/Entry.py
+Examples/Eventbinds.py
 Examples/Events.py
 Examples/Hello.py
 Examples/Listbox.py
@@ -29,7 +31,7 @@ Examples/_setup.py
 Examples/winfo.py
 Nictk/__init__.py
 Nictk/constants.py
-Nictk_pkg_python_gui.egg-info/PKG-INFO
-Nictk_pkg_python_gui.egg-info/SOURCES.txt
-Nictk_pkg_python_gui.egg-info/dependency_links.txt
-Nictk_pkg_python_gui.egg-info/top_level.txt
+Nictk.egg-info/PKG-INFO
+Nictk.egg-info/SOURCES.txt
+Nictk.egg-info/dependency_links.txt
+Nictk.egg-info/top_level.txt

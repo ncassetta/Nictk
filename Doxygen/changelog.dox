@@ -1,15 +1,15 @@
 /// \defgroup CHANGELOG Change Log
-///
-/// Changes in various versions
-///
+/// @{
 /// ## Version 1.0.0 (Aug 11, 2021) ##
 ///
 /// Initial version.
-///
+/// <br>
+/// <br>
 /// ## Version 1.0.1 (Sep 15, 2021) ##
 ///
 /// Solved a problem with documentation by inserting the .nojekyll file and allowing doxygen documentation to be linked.
-///
+/// <br>
+/// <br>
 /// ## Version 2.0.0 (May 14, 2022) ##
 ///
 /// Renamed Ntk inti Nictk and published it as a Python package (with an \_\_init__.py main file). Dropped the Ntk prefix from widget names, so this version is incompatible with 1.0.1. Also the example files were renamed without the Ntk prefix.
@@ -23,5 +23,38 @@
 /// + Dropped the duplicate Hello2.py
 ///
 /// **Bugfix**
-/// + (\_\_init__.py:31-36) corrected a problem importing the constants module
+/// + (\_\_init__.py L31-L36) corrected a problem importing the constants module
+/// <br>
+/// <br>
+/// ## Version 2.0.1 (May 30, 2022) ##
 ///
+/// **Bugfix**
+/// + Updated the dist files.
+/// <br>
+/// <br>
+/// ## Version 2.1.0 (Jun 25, 2023) ##
+///
+/// Some improvements and bugfixes
+///
+/// **Bugfix**
+/// + (constants.py L28) imported tkinter.DoubleVar as DoubleVar (as other tkinter Variable subclass)
+/// + (\_\_init__.py L1098) corrected: Canvas class did not inherit from Widget
+/// + (\_\_init.py L1850-1874) corrected: Menu.add() and Menu.insert() methods could not accept all options
+///
+/// **New features**
+/// + Added the new option dbcolor to the Misc.config() method
+/// + Now widgets in DISABLED state ignore the events even if they were bound by the bind() method (in tkinter this happens only with the command option of the config() method)
+/// + Added the method nictk.Widget.enabled()
+/// + Added the methods Checkbutton.set_value() and Scale.set_value()
+/// + Some code optimization
+///
+/// **Examples**
+/// + Added the new example file Eventbinds.py which demonstrates the new feature in 2.1.0 version
+/// + (Examples/Spinbox.py L31) Corrected a typo in spinbox.py
+///
+/// **Documentation**
+/// + Added this file changelog.dox
+/// + Renamed the page Events into Events and callbacks and improved the documentation with two new paragraphs
+/// + Various typos corrected
+///
+/// @}

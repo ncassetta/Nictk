@@ -5,6 +5,7 @@ var examples =
     [ "WidgetOptions.py", "_widget_options_8py-example.html", null ],
     [ "WidgetStates.py", "_widget_states_8py-example.html", null ],
     [ "Dialogs.py", "_dialogs_8py-example.html", null ],
+    [ "Eventbinds.py", "_eventbinds_8py-example.html", null ],
     [ "Events.py", "_events_8py-example.html", null ],
     [ "winfo.py", "winfo_8py-example.html", null ],
     [ "Window.py", "_window_8py-example.html", null ],

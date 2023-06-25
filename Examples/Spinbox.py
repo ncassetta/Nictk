@@ -28,7 +28,7 @@ CITIES = ("Bari", "Bologna", "Firenze", "Milano", "Napoli", "Palermo",
 
 MODES = {"normal":"You can change the Spinbox value clicking on buttons or typing in it and pressing <RETURN>",
          "readonly":"You can only use up and down buttons",
-         "autoadd":"As Normal, but every new value you type is added to Spinboz list"}
+         "autoadd":"As Normal, but every new value you type is added to the Spinbox list"}
 
 WRAPS = ["When you arrive at the end of the list you can continue from the beginning",
          "When you arrive at the end of the list you cannot go beyond"]

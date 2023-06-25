@@ -95,12 +95,13 @@ $(document).ready(function(){initNavTree('group___c_h_a_n_g_e_l_o_g.html',''); i
   <div class="headertitle"><div class="title">Change Log</div></div>
 </div><!--header-->
 <div class="contents">
-<p >Changes in various versions</p>
 <h2>Version 1.0.0 (Aug 11, 2021)</h2>
-<p >Initial version.</p>
-<h2>Version 1.0.1 (Sep 15, 2021)</h2>
-<p >Solved a problem with documentation by inserting the .nojekyll file and allowing doxygen documentation to be linked.</p>
-<h2>Version 2.0.0 (May 14, 2022)</h2>
+<p >Initial version. <br  />
+ <br  />
+ </p><h2>Version 1.0.1 (Sep 15, 2021)</h2>
+<p >Solved a problem with documentation by inserting the .nojekyll file and allowing doxygen documentation to be linked. <br  />
+ <br  />
+ </p><h2>Version 2.0.0 (May 14, 2022)</h2>
 <p >Renamed Ntk inti Nictk and published it as a Python package (with an <a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> main file). Dropped the Ntk prefix from widget names, so this version is incompatible with 1.0.1. Also the example files were renamed without the Ntk prefix.</p>
 <p ><b>Documentation</b></p><ul>
 <li>Updated all the .dox files to reflect the changes as above and recompiled with doxygen</li>
@@ -111,7 +112,38 @@ $(document).ready(function(){initNavTree('group___c_h_a_n_g_e_l_o_g.html',''); i
 <li>Dropped the duplicate Hello2.py</li>
 </ul>
 <p ><b>Bugfix</b></p><ul>
-<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a>:31-36) corrected a problem importing the constants module </li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L31-L36) corrected a problem importing the constants module <br  />
+ <br  />
+ <h2>Version 2.0.1 (May 30, 2022)</h2>
+</li>
+</ul>
+<p ><b>Bugfix</b></p><ul>
+<li>Updated the dist files. <br  />
+ <br  />
+ <h2>Version 2.1.0 (Jun 25, 2023)</h2>
+</li>
+</ul>
+<p >Some improvements and bugfixes</p>
+<p ><b>Bugfix</b></p><ul>
+<li>(<a class="el" href="constants_8py.html" title="String constants to use as parameters in various Nictk methods.">constants.py</a> L28) imported tkinter.DoubleVar as DoubleVar (as other tkinter Variable subclass)</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1098) corrected: Canvas class did not inherit from Widget</li>
+<li>(__init.py L1850-1874) corrected: Menu.add() and Menu.insert() methods could not accept all options</li>
+</ul>
+<p ><b>New features</b></p><ul>
+<li>Added the new option dbcolor to the Misc.config() method</li>
+<li>Now widgets in DISABLED state ignore the events even if they were bound by the bind() method (in tkinter this happens only with the command option of the config() method)</li>
+<li>Added the method nictk.Widget.enabled()</li>
+<li>Added the methods Checkbutton.set_value() and Scale.set_value()</li>
+<li>Some code optimization</li>
+</ul>
+<p ><b>Examples</b></p><ul>
+<li>Added the new example file Eventbinds.py which demonstrates the new feature in 2.1.0 version</li>
+<li>(Examples/Spinbox.py L31) Corrected a typo in spinbox.py</li>
+</ul>
+<p ><b>Documentation</b></p><ul>
+<li>Added this file changelog.dox</li>
+<li>Renamed the page Events into Events and callbacks and improved the documentation with two new paragraphs</li>
+<li>Various typos corrected </li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

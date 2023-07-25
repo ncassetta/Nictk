@@ -118,7 +118,7 @@ $(document).ready(function(){initNavTree('_dialogs_8py-example.html',''); initRe
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">import</span> _setup</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">import</span> Nictk <span class="keyword">as</span> Ntk</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">from</span> <a class="code hl_namespace" href="namespace_nictk_1_1constants.html">Nictk.constants</a> <span class="keyword">import</span> *</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">#from Nictk.constants import *</span></div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"># TODO:</span></div>
@@ -130,15 +130,15 @@ $(document).ready(function(){initNavTree('_dialogs_8py-example.html',''); initRe
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="stringliteral">   - the name of the function to call</span></div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="stringliteral">   - its named parameters</span></div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="stringliteral">&quot;&quot;&quot;</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="stringliteral">DIALOGS = { &quot;Ok - Cancel&quot;: (Ntk.mb.askokcancel, {&quot;message&quot;:&quot;  Do you want to proceed?  &quot;}),</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="stringliteral">            &quot;Yes - No&quot;</span>: (Ntk.mb.askquestion, {<span class="stringliteral">&quot;message&quot;</span>:<span class="stringliteral">&quot;  Exit from the application?  &quot;</span>}),</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            <span class="stringliteral">&quot;Retry - Cancel&quot;</span>: (Ntk.mb.askretrycancel, {<span class="stringliteral">&quot;message&quot;</span>:<span class="stringliteral">&quot;  Do you want to retry?  &quot;</span>}),</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            <span class="stringliteral">&quot;Error&quot;</span>: (Ntk.mb.showerror, {<span class="stringliteral">&quot;message&quot;</span>:<span class="stringliteral">&quot;  File not found  &quot;</span>}),</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>            <span class="stringliteral">&quot;Info&quot;</span>: (Ntk.mb.showinfo, {<span class="stringliteral">&quot;message&quot;</span>:<span class="stringliteral">&quot;    File saved    &quot;</span>}),</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            <span class="stringliteral">&quot;Warning&quot;</span>: (Ntk.mb.showwarning, {<span class="stringliteral">&quot;message&quot;</span>:<span class="stringliteral">&quot;  Data could be corrupted  &quot;</span>}),</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            <span class="stringliteral">&quot;Open File&quot;</span>: (Ntk.fd.askopenfilename, {}),</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            <span class="stringliteral">&quot;Save as File&quot;</span>: (Ntk.fd.asksaveasfilename, {<span class="stringliteral">&quot;initialfile&quot;</span>:<span class="stringliteral">&quot;untitled.py&quot;</span>}),</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            <span class="stringliteral">&quot;Choose color&quot;</span>: (Ntk.cc.askcolor, {<span class="stringliteral">&quot;color&quot;</span>:<span class="stringliteral">&quot;#FF0000&quot;</span>})</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="stringliteral">DIALOGS = { &quot;Ok - Cancel&quot;: (Ntk.askokcancel, {&quot;message&quot;:&quot;  Do you want to proceed?  &quot;}),</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="stringliteral">            &quot;Yes - No&quot;</span>: (Ntk.askquestion, {<span class="stringliteral">&quot;message&quot;</span>:<span class="stringliteral">&quot;  Exit from the application?  &quot;</span>}),</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            <span class="stringliteral">&quot;Retry - Cancel&quot;</span>: (Ntk.askretrycancel, {<span class="stringliteral">&quot;message&quot;</span>:<span class="stringliteral">&quot;  Do you want to retry?  &quot;</span>}),</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            <span class="stringliteral">&quot;Error&quot;</span>: (Ntk.showerror, {<span class="stringliteral">&quot;message&quot;</span>:<span class="stringliteral">&quot;  File not found  &quot;</span>}),</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>            <span class="stringliteral">&quot;Info&quot;</span>: (Ntk.showinfo, {<span class="stringliteral">&quot;message&quot;</span>:<span class="stringliteral">&quot;    File saved    &quot;</span>}),</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>            <span class="stringliteral">&quot;Warning&quot;</span>: (Ntk.showwarning, {<span class="stringliteral">&quot;message&quot;</span>:<span class="stringliteral">&quot;  Data could be corrupted  &quot;</span>}),</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            <span class="stringliteral">&quot;Open File&quot;</span>: (Ntk.askopenfilename, {}),</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            <span class="stringliteral">&quot;Save as File&quot;</span>: (Ntk.asksaveasfilename, {<span class="stringliteral">&quot;initialfile&quot;</span>:<span class="stringliteral">&quot;untitled.py&quot;</span>}),</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            <span class="stringliteral">&quot;Choose color&quot;</span>: (Ntk.askcolor, {<span class="stringliteral">&quot;color&quot;</span>:<span class="stringliteral">&quot;#FF0000&quot;</span>})</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>          }</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        </div>
@@ -175,7 +175,6 @@ $(document).ready(function(){initNavTree('_dialogs_8py-example.html',''); initRe
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>labResult.config(bcolor=<span class="stringliteral">&quot;#FFFFC0&quot;</span>, fcolor=<span class="stringliteral">&quot;#202060&quot;</span>, relief=RIDGE, anchor=CENTER)</div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>Ntk.mainloop()</div>
-<div class="ttc" id="anamespace_nictk_1_1constants_html"><div class="ttname"><a href="namespace_nictk_1_1constants.html">Nictk.constants</a></div><div class="ttdef"><b>Definition:</b> constants.py:1</div></div>
 </div><!-- fragment --> </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

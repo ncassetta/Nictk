@@ -24,9 +24,11 @@
 
 import tkinter as tk
 import tkinter.ttk as ttk
-import tkinter.filedialog as fd
-import tkinter.messagebox as mb
-import tkinter.colorchooser as cc
+from  tkinter import IntVar, StringVar, DoubleVar, BooleanVar, mainloop, EventType
+from tkinter.filedialog import askdirectory, askopenfilename, askopenfilenames, asksaveasfilename
+from tkinter.messagebox import askokcancel, askquestion, askretrycancel, askyesno, askyesnocancel, showerror, \
+     showinfo, showwarning
+from tkinter.colorchooser import askcolor
 
 # Prevents the "attempted relative import with no known parent package"
 # error when this file is executed
@@ -1837,6 +1839,33 @@ class Menu(Misc, tk.Menu):
         elif isinstance(parent, (Main, Window)) and not popup:
             parent.config(menu=self)
         self._len = 0
+        
+    def activate(self):
+        """Sets the state of the menu to NORMAL.       
+        The menu and all its submenus can interact with mouse and keyboard."""
+        self.config(state=NORMAL)
+                
+    def deactivate(self):
+        """Sets the state of the menu to DISABLED.       
+        The menu and all its submenus are grayed and cannot interact with mouse
+        and keyboard."""        
+        self.config(state=DISABLED)    
+        
+    def entry_activate(self, index):
+        """Sets the state of the menu item denoted by _index_ to NORMAL.       
+        The menu item  and all its submenus can interact with mouse and
+        keyboard.
+        \param index can be the label of the menu item or its index in the menu
+        array."""
+        self.entryconfig(index, state=NORMAL)
+                
+    def entry_deactivate(self, index):
+        """Sets the state of the menu item denoted by _index_ to DISABLED.       
+        The menu item  and all its submenus are grayed and cannot interact with
+        mouse and keyboard.
+        \param index can be the label of the menu item or its index in the menu
+        array."""        
+        self.entryconfig(index, state=DISABLED)    
 
     def add(self, itemType, cnf={}, **kw):
         """Appends an item to the menu. It overrides tkinter method. You,

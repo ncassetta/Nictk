@@ -700,7 +700,7 @@ class Main(BaseWindow, tk.Tk):
     
     **Common options** (see \ref ATTRIBUTES)
     
-        borderwidth, relief, bcolor, cursor, hbcolor, hfcolor', takefocus
+        borderwidth, relief, bcolor, cursor, hbcolor, hfcolor, takefocus
         
     **Less common options**
 
@@ -742,14 +742,14 @@ class Window(BaseWindow, tk.Toplevel):
     
     def __init__(self, parent, x, y, w, h, title="", modal=NORMAL):
         """The constructor.
-        \param parent you can indicate None or your winMain
+        \param parent you can indicate None or your Main
         \param x, y, w, h see \ref PLACING_WIDGETS
         \param title the window title
         \param modal one of these three:
-        - **"normal"** this is a normal window
-        - **"modal"** the window will grab the focus until it is closed, preventing
+        - "normal" (or NORMAL) this is a normal window
+        - "modal" the window will grab the focus until it is closed, preventing
         to switch to other windows: can be used for dialogs 
-        - **"persistent"** the window can lose the focus but will remain
+        - "persistent" the window can lose the focus but will remain
         on top until it is closed."""        
         tk.Toplevel.__init__(self, master=parent)
         BaseWindow.__init__(self, x, y, w, h, title)
@@ -772,11 +772,16 @@ class Window(BaseWindow, tk.Toplevel):
             
     def hide(self):
         """Hides the window. It will not be displayed, but its
-        data remain managed and the internal widgets state do not chenge;
+        data remain managed and the internal widgets state do not change;
         use show() to newly display it. If the window was already hidden
         it does nothing."""        
         self.grab_release()
         self.withdraw()
+        
+    def visible(self):
+        """Returns True if the window is visible."""
+        return self.state() != "whitdrawn"
+        
         
     def set_modal(self, modal):
         """Changes the mode of the window, making it normal,
@@ -814,7 +819,7 @@ class HorFrame(Widget, Container, tk.LabelFrame):
         self.init_content(content)
  
  
-class VerFrame(Widget, Container, tk.LabelFrame):
+class VerFrame(Widget, Container, tk.LabelFrame, tk.YView):
     """A container in which you can stack children widgets vertically.
     This is done by using PACK as the y parameter in their constructor. The
     frame is initialized with the same color of its parent and no border,
@@ -836,6 +841,10 @@ class VerFrame(Widget, Container, tk.LabelFrame):
             self.config(background=parent.cget("background"), relief=FLAT)
         Container.__init__(self)
         self.init_content(content)
+        # NEW EXPERIMENTAL
+        # self._vscroll = tk.Scrollbar(self, orient=VERTICAL)
+        # self.config(yscrollcommand=self._vscroll.set)
+        # self._vscroll.config(command=self.yview)               
         
         
 class _framerow():
@@ -949,7 +958,7 @@ class _framecol:
 
 
 
-class RowFrame(Widget, Container, tk.LabelFrame):
+class RowFrame(Widget, Container, tk.LabelFrame, tk.YView):
     """A container in which you can stack rows vertically.
     Each row behaves like a HorFrame, allowing to stack children
     widgets horizontally (using PACK as the x parameter in their constructor).
@@ -980,6 +989,10 @@ class RowFrame(Widget, Container, tk.LabelFrame):
         self.init_content(content)
         self._rows = []
         self._active = None
+        # NEW EXPERIMENTAL
+        # self._vscroll = tk.Scrollbar(self, orient=VERTICAL)
+        # self.config(yscrollcommand=self._vscroll.set)
+        # self._vscroll.config(command=self.yview)               
         
     def add_row(self, h):
         """Adds a row to the frame.
@@ -1268,7 +1281,9 @@ class Checkbutton(Widget, tk.Checkbutton):
 
 class Combobox(Widget, tk.OptionMenu):
     """Combobox which allows the user to select a value from a menu.
-    It is the equivalent (renamed) of the OptionMenu class in tkinter
+    It is the equivalent (renamed) of the OptionMenu class in tkinter.
+    You can get the selected item with the get_content() method, it will
+    return an empty string if no selection is done.
        
     **Common options** (see \ref ATTRIBUTES)
     
@@ -1342,7 +1357,7 @@ class Combobox(Widget, tk.OptionMenu):
     def get_items(self):
         """Returns a tuple of strings with all menu labels."""
         lst = []
-        for i in range(self.__menu.len()):
+        for i in range(self.__menu.size()):
             lst.append(self.__menu.entrycget(i, "label"))
         return tuple(lst)
     
@@ -1380,7 +1395,8 @@ class Combobox(Widget, tk.OptionMenu):
     def add(self, *items):
         """Appends one or more items to the list of options.
         \param *items one or more strings (the item labels) to be
-        appended"""
+        appended (or list/tuples containing strings)"""
+        items = tk._flatten(items)
         for item in items:
             self.__menu.add_command(label=item,
                 command=_setitCommand(self, self.callback, item, self._textVar))
@@ -1391,9 +1407,10 @@ class Combobox(Widget, tk.OptionMenu):
         \param index the insert position; it can be an int (beginning from 0)
         or a string already in the options list (items will be inserted BEFORE it)
         \param *items one or more strings (the item labels) to be
-        inserted"""
+        inserted (or lists/tuples containing strings)"""
         if isinstance(index, str):
             index = self.__menu.index(index)
+        items = tk._flatten(items)
         for i in range(len(items)):
             item = items[i]
             self.__menu.insert_command(index + i, label=item,
@@ -1403,10 +1420,18 @@ class Combobox(Widget, tk.OptionMenu):
         """Deletes menu items between index1 and index2 (included).
         \param index1, index2 the first and last items to be deleted;
         if you leave _index2_ = None only _index1_ will be deleted. These
-        can be integers or strings already in the options list
+        can be integers or strings already in the options list. If the
+        current selected item gets cancelled it resets the selection.
         \note be careful: if you specify two strings ALL items between
         them will be deleted"""
         self.__menu.delete(index1, index2)
+        if self._textVar.get() not in self.get_items():
+            self._textVar.set("")
+        
+    def clear(self):
+        """Deletes all menu items"""
+        self.__menu.delete(0, END)
+        self._textVar.set("")
     
     def get_config_item(self, index, option):
         """Returns the resource value of a menu item. It is aliased by
@@ -1439,11 +1464,9 @@ class Combobox(Widget, tk.OptionMenu):
     
     def index(self, index):
         """Returns the index of a menu item. If the item is
-        not in the  mnenu returns None.
+        not in the  menu it gives a TclError.
         \param index a string (the label of the menu item)"""
-        i = self.__menu.tk.call(self.__menu._w, 'index', index)
-        if i == 'none': return None
-        return self.__menu.tk.getint(i)
+        return self.__menu.index(index)
     
     def invoke(self, index):
         """Invokes the given menu item and executes
@@ -1920,7 +1943,11 @@ class Menu(Misc, tk.Menu):
                 if c:
                     self.deletecommand(c)
             self._len -= 1
-        self.tk.call(self._w, 'delete', index1, index2)    
+        self.tk.call(self._w, 'delete', index1, index2)
+        
+    def clear(self):
+        """Deletes all menu items"""
+        self.__menu.delete(0, END)
         
     def entry_get_config(self, index, option):
         # This is an alias for entrycget()

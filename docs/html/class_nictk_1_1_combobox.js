@@ -2,6 +2,7 @@ var class_nictk_1_1_combobox =
 [
     [ "__init__", "class_nictk_1_1_combobox.html#af70c199fe181c75ee02e391d6e87a12d", null ],
     [ "add", "class_nictk_1_1_combobox.html#afa95bc09f8f119444b21171bb3fa44b4", null ],
+    [ "clear", "class_nictk_1_1_combobox.html#ad149341d7d849ff957baee565b19c123", null ],
     [ "config_item", "class_nictk_1_1_combobox.html#af01a3733216fada21418014c6399820c", null ],
     [ "delete", "class_nictk_1_1_combobox.html#a909365daf08109f7ac719d32794e6248", null ],
     [ "get_config_item", "class_nictk_1_1_combobox.html#aba7b853ffd5efaeaa0d7615ae9840f03", null ],

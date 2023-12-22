@@ -52,8 +52,7 @@ def delete_sel(event):
             cmbCities.set_content(cmbCities.get_item(ind))
             labHelp.set_content("You deleted {} (but it is now in the lower combobox".format(sel))
         else:
-            # the upper combo is empty
-            cmbCities.set_content("")
+            # the upper combo is empty: selection automatically cleared
             labHelp.set_content("Empty menu")
 
         
@@ -69,21 +68,18 @@ def insert_sel(event):
         labHelp.set_content("You newly added {} to the upper combobox".format(sel))
         if cmbIns.get_menu().size() > 0:
             cmbIns.set_content(cmbIns.get_item(ind))
-        else:
-            cmbIns.set_content("")
+        # otherwise selection automatically cleared
 
 
 def reset_combo(event):
     """This callback resets the contents of the two combos"""
     # empties and refills the upper combo
-    cmbCities.delete(0, END)
-    for i in CITIES:
-        cmbCities.add(i)
+    cmbCities.clear()
+    cmbCities.add(CITIES)
     # selects the first city
     cmbCities.set_content(CITIES[0])
     # empties the lower combo
-    cmbIns.delete(0, END)
-    cmbIns.set_content("")
+    cmbIns.clear()
     labHelp.set_content("You reset the combos")
     
 

@@ -127,6 +127,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab4f4398c3f210fe4ea6e720401357691"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nictk_1_1_window.html#ab4f4398c3f210fe4ea6e720401357691">show</a> (self)</td></tr>
 <tr class="memdesc:ab4f4398c3f210fe4ea6e720401357691"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shows the window, making it visible.  <a href="class_nictk_1_1_window.html#ab4f4398c3f210fe4ea6e720401357691">More...</a><br /></td></tr>
 <tr class="separator:ab4f4398c3f210fe4ea6e720401357691"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a478bf5249256ef875bca4c0a3724923d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nictk_1_1_window.html#a478bf5249256ef875bca4c0a3724923d">visible</a> (self)</td></tr>
+<tr class="memdesc:a478bf5249256ef875bca4c0a3724923d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns True if the window is visible.  <a href="class_nictk_1_1_window.html#a478bf5249256ef875bca4c0a3724923d">More...</a><br /></td></tr>
+<tr class="separator:a478bf5249256ef875bca4c0a3724923d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_nictk_1_1_base_window"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_nictk_1_1_base_window')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_nictk_1_1_base_window.html">BaseWindow</a></td></tr>
 <tr class="memitem:ac015d4f5b8101ce45bb27c77cc8d0435 inherit pub_methods_class_nictk_1_1_base_window"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nictk_1_1_base_window.html#ac015d4f5b8101ce45bb27c77cc8d0435">onclose</a> (self, command)</td></tr>
 <tr class="memdesc:ac015d4f5b8101ce45bb27c77cc8d0435 inherit pub_methods_class_nictk_1_1_base_window"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a callback to call when the window is closed.  <a href="class_nictk_1_1_base_window.html#ac015d4f5b8101ce45bb27c77cc8d0435">More...</a><br /></td></tr>
@@ -271,13 +274,13 @@ padx, pady, visual
 <p>The constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">parent</td><td>you can indicate None or your winMain </td></tr>
+    <tr><td class="paramname">parent</td><td>you can indicate None or your <a class="el" href="class_nictk_1_1_main.html" title="The main window of the app.">Main</a> </td></tr>
     <tr><td class="paramname">x,y,w,h</td><td>see <a class="el" href="_p_l_a_c_i_n_g__w_i_d_g_e_t_s.html">Placing the widgets</a> </td></tr>
     <tr><td class="paramname">title</td><td>the window title </td></tr>
     <tr><td class="paramname">modal</td><td>one of these three:<ul>
-<li>**"normal"** this is a normal window</li>
-<li>**"modal"** the window will grab the focus until it is closed, preventing to switch to other windows: can be used for dialogs</li>
-<li>**"persistent"** the window can lose the focus but will remain on top until it is closed. </li>
+<li>"normal" (or NORMAL) this is a normal window</li>
+<li>"modal" the window will grab the focus until it is closed, preventing to switch to other windows: can be used for dialogs</li>
+<li>"persistent" the window can lose the focus but will remain on top until it is closed. </li>
 </ul>
 </td></tr>
   </table>
@@ -306,7 +309,7 @@ padx, pady, visual
 </div><div class="memdoc">
 
 <p>Hides the window. </p>
-<p >It will not be displayed, but its data remain managed and the internal widgets state do not chenge; use <a class="el" href="class_nictk_1_1_window.html#ab4f4398c3f210fe4ea6e720401357691" title="Shows the window, making it visible.">show()</a> to newly display it. If the window was already hidden it does nothing. </p>
+<p >It will not be displayed, but its data remain managed and the internal widgets state do not change; use <a class="el" href="class_nictk_1_1_window.html#ab4f4398c3f210fe4ea6e720401357691" title="Shows the window, making it visible.">show()</a> to newly display it. If the window was already hidden it does nothing. </p>
 
 </div>
 </div>
@@ -363,6 +366,26 @@ padx, pady, visual
 </div><div class="memdoc">
 
 <p>Shows the window, making it visible. </p>
+
+</div>
+</div>
+<a id="a478bf5249256ef875bca4c0a3724923d" name="a478bf5249256ef875bca4c0a3724923d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a478bf5249256ef875bca4c0a3724923d">&#9670;&nbsp;</a></span>visible()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def visible </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns True if the window is visible. </p>
 
 </div>
 </div>

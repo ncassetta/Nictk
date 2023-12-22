@@ -121,6 +121,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afa95bc09f8f119444b21171bb3fa44b4"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nictk_1_1_combobox.html#afa95bc09f8f119444b21171bb3fa44b4">add</a> (self, *items)</td></tr>
 <tr class="memdesc:afa95bc09f8f119444b21171bb3fa44b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends one or more items to the list of options.  <a href="class_nictk_1_1_combobox.html#afa95bc09f8f119444b21171bb3fa44b4">More...</a><br /></td></tr>
 <tr class="separator:afa95bc09f8f119444b21171bb3fa44b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad149341d7d849ff957baee565b19c123"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nictk_1_1_combobox.html#ad149341d7d849ff957baee565b19c123">clear</a> (self)</td></tr>
+<tr class="memdesc:ad149341d7d849ff957baee565b19c123"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deletes all menu items.  <a href="class_nictk_1_1_combobox.html#ad149341d7d849ff957baee565b19c123">More...</a><br /></td></tr>
+<tr class="separator:ad149341d7d849ff957baee565b19c123"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af01a3733216fada21418014c6399820c"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nictk_1_1_combobox.html#af01a3733216fada21418014c6399820c">config_item</a> (self, <a class="el" href="class_nictk_1_1_combobox.html#a31450b66b50fd21ed99198069ecb9885">index</a>, cnf=None, **kw)</td></tr>
 <tr class="memdesc:af01a3733216fada21418014c6399820c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures a menu item.  <a href="class_nictk_1_1_combobox.html#af01a3733216fada21418014c6399820c">More...</a><br /></td></tr>
 <tr class="separator:af01a3733216fada21418014c6399820c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -256,7 +259,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p ><a class="el" href="class_nictk_1_1_combobox.html" title="Combobox which allows the user to select a value from a menu.">Combobox</a> which allows the user to select a value from a menu. </p>
-<p >It is the equivalent (renamed) of the OptionMenu class in tkinter</p>
+<p >It is the equivalent (renamed) of the OptionMenu class in tkinter. You can get the selected item with the <a class="el" href="class_nictk_1_1_widget.html#a65d29e6d70075b87f436320c53644a38" title="Returns the content of the widget as a string.">get_content()</a> method, it will return an empty string if no selection is done.</p>
 <p ><b>Common options</b> (see <a class="el" href="_a_t_t_r_i_b_u_t_e_s.html">Widgets properties</a>) </p><pre class="fragment">abcolor, afcolor, bcolor, borderwidth, cursor, dfcolor, font,
 fcolor, relief, scolor, state, takefocus.
 </pre><p> <b>Less common options</b> </p><pre class="fragment">activeborderwidth, postcommand, tearoff, tearoffcommand, title, type.
@@ -382,10 +385,30 @@ fcolor, relief, scolor, state, takefocus.
 <p>Appends one or more items to the list of options. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">*items</td><td>one or more strings (the item labels) to be appended </td></tr>
+    <tr><td class="paramname">*items</td><td>one or more strings (the item labels) to be appended (or list/tuples containing strings) </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ad149341d7d849ff957baee565b19c123" name="ad149341d7d849ff957baee565b19c123"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad149341d7d849ff957baee565b19c123">&#9670;&nbsp;</a></span>clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def clear </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Deletes all menu items. </p>
 
 </div>
 </div>
@@ -473,7 +496,7 @@ fcolor, relief, scolor, state, takefocus.
 <p>Deletes menu items between index1 and index2 (included). </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">index1,index2</td><td>the first and last items to be deleted; if you leave <em>index2</em> = None only <em>index1</em> will be deleted. These can be integers or strings already in the options list </td></tr>
+    <tr><td class="paramname">index1,index2</td><td>the first and last items to be deleted; if you leave <em>index2</em> = None only <em>index1</em> will be deleted. These can be integers or strings already in the options list. If the current selected item gets cancelled it resets the selection. </td></tr>
   </table>
   </dd>
 </dl>
@@ -628,7 +651,7 @@ fcolor, relief, scolor, state, takefocus.
 </div><div class="memdoc">
 
 <p>Returns the index of a menu item. </p>
-<p >If the item is not in the mnenu returns None. </p><dl class="params"><dt>Parameters</dt><dd>
+<p >If the item is not in the menu it gives a TclError. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">index</td><td>a string (the label of the menu item) </td></tr>
   </table>
@@ -673,7 +696,7 @@ fcolor, relief, scolor, state, takefocus.
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">index</td><td>the insert position; it can be an int (beginning from 0) or a string already in the options list (items will be inserted BEFORE it) </td></tr>
-    <tr><td class="paramname">*items</td><td>one or more strings (the item labels) to be inserted </td></tr>
+    <tr><td class="paramname">*items</td><td>one or more strings (the item labels) to be inserted (or lists/tuples containing strings) </td></tr>
   </table>
   </dd>
 </dl>

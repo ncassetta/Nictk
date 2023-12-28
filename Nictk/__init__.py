@@ -476,7 +476,7 @@ class Widget(Misc):
         else:
             parent = self.parent()
             offs_x, offs_y = 0, 0
-            offs_border = 2 * parent.cget("borderwidth")
+            offs_border = 2 * int(parent.cget("borderwidth"))   # Canvas returns bw as a string. Why?
             parent_w = parent.winfo_width() - offs_border       # not winfo_W in case root = None
             parent_h = parent.winfo_height() - offs_border      # idem        
         
@@ -819,7 +819,7 @@ class HorFrame(Widget, Container, tk.LabelFrame):
         self.init_content(content)
  
  
-class VerFrame(Widget, Container, tk.LabelFrame, tk.YView):
+class VerFrame(Widget, Container, tk.LabelFrame):
     """A container in which you can stack children widgets vertically.
     This is done by using PACK as the y parameter in their constructor. The
     frame is initialized with the same color of its parent and no border,
@@ -840,11 +840,7 @@ class VerFrame(Widget, Container, tk.LabelFrame, tk.YView):
         if not isinstance(parent, Notebook):
             self.config(background=parent.cget("background"), relief=FLAT)
         Container.__init__(self)
-        self.init_content(content)
-        # NEW EXPERIMENTAL
-        # self._vscroll = tk.Scrollbar(self, orient=VERTICAL)
-        # self.config(yscrollcommand=self._vscroll.set)
-        # self._vscroll.config(command=self.yview)               
+        self.init_content(content)        
         
         
 class _framerow():
@@ -958,7 +954,7 @@ class _framecol:
 
 
 
-class RowFrame(Widget, Container, tk.LabelFrame, tk.YView):
+class RowFrame(Widget, Container, tk.LabelFrame):
     """A container in which you can stack rows vertically.
     Each row behaves like a HorFrame, allowing to stack children
     widgets horizontally (using PACK as the x parameter in their constructor).
@@ -988,11 +984,7 @@ class RowFrame(Widget, Container, tk.LabelFrame, tk.YView):
         Container.__init__(self)
         self.init_content(content)
         self._rows = []
-        self._active = None
-        # NEW EXPERIMENTAL
-        # self._vscroll = tk.Scrollbar(self, orient=VERTICAL)
-        # self.config(yscrollcommand=self._vscroll.set)
-        # self._vscroll.config(command=self.yview)               
+        self._active = None            
         
     def add_row(self, h):
         """Adds a row to the frame.
@@ -1144,6 +1136,9 @@ class Canvas(Widget, tk.Canvas):
         Widget.__init__(self, parent, x, y, w, h, pad, tk.Canvas.__init__)
         #self.config(anchor=W, justify=LEFT, wraplength=self._calc_wrap())
         self._get_parent_config()
+        
+    def _resize_children(self):
+        pass
         
 
 
@@ -2195,7 +2190,7 @@ class Scrollbar(tk.Scrollbar):
         
     def __init__(self, master=None, cnf={}, **kw):
         """The constructor.""" 
-        tk.Scrollbar.__init_(self, master, cnf, kw)
+        tk.Scrollbar.__init__(self, master, cnf, kw)
 
 
 

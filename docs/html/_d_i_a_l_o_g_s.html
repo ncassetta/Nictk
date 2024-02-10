@@ -95,7 +95,14 @@ $(document).ready(function(){initNavTree('_d_i_a_l_o_g_s.html',''); initResizabl
   <div class="headertitle"><div class="title">Dialog boxes </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p >In <b>tkinter</b> there are some functions to open the standard system dialog boxes, grouped in some submodules which you must import if you want to use them. In Nictk (since version 2.1.3) I imported the function names with <em>from ... import ...</em>, so you can use them prepending only the Nictk prefix. For an example of their use see the file <a class="el" href="_dialogs_8py-example.html">Dialogs.py</a>.</p>
+<div class="textblock"><p >In <b>tkinter</b> there are some functions to open the standard system dialog boxes, grouped in some submodules which you must import if you want to use them. In Nictk (since version 2.1.3) I imported the function names with <em>from ... import ...</em>, so you can use them prepending only the Nictk prefix. For compatibility with older versions you can still call them with older prefixes (this will be dropped in future versions).</p>
+<div class="fragment"><div class="line">Nictk.showerror(message=<span class="stringliteral">&quot;File not found&quot;</span>)    <span class="comment"># or</span></div>
+<div class="line">Nictk.mb.showerror(message=<span class="stringliteral">&quot;File not found&quot;</span>) <span class="comment"># DEPRECATED</span></div>
+<div class="line">Nictk.askopenfilename()                      <span class="comment"># or</span></div>
+<div class="line">Nictk.fd.askopenfilename()                   <span class="comment"># DEPRECATED</span></div>
+<div class="line">Nictk.askcolor()                             <span class="comment"># or</span></div>
+<div class="line">Nictk.cc.askcolor()                          <span class="comment"># DEPRECATED</span></div>
+</div><!-- fragment --><p >For an example of their use see the file <a class="el" href="_dialogs_8py-example.html">Dialogs.py</a>.</p>
 <h2>Dialog boxes in tkinter.messagebox</h2>
 <p >All these functions share the same paradigm:</p>
 <center><em>functionname(title=None, message=None, **options)</em></center><p> where:</p><ul>

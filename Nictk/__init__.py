@@ -25,6 +25,11 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from  tkinter import IntVar, StringVar, DoubleVar, BooleanVar, mainloop, EventType
+# These are only for compatibility. Must be deleted in version 2.2.0
+import tkinter.filedialog as fd
+import tkinter.messagebox as mb
+import tkinter.colorchooser as cc
+# Until here
 from tkinter.filedialog import askdirectory, askopenfilename, askopenfilenames, asksaveasfilename
 from tkinter.messagebox import askokcancel, askquestion, askretrycancel, askyesno, askyesnocancel, showerror, \
      showinfo, showwarning
@@ -38,7 +43,7 @@ else:
     from .constants import *
     
 
-__version__ = "2.1.0"
+__version__ = "2.1.1"
 
 
 ## @cond IGNORE
@@ -736,7 +741,7 @@ class Window(BaseWindow, tk.Toplevel):
         class, menu, screen, use, colormap, container, highlightthickness, 
         padx, pady, visual
         
-    see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/toplevel.html">anzeljg reference</a>)
+    see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/toplevel.html">anzeljg reference</a>
     for the class **tkinter.Toplevel**
     \see \ref Window.py example file"""
     
@@ -780,7 +785,7 @@ class Window(BaseWindow, tk.Toplevel):
         
     def visible(self):
         """Returns True if the window is visible."""
-        return self.state() != "whitdrawn"
+        return self.state() != "withdrawn"
         
         
     def set_modal(self, modal):

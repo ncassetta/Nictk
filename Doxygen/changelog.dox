@@ -12,7 +12,7 @@
 /// <br>
 /// ## Version 2.0.0 (May 14, 2022) ##
 ///
-/// Renamed Ntk inti Nictk and published it as a Python package (with an \_\_init__.py main file). Dropped the Ntk prefix from widget names, so this version is incompatible with 1.0.1. Also the example files were renamed without the Ntk prefix.
+/// Renamed Ntk into Nictk and published it as a Python package (with an \_\_init__.py main file). Dropped the Ntk prefix from widget names, so this version is incompatible with 1.0.1. Also the example files were renamed without the Ntk prefix.
 ///
 /// **Documentation**
 /// + Updated all the .dox files to reflect the changes as above and recompiled with doxygen
@@ -56,5 +56,29 @@
 /// + Added this file changelog.dox
 /// + Renamed the page Events into Events and callbacks and improved the documentation with two new paragraphs
 /// + Various typos corrected
+/// <br>
+/// <br>
+/// ## Version 2.1.1 (Feb 6, 2024) ##
 ///
+/// Some improvements and bugfixes
+///
+///
+/// **Bugfix**
+/// + (constants.py L28) imported tkinter.DoubleVar as DoubleVar (as other tkinter Variable subclass)
+/// + (\_\_init__.py L783) corrected: a typo in Window.visible() caused it to always return True 
+/// + (\_\_init.py L1850-1874) corrected: Menu.add() and Menu.insert() methods could not accept all options
+///
+/// **New features**
+/// + Added to the Menu class the methods activate(), deactivate(), entry_activate(), entry_deactivate()
+/// + Now widgets in DISABLED state ignore the events even if they were bound by the bind() method (in tkinter this happens only with the command option of the config() method)
+/// + Added the method nictk.Widget.enabled()
+/// + Methods for opening dialog boxes can now be called prepending only the Nictk prefix (i.e. Nictk.showerror(message) instead of Nictk.mb.showerror(message)). Old prefixes are still accepted but their use will be dropped in future versions.
+/// + Some code optimization
+///
+/// **Examples**
+/// + Update the Dialogs.py example to reflect the new feature of dialog boxes and included all dialog methods (some were missing).
+///
+/// **Documentation**
+/// + Updated the **Dialog boxes** page
+/// + Various typos corrected
 /// @}

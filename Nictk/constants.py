@@ -1,5 +1,5 @@
 # This file is part of Nictk - A simple tkinter wrapper.
-#    Copyright (C) 2021  Nicola Cassetta
+#    Copyright (C) 2021-2024  Nicola Cassetta
 #    See <https://github.com/ncassetta/Nictk>
 #
 #    This program is free software: you can redistribute it and/or modify

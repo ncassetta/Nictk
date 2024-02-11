@@ -58,27 +58,32 @@
 /// + Various typos corrected
 /// <br>
 /// <br>
-/// ## Version 2.1.1 (Feb 6, 2024) ##
+/// ## Version 2.1.1 (Feb 11, 2024) ##
 ///
 /// Some improvements and bugfixes
 ///
-///
 /// **Bugfix**
-/// + (constants.py L28) imported tkinter.DoubleVar as DoubleVar (as other tkinter Variable subclass)
-/// + (\_\_init__.py L783) corrected: a typo in Window.visible() caused it to always return True 
-/// + (\_\_init.py L1850-1874) corrected: Menu.add() and Menu.insert() methods could not accept all options
+/// + (\_\_init__.py L484) Corrected: in Widget.calc_dimensions the Canvas returns borderwidth as a string, not a number
+/// + (\_\_init__.py L1360) Corrected: calling Combobox.get_items() raises an error
+/// + (\_\_init__.py L1428-1429) Corrected: now in Combobox.delete() if the selected item is cancelled the selection is reset
+/// + (\_\_init__.py L2198) Corrected: calling the Scrollbar constructor raises an error
 ///
 /// **New features**
-/// + Added to the Menu class the methods activate(), deactivate(), entry_activate(), entry_deactivate()
-/// + Now widgets in DISABLED state ignore the events even if they were bound by the bind() method (in tkinter this happens only with the command option of the config() method)
-/// + Added the method nictk.Widget.enabled()
-/// + Methods for opening dialog boxes can now be called prepending only the Nictk prefix (i.e. Nictk.showerror(message) instead of Nictk.mb.showerror(message)). Old prefixes are still accepted but their use will be dropped in future versions.
-/// + Some code optimization
+/// + (\_\_init__.py L786-788) Added the method Window.visible()
+/// + (\_\_init__.py L1431-1434) Added the method Combobox().clear()
+/// + (\_\_init__.py L1866-1891 L1946-1950) Added the methods Menu.activate(), Menu.deactivate(), Menu.entry_activate(), Menu.entry_deactivate(), Menu.clear()
+/// + (\_\_init__.py L27) The import of IntVar, StringVar, DoubleVar, BooleanVar, mainloop, EventType was moved from constants.py to \_\_init__.py
+/// + (constants.py L29-30) Imported all dialog boxes related constants
+/// + (\_\_init__.py L28-36) Methods for opening dialog boxes can now be called prepending only the Nictk prefix (i.e. Nictk.showerror(message) instead of Nictk.mb.showerror(message)). Old prefixes are still accepted but their use will be dropped in future versions
+/// + (\_\_init__.py L1399 L1413) Now methods Combobox.add() and Combobox.insert() accept a list/tuple of items
+/// + (\_\_init__.py L1469) Now method Combobox.index() raises an error if the argument is not in the menu
+/// + (\_\_init__.py L1145-1146) Added the method Canvas.resize_children for future development (currently it does nothing)
 ///
 /// **Examples**
-/// + Update the Dialogs.py example to reflect the new feature of dialog boxes and included all dialog methods (some were missing).
+/// + Updated the Combobox.py and Dialogs.py examples to reflect new features
+/// + Changed window dimensions in Dialogs.py
 ///
 /// **Documentation**
-/// + Updated the **Dialog boxes** page
+/// + Updated the Dialog boxes page
 /// + Various typos corrected
 /// @}

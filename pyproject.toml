@@ -1,6 +1,6 @@
 [project]
 name = "Nictk"
-version = "2.1.0"
+version = "2.1.1"
 authors = [
   { name="Nicola Cassetta", email="ncassetta@tiscali.it" },
 ]
@@ -20,7 +20,6 @@ classifiers = [
 
 [build-system]
 requires = [
-    "setuptools>=42",
-    "wheel"
+    "setuptools>=42"
 ]
 build-backend = "setuptools.build_meta"

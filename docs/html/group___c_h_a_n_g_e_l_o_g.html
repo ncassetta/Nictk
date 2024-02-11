@@ -145,29 +145,33 @@ $(document).ready(function(){initNavTree('group___c_h_a_n_g_e_l_o_g.html',''); i
 <li>Renamed the page Events into Events and callbacks and improved the documentation with two new paragraphs</li>
 <li>Various typos corrected <br  />
  <br  />
- <h2>Version 2.1.1 (Feb 6, 2024)</h2>
+ <h2>Version 2.1.1 (Feb 11, 2024)</h2>
 </li>
 </ul>
 <p >Some improvements and bugfixes</p>
 <p ><b>Bugfix</b></p><ul>
-<li>(<a class="el" href="constants_8py.html" title="String constants to use as parameters in various Nictk methods.">constants.py</a> L28) imported tkinter.DoubleVar as DoubleVar (as other tkinter Variable subclass)</li>
-<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L783) corrected: a typo in Window.visible() caused it to always return True</li>
-<li>(__init.py L1850-1874) corrected: Menu.add() and Menu.insert() methods could not accept all options</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L484) Corrected: in Widget.calc_dimensions the Canvas returns borderwidth as a string, not a number</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1360) Corrected: calling Combobox.get_items() raises an error</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1428-1429) Corrected: now in Combobox.delete() if the selected item is cancelled the selection is reset</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L2198) Corrected: calling the Scrollbar constructor raises an error</li>
 </ul>
 <p ><b>New features</b></p><ul>
-<li>Added to the Menu class the methods activate(), deactivate(), entry_activate(), entry_deactivate()</li>
-<li>Now widgets in DISABLED state ignore the events even if they were bound by the bind() method (in tkinter this happens only with the command option of the config() method)</li>
-<li>Added the method nictk.Widget.enabled()</li>
-<li>Added the methods Checkbutton.set_value() and Scale.set_value()</li>
-<li>Some code optimization</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L786-788) Added the method Window.visible()</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1431-1434) Added the method Combobox().clear()</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1866-1891 L1946-1950) Added the methods Menu.activate(), Menu.deactivate(), Menu.entry_activate(), Menu.entry_deactivate(), Menu.clear()</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L27) The import of IntVar, StringVar, DoubleVar, BooleanVar, mainloop, EventType was moved from <a class="el" href="constants_8py.html" title="String constants to use as parameters in various Nictk methods.">constants.py</a> to <a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a></li>
+<li>(<a class="el" href="constants_8py.html" title="String constants to use as parameters in various Nictk methods.">constants.py</a> L29-30) Imported all dialog boxes related constants</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L28-36) Methods for opening dialog boxes can now be called prepending only the Nictk prefix (i.e. Nictk.showerror(message) instead of Nictk.mb.showerror(message)). Old prefixes are still accepted but their use will be dropped in future versions</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1399 L1413) Now methods Combobox.add() and Combobox.insert() accept a list/tuple of items</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1469) Now method Combobox.index() raises an error if the argument is not in the menu</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1145-1146) Added the method Canvas.resize_children for future development (currently it does nothing)</li>
 </ul>
 <p ><b>Examples</b></p><ul>
-<li>Added the new example file Eventbinds.py which demonstrates the new feature in 2.1.0 version</li>
-<li>(Examples/Spinbox.py L31) Corrected a typo in spinbox.py</li>
+<li>Updated the Combobox.py and Dialogs.py examples to reflect new features</li>
+<li>Changed window dimensions in Dialogs.py</li>
 </ul>
 <p ><b>Documentation</b></p><ul>
-<li>Added this file changelog.dox</li>
-<li>Renamed the page Events into Events and callbacks and improved the documentation with two new paragraphs</li>
+<li>Updated the Dialog boxes page</li>
 <li>Various typos corrected </li>
 </ul>
 </div><!-- contents -->

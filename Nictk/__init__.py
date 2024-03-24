@@ -1316,7 +1316,7 @@ class Combobox(Widget, tk.OptionMenu):
         # MUST be here, so it initializes master if None
         tk.Widget.__init__(self, parent, "menubutton")
         self._textVar = tk.StringVar() if not variable else variable 
-        self._textVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
+        self._textVar.trace_add("write", lambda *args: self.event_generate("<<ChangedVar>>"))
         Widget.__init__(self, parent, x, y, w, h, pad, self._init1_, variable=self._textVar,
                             values=items, command=command)
         self._get_parent_config()
@@ -1427,11 +1427,16 @@ class Combobox(Widget, tk.OptionMenu):
         self.__menu.delete(index1, index2)
         if self._textVar.get() not in self.get_items():
             self._textVar.set("")
+            if self._commandwrap:       # deleting the menu disables the command!
+                self._commandwrap()
         
     def clear(self):
         """Deletes all menu items"""
         self.__menu.delete(0, END)
-        self._textVar.set("")
+        if self._textVar.get() != "":
+            self._textVar.set("")
+            if self._commandwrap:        # deleting the menu disables the command!
+                self._commandwrap()            
     
     def get_config_item(self, index, option):
         """Returns the resource value of a menu item. It is aliased by
@@ -1521,7 +1526,7 @@ class Entry(Widget, tk.Entry):
         self._get_parent_config()
         self._textVar = tk.StringVar(value=content) if isinstance(content, str) else content
         self.init_content(self._textVar)
-        self._textVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
+        self._textVar.trace_add("write", lambda *args: self.event_generate("<<ChangedVar>>"))
         self._commandwrap = None
         if command:
             self.config(command=command)
@@ -2124,7 +2129,7 @@ class Scale(Widget, tk.Scale):
                 self.config(bigincrement=limits[2])
         self._valueVar = DoubleVar() if not variable else variable 
         self._valueVar.set(str(limits[0]))
-        self._valueVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
+        self._valueVar.trace_add("write", lambda *args: self.event_generate("<<ChangedVar>>"))
         self.config(variable=self._valueVar)
         self._cont_type = None
         self._get_parent_config()
@@ -2260,7 +2265,7 @@ class Spinbox(Widget, tk.Spinbox):
         self.init_content(self._textVar)
         if limits:
             self._textVar.set(str(limits[0]))
-        self._textVar.trace("w", lambda *args: self.event_generate("<<ChangedVar>>"))
+        self._textVar.trace_add("write", lambda *args: self.event_generate("<<ChangedVar>>"))
         self._get_parent_config()
         self._commandwrap = None
         self._autoaddflag = False

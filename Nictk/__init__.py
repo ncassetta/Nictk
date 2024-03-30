@@ -325,6 +325,8 @@ class Widget(Misc):
     def __init__(self, parent, x, y, w, h, pad, ctor, **kw):
         """The constructor."""
         self._orig_dim = (x, y, w, h, pad)      # tk.Widget.__init__ does nothing
+        if isinstance(parent, VerScrollFrame):
+            parent = parent._frame
         if isinstance(self, Combobox):
             ctor(parent, kw["variable"], kw["values"], kw["command"]) 
         else:
@@ -332,7 +334,7 @@ class Widget(Misc):
         self._calc_dimensions()                 # sets _curr_dim
         self._place_widget()
         if isinstance(parent, (RowFrame, ColFrame)): 
-            parent.get_active().children.append(self)       
+            parent.get_active().children.append(self)
         
     def hide(self):
         """Hides the widget. The widget will not be displayed, but its
@@ -492,9 +494,11 @@ class Widget(Misc):
         else:                                   # we are placing a new widget
             last_wdg = brothers[-1] if len(brothers) else None
         last_x, last_y = 0, 0
-        if isinstance(parent, (HorFrame, _framerow))and last_wdg:
+        if (isinstance(parent, (HorFrame, _framerow)) or
+            (isinstance(parent, tk.Frame) and isinstance(parent.master.master, HorScrollFrame))) and last_wdg:
             last_x = last_wdg.winfo_bx() + last_wdg.winfo_bw()
-        elif isinstance(parent, (VerFrame, _framecol, Main, Window)) and last_wdg:
+        elif (isinstance(parent, (VerFrame, _framecol, Main, Window)) or
+              (isinstance(parent, tk.Frame) and isinstance(parent.master.master, VerScrollFrame))) and last_wdg:        
             last_y = last_wdg.winfo_by() + last_wdg.winfo_bh() 
         #print ("parent name:", parent.winfo_name(), "   width:", parent.winfo_width(), "height:", parent.winfo_height(),
                #"reqwidth:", parent.winfo_width(), "reqheight:", parent.winfo_height())
@@ -581,6 +585,13 @@ class Widget(Misc):
         y = self.winfo_y()
         w = self.winfo_w()
         h = self.winfo_h()
+        # this is needed for scrolling frames, in which the widget is embedded in a Frame
+        if self.parent().winfo_class()== "Frame":
+            if self.parent().winfo_height() < y + h:
+                self.parent().config(height=y + h)
+            if self.parent().winfo_width() < x + w:
+                self.parent().config(width=x + w)
+            
         self.place(x=x, y=y, width=w, height=h)       
         if isinstance(self, (Label, Checkbutton, Radiobutton)):
             self.config(wraplength=self._calc_wrap())
@@ -593,12 +604,17 @@ class Widget(Misc):
         the widget changes."""
         if hasattr(self, "_vscroll"):
             self.update_idletasks()             # needed for updating the yview
-            offs, size = self.yview()
+            if isinstance(self, VerScrollFrame):
+                 offs, size = self._canvas.yview()
+            else:
+                offs, size = self.yview()
             if size - offs < 1.0 and not self._vscroll.winfo_ismapped():                
                 self._vscroll.pack(side=RIGHT, fill=BOTH)
                 self._vscroll.update()              # needed for drawing the scrollbar
+                print("scrollbar shown")
             elif size - offs == 1.0 and self._vscroll.winfo_ismapped():
                 self._vscroll.pack_forget()
+                print("scrollbar hidden")
     
     def _get_parent_config(self):
         """Internal function.
@@ -1042,8 +1058,154 @@ class ColFrame(Widget, Container, tk.LabelFrame):
     #def set_active(self, n):
         #if 0 <= n < len(self._cols):
             #self._active = n
-      
             
+            
+class HorScrollFrame(Widget, Container, tk.LabelFrame):
+    """A container in which you can stack children widgets horizontally.
+    This is done by using PACK as the x parameter in their constructor. The
+    frame is initialized with the same color of its parent and no border,
+    being so invisible. However you can set a border and also a label to be
+    shown on it.
+    \warning setting a border reduces the space inside the frame
+    \see \ref Listbox.py, \ref Spinbox.py example files"""
+    
+    def __init__(self, parent, x, y, w, h, pad=0, content=""):
+        """The constructor.
+        \param parent the frame parent
+        \param x, y, w, h see \ref PLACING_WIDGETS
+        \param pad this is ignored, you cannot have a padding on frames
+        \param content a string you can put as label"""        
+        Widget.__init__(self, parent, x, y, w, h, 0,
+                        tk.LabelFrame.__init__)         # pad argument is ignored
+        if not isinstance(parent, Notebook):
+            self.config(background=parent.cget("background"), relief=FLAT)
+        Container.__init__(self)
+        self.init_content(content)
+        
+        
+class VerScrollFrame(Widget, Container, tk.LabelFrame):
+    """A container in which you can stack children widgets vertically.
+    This is done by using PACK as the y parameter in their constructor. The
+    frame is initialized with the same color of its parent and no border,
+    being so invisible. However you can set a border and also a label to be
+    shown on it.
+    \warning setting a border reduces the space inside the frame
+    
+    See \ref Listbox.py, \ref RCbuttons.py, \ref Scale.py example files"""
+    
+    def __init__(self, parent, x, y, w, h, pad=0, content=""):
+        """The constructor.
+        \param parent the frame parent
+        \param x, y, w, h see \ref PLACING_WIDGETS
+        \param pad this is ignored, you cannot have a padding on frames
+        \param content a string you can put as label"""                        
+        Widget.__init__(self, parent, x, y, w, h, 0,
+                        tk.LabelFrame.__init__)         # pad argument is ignored
+        if not isinstance(parent, Notebook):
+            self.config(background=parent.cget("background"), relief=FLAT)
+        Container.__init__(self)
+        self.init_content(content)   
+        
+        self._vscroll = tk.Scrollbar(self, orient=VERTICAL)
+        self._vscroll.pack(side=RIGHT, fill="y", expand=False)
+        self._canvas = tk.Canvas(self, borderwidth=0, background="#eeeeee",
+                                 yscrollcommand=self._vscroll.set)
+        self._canvas.pack(side=LEFT, fill=BOTH, expand=True)
+        self._vscroll.config(command=self._canvas.yview)
+        self._frame = tk.Frame(self._canvas, background="#ffffff")
+        self._canvas.create_window((4,4), window=self._frame, anchor=NW, tags="self._frame")
+        self._frame.bind("<Configure>", self._reset_region)
+
+        #self.populate()
+
+    #def populate(self):
+        #'''Put in some fake data'''
+        #for row in range(100):
+            #tk.Label(self.frame, text="%s" % row, width=3, borderwidth="1",
+                     #relief="solid").grid(row=row, column=0)
+            #t="this is the second column for row %s" %row
+            #tk.Label(self.frame, text=t).grid(row=row, column=1)
+
+    def _reset_region(self, event):
+        '''Reset the scroll region to encompass the inner frame'''
+        self._canvas.config(scrollregion=self._canvas.bbox(ALL))
+        self._auto_yscroll()
+            
+        print("_reset_region")
+
+#class Scrollable(tk.Frame):
+    #"""
+       #Make a frame scrollable with scrollbar on the right.
+       #After adding or removing widgets to the scrollable frame,
+       #call the update() method to refresh the scrollable area.
+    #"""
+
+    #def __init__(self, frame, width=16):
+
+        #scrollbar = tk.Scrollbar(frame, width=width)
+        #scrollbar.pack(side=tk.RIGHT, fill=tk.Y, expand=False)
+
+        #self.canvas = tk.Canvas(frame, yscrollcommand=scrollbar.set)
+        #self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        #scrollbar.config(command=self.canvas.yview)
+
+        #self.canvas.bind('<Configure>', self.__fill_canvas)
+
+        ## base class initialization
+        #tk.Frame.__init__(self, frame)
+
+        ## assign this obj (the inner frame) to the windows item of the canvas
+        #self.windows_item = self.canvas.create_window(0,0, window=self, anchor=tk.NW)
+
+
+    #def __fill_canvas(self, event):
+        #"Enlarge the windows item to the canvas width"
+
+        #canvas_width = event.width
+        #self.canvas.itemconfig(self.windows_item, width = canvas_width)
+
+    #def update(self):
+        #"Update the canvas and the scrollregion"
+
+        #self.update_idletasks()
+        #self.canvas.config(scrollregion=self.canvas.bbox(self.windows_item))
+
+
+#class ScrollbarFrame(tk.Frame):
+    #"""
+    #Extends class tk.Frame to support a scrollable Frame 
+    #This class is independent from the widgets to be scrolled and 
+    #can be used to replace a standard tk.Frame
+    #"""
+    #def __init__(self, parent, **kwargs):
+        #tk.Frame.__init__(self, parent, **kwargs)
+
+        ## The Scrollbar, layout to the right
+        #vsb = tk.Scrollbar(self, orient="vertical")
+        #vsb.pack(side="right", fill="y")
+
+        ## The Canvas which supports the Scrollbar Interface, layout to the left
+        #self.canvas = tk.Canvas(self, borderwidth=0, background="#ffffff")
+        #self.canvas.pack(side="left", fill="both", expand=True)
+
+        ## Bind the Scrollbar to the self.canvas Scrollbar Interface
+        #self.canvas.configure(yscrollcommand=vsb.set)
+        #vsb.configure(command=self.canvas.yview)
+
+        ## The Frame to be scrolled, layout into the canvas
+        ## All widgets to be scrolled have to use this Frame as parent
+        #self.scrolled_frame = tk.Frame(self.canvas, background=self.canvas.cget('bg'))
+        #self.canvas.create_window((4, 4), window=self.scrolled_frame, anchor="nw")
+
+        ## Configures the scrollregion of the Canvas dynamically
+        #self.scrolled_frame.bind("<Configure>", self.on_configure)
+
+    #def on_configure(self, event):
+        #"""Set the scroll region to encompass the scrolled frame"""
+        #self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+
 
 #####################################################################
 ############       tkinter WIDGETS SUPERCLASSES

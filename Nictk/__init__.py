@@ -265,8 +265,9 @@ class _setitBind:
         self._callback = callback
         
     def __call__(self, event):
-        """The call method."""       
-        if self._widget.get_config("state") != DISABLED and self._callback:
+        """The call method."""
+        w = self._widget
+        if ("state" not in w.keys() or w.get_config("state") != DISABLED) and self._callback:
             self._callback(event)
     
         
@@ -325,7 +326,7 @@ class Widget(Misc):
     def __init__(self, parent, x, y, w, h, pad, ctor, **kw):
         """The constructor."""
         self._orig_dim = (x, y, w, h, pad)      # tk.Widget.__init__ does nothing
-        if isinstance(parent, VerScrollFrame):
+        if isinstance(parent, (VerScrollFrame, HorScrollFrame)):
             parent = parent._frame
         if isinstance(self, Combobox):
             ctor(parent, kw["variable"], kw["values"], kw["command"]) 
@@ -397,11 +398,6 @@ class Widget(Misc):
                 if content is not self._textVar:
                     self._textVar = content
                 self._cont_type = Widget.STRVAR        
-            elif isinstance(content, tk.Variable):
-                self.config(textvariable=content)
-                if content is not self._textVar:
-                    self._textVar = content
-                self._cont_type = Widget.NUMVAR
             elif isinstance(content, tk.PhotoImage) or isinstance(content, tk.BitmapImage):
                 self.config(text="", textvariable="", image=content)
                 self._textVar = None
@@ -445,7 +441,8 @@ class Widget(Misc):
             self._orig_dim[2] if w is None else w,
             self._orig_dim[3] if h is None else h,
             self._orig_dim[4] if pad is None else pad)
-        self.parent()._resize_children()
+        if isinstance(self.parent(), Container):
+            self.parent()._resize_children()
             
     def _calc_dimensions(self):                 #TODO: implement "rpack"
         """Internal function.
@@ -479,7 +476,7 @@ class Widget(Misc):
             offs_x, offs_y = parent.winfo_x(), 0
             offs_border = 2 * self.parent().cget("borderwidth")
             parent_w = parent.winfo_w() - offs_border
-            parent_h = parent.winfo_h() - offs_border          
+            parent_h = parent.winfo_h() - offs_border       
         else:
             parent = self.parent()
             offs_x, offs_y = 0, 0
@@ -494,11 +491,9 @@ class Widget(Misc):
         else:                                   # we are placing a new widget
             last_wdg = brothers[-1] if len(brothers) else None
         last_x, last_y = 0, 0
-        if (isinstance(parent, (HorFrame, _framerow)) or
-            (isinstance(parent, tk.Frame) and isinstance(parent.master.master, HorScrollFrame))) and last_wdg:
+        if isinstance(parent, (HorFrame, _framerow)) and last_wdg:
             last_x = last_wdg.winfo_bx() + last_wdg.winfo_bw()
-        elif (isinstance(parent, (VerFrame, _framecol, Main, Window)) or
-              (isinstance(parent, tk.Frame) and isinstance(parent.master.master, VerScrollFrame))) and last_wdg:        
+        elif isinstance(parent, (VerFrame, _framecol, Main, Window)) and last_wdg:        
             last_y = last_wdg.winfo_by() + last_wdg.winfo_bh() 
         #print ("parent name:", parent.winfo_name(), "   width:", parent.winfo_width(), "height:", parent.winfo_height(),
                #"reqwidth:", parent.winfo_width(), "reqheight:", parent.winfo_height())
@@ -586,11 +581,16 @@ class Widget(Misc):
         w = self.winfo_w()
         h = self.winfo_h()
         # this is needed for scrolling frames, in which the widget is embedded in a Frame
-        if self.parent().winfo_class()== "Frame":
-            if self.parent().winfo_height() < y + h:
-                self.parent().config(height=y + h)
-            if self.parent().winfo_width() < x + w:
-                self.parent().config(width=x + w)
+        try:
+            frame = self.master.master.master           # again, not parent() the second is a Tk.Frame
+        except AttributeError:
+            pass
+        else:
+            if isinstance(frame, (HorScrollFrame, VerScrollFrame)):
+                if self.parent().winfo_h() < y + h:
+                    self.parent().config(height=y + h)
+                if self.parent().winfo_w() < x + w:
+                    self.parent().config(width=x + w)
             
         self.place(x=x, y=y, width=w, height=h)       
         if isinstance(self, (Label, Checkbutton, Radiobutton)):
@@ -1112,19 +1112,13 @@ class VerScrollFrame(Widget, Container, tk.LabelFrame):
                                  yscrollcommand=self._vscroll.set)
         self._canvas.pack(side=LEFT, fill=BOTH, expand=True)
         self._vscroll.config(command=self._canvas.yview)
-        self._frame = tk.Frame(self._canvas, background="#ffffff")
+        self._frame = VerFrame(self._canvas, 0, 0, FILL, FILL)
+        self._frame.config(bcolor="white")
         self._canvas.create_window((4,4), window=self._frame, anchor=NW, tags="self._frame")
+        self._frame.resize(h=1, w=1)
         self._frame.bind("<Configure>", self._reset_region)
 
-        #self.populate()
 
-    #def populate(self):
-        #'''Put in some fake data'''
-        #for row in range(100):
-            #tk.Label(self.frame, text="%s" % row, width=3, borderwidth="1",
-                     #relief="solid").grid(row=row, column=0)
-            #t="this is the second column for row %s" %row
-            #tk.Label(self.frame, text=t).grid(row=row, column=1)
 
     def _reset_region(self, event):
         '''Reset the scroll region to encompass the inner frame'''

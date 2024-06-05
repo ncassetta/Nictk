@@ -24,8 +24,9 @@ from Nictk.constants import *
 
 
 def add_label(event):
-    str_label = "Label " + str(len(vsf1._frame.winfo_children()) + 1)
-    lab = Ntk.Label(vsf1, 10, PACK, 120, 40, pad=5, content=str_label)
+    #str_label = "Label " + str(len(vsf1._frame.winfo_children()) + 1)
+    lab = Ntk.Label(vsf1, 10, PACK, -20, 40, pad=5)
+    lab.set_content(lab._name)
 
 def del_label(event):
     if len(vsf1._frame.winfo_children()) > 0:
@@ -35,31 +36,42 @@ def del_label(event):
 
 winMain = Ntk.Main(200, 150, 400, 300, "VerScrollFrame sample")
 
-# THIS DOESN'T WORK!!!!!
-
-## extern frame
-#hfr1 = Ntk.HorFrame(winMain, 0, 0, FILL, FILL)
 ## our VerScrollFrame
-#vsf1 = Ntk.VerScrollFrame(hfr1, 0, 0, "70%", FILL)
+#vsf1 = Ntk.VerScrollFrame(winMain, 0, 0, "80%", 240)
 #vsf1.config_children(Ntk.Label, relief="solid", bcolor = "blue", fcolor="yellow",
                      #anchor=CENTER)
-## vertical frame for buttons
-#vfr1 = Ntk.VerFrame(hfr1, PACK, 0, FILL, FILL)
+## horizontal frame for buttons
+#hfr1 = Ntk.HorFrame(winMain, 0, PACK, FILL, FILL)
 ## buttons
-#butAdd = Ntk.Button(vfr1, CENTER, PACK, "80%", 60, pad=(0,10), content="Add label", command=add_label)
-#butDel = Ntk.Button(vfr1, CENTER, PACK, "80%", 60, pad=(0,10), content="Delete label", command= del_label)
+#butAdd = Ntk.Button(hfr1, 0, 0, 100, FILL, pad=10, content="Add label", command=add_label)
+#butDel = Ntk.Button(hfr1, PACK, PACK, 100, FILL, pad=10, content="Delete label", command= del_label)
+
+
 
 # THIS IS OK
 
-vsf1 = Ntk.VerScrollFrame(winMain, 0, 0, FILL, FILL)
+#vsf1 = Ntk.VerScrollFrame(winMain, 0, 0, FILL, FILL)
+#vsf1.config_children(Ntk.Label, relief="solid", bcolor = "blue", fcolor="yellow",
+                     #anchor=CENTER)
+
+# extern frame
+hfr1 = Ntk.HorFrame(winMain, 0, 0, FILL, FILL)
+# our VerScrollFrame
+vsf1 = Ntk.VerScrollFrame(hfr1, 0, 0, "70%", FILL)
 vsf1.config_children(Ntk.Label, relief="solid", bcolor = "blue", fcolor="yellow",
                      anchor=CENTER)
+# vertical frame for buttons
+vfr1 = Ntk.VerFrame(hfr1, PACK, 0, FILL, FILL)
+# buttons
+butAdd = Ntk.Button(vfr1, CENTER, PACK, "80%", 60, pad=(0,10), content="Add label", command=add_label)
+butDel = Ntk.Button(vfr1, CENTER, PACK, "80%", 60, pad=(0,10), content="Delete label", command= del_label)
 
-for i in range(30):
-    lab = Ntk.Label(vsf1, 10, PACK, 120, 40, pad=5, content="Label " + str(i + 1))
-    print("Label size:", lab.winfo_w(), "x", lab.winfo_h())
-    parent = lab.parent()
-    print("Parent size:", parent.winfo_reqwidth(), "x", parent.winfo_reqheight())
+## THIS IS OK
+
+#vsf1 = Ntk.VerScrollFrame(winMain, 0, 0, "80%", FILL)
+#vsf1.config_children(Ntk.Label, relief="solid", bcolor = "blue", fcolor="yellow",
+                     #anchor=CENTER)
+
     
 
 

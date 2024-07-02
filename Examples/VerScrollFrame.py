@@ -24,40 +24,25 @@ from Nictk.constants import *
 
 
 def add_label(event):
-    #str_label = "Label " + str(len(vsf1._frame.winfo_children()) + 1)
+    str_label = "Label " + str(len(vsf1._frame.winfo_children()) + 1)
     lab = Ntk.Label(vsf1, 10, PACK, -20, 40, pad=5)
-    lab.set_content(lab._name)
+    lab.set_content(str_label)
 
 def del_label(event):
-    if len(vsf1._frame.winfo_children()) > 0:
+    # see the VerScroll.Frame.get_intframe() note.
+    if len(vsf1.get_intframe().winfo_children()) > 0:
         lab = vsf1._frame.winfo_children()[-1]
         lab.destroy()
 
 
+# main window
 winMain = Ntk.Main(200, 150, 400, 300, "VerScrollFrame sample")
-
-## our VerScrollFrame
-#vsf1 = Ntk.VerScrollFrame(winMain, 0, 0, "80%", 240)
-#vsf1.config_children(Ntk.Label, relief="solid", bcolor = "blue", fcolor="yellow",
-                     #anchor=CENTER)
-## horizontal frame for buttons
-#hfr1 = Ntk.HorFrame(winMain, 0, PACK, FILL, FILL)
-## buttons
-#butAdd = Ntk.Button(hfr1, 0, 0, 100, FILL, pad=10, content="Add label", command=add_label)
-#butDel = Ntk.Button(hfr1, PACK, PACK, 100, FILL, pad=10, content="Delete label", command= del_label)
-
-
-
-# THIS IS OK
-
-#vsf1 = Ntk.VerScrollFrame(winMain, 0, 0, FILL, FILL)
-#vsf1.config_children(Ntk.Label, relief="solid", bcolor = "blue", fcolor="yellow",
-                     #anchor=CENTER)
 
 # extern frame
 hfr1 = Ntk.HorFrame(winMain, 0, 0, FILL, FILL)
 # our VerScrollFrame
 vsf1 = Ntk.VerScrollFrame(hfr1, 0, 0, "70%", FILL)
+vsf1.config(relief=SOLID)
 vsf1.config_children(Ntk.Label, relief="solid", bcolor = "blue", fcolor="yellow",
                      anchor=CENTER)
 # vertical frame for buttons
@@ -65,14 +50,6 @@ vfr1 = Ntk.VerFrame(hfr1, PACK, 0, FILL, FILL)
 # buttons
 butAdd = Ntk.Button(vfr1, CENTER, PACK, "80%", 60, pad=(0,10), content="Add label", command=add_label)
 butDel = Ntk.Button(vfr1, CENTER, PACK, "80%", 60, pad=(0,10), content="Delete label", command= del_label)
-
-## THIS IS OK
-
-#vsf1 = Ntk.VerScrollFrame(winMain, 0, 0, "80%", FILL)
-#vsf1.config_children(Ntk.Label, relief="solid", bcolor = "blue", fcolor="yellow",
-                     #anchor=CENTER)
-
-    
 
 
 Ntk.mainloop()

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['visible_0',['visible',['../class_nictk_1_1_widget.html#a478bf5249256ef875bca4c0a3724923d',1,'Nictk.Widget.visible()'],['../class_nictk_1_1_window.html#a478bf5249256ef875bca4c0a3724923d',1,'Nictk.Window.visible()']]]
+  ['unbind_0',['unbind',['../class_nictk_1_1_misc.html#a43bd7643fc355fafd9233643d8c35481',1,'Nictk::Misc']]]
 ];

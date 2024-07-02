@@ -30,7 +30,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Nictk<span id="projectnumber">&#160;2.1.0</span>
+   <div id="projectname">Nictk<span id="projectnumber">&#160;2.1.1</span>
    </div>
    <div id="projectbrief">An easy to use pyton GUI</div>
   </td>
@@ -108,8 +108,9 @@ Inheritance diagram for Listbox:</div>
  <div class="center">
   <img src="class_nictk_1_1_listbox.png" usemap="#Listbox_map" alt=""/>
   <map id="Listbox_map" name="Listbox_map">
-<area href="class_nictk_1_1_widget.html" title="Base class which defines methods common for all Nictk internal widgets (not windows nor menus)." alt="Widget" shape="rect" coords="0,56,51,80"/>
-<area href="class_nictk_1_1_misc.html" title="Base class for windows and widgets." alt="Misc" shape="rect" coords="0,0,51,24"/>
+<area href="class_nictk_1_1_widget.html" title="Base class which defines methods common for all Nictk internal widgets (not windows nor menus)." alt="Widget" shape="rect" coords="0,56,66,80"/>
+<area href="class_nictk_1_1_ver_scroll.html" title="Base class for widgets which have a right vertical scrollbar." alt="VerScroll" shape="rect" coords="76,56,142,80"/>
+<area href="class_nictk_1_1_misc.html" title="Base class for windows and widgets." alt="Misc" shape="rect" coords="0,0,66,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -167,6 +168,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2d696bdfbd4246718adc08224abb4a1a inherit pub_methods_class_nictk_1_1_widget"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nictk_1_1_widget.html#a2d696bdfbd4246718adc08224abb4a1a">deactivate</a> (self)</td></tr>
 <tr class="memdesc:a2d696bdfbd4246718adc08224abb4a1a inherit pub_methods_class_nictk_1_1_widget"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the state of the widget to DISABLED.  <a href="class_nictk_1_1_widget.html#a2d696bdfbd4246718adc08224abb4a1a">More...</a><br /></td></tr>
 <tr class="separator:a2d696bdfbd4246718adc08224abb4a1a inherit pub_methods_class_nictk_1_1_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a997ac515f8cd659ce5e5eabf1d6c3bd2 inherit pub_methods_class_nictk_1_1_widget"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nictk_1_1_widget.html#a997ac515f8cd659ce5e5eabf1d6c3bd2">destroy</a> (self)</td></tr>
+<tr class="memdesc:a997ac515f8cd659ce5e5eabf1d6c3bd2 inherit pub_methods_class_nictk_1_1_widget"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides the BaseWidget method, unmapping the widget if its parent is a <a class="el" href="class_nictk_1_1__embed_ver_frame.html" title="Internal class.">_embedVerFrame</a>.  <a href="class_nictk_1_1_widget.html#a997ac515f8cd659ce5e5eabf1d6c3bd2">More...</a><br /></td></tr>
+<tr class="separator:a997ac515f8cd659ce5e5eabf1d6c3bd2 inherit pub_methods_class_nictk_1_1_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05cd4cd28b324f262fefe1a1782bd992 inherit pub_methods_class_nictk_1_1_widget"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nictk_1_1_widget.html#a05cd4cd28b324f262fefe1a1782bd992">enabled</a> (self)</td></tr>
 <tr class="memdesc:a05cd4cd28b324f262fefe1a1782bd992 inherit pub_methods_class_nictk_1_1_widget"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns True if the widget is enabled.  <a href="class_nictk_1_1_widget.html#a05cd4cd28b324f262fefe1a1782bd992">More...</a><br /></td></tr>
 <tr class="separator:a05cd4cd28b324f262fefe1a1782bd992 inherit pub_methods_class_nictk_1_1_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -183,7 +187,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a891811ff596b449f2c75871ec7da7e54 inherit pub_methods_class_nictk_1_1_widget"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes the dimensions of the widget.  <a href="class_nictk_1_1_widget.html#a891811ff596b449f2c75871ec7da7e54">More...</a><br /></td></tr>
 <tr class="separator:a891811ff596b449f2c75871ec7da7e54 inherit pub_methods_class_nictk_1_1_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb2b80d1ea897e663737503cc6272939 inherit pub_methods_class_nictk_1_1_widget"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nictk_1_1_widget.html#aeb2b80d1ea897e663737503cc6272939">set_content</a> (self, content)</td></tr>
-<tr class="memdesc:aeb2b80d1ea897e663737503cc6272939 inherit pub_methods_class_nictk_1_1_widget"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the content of the widget.  <a href="class_nictk_1_1_widget.html#aeb2b80d1ea897e663737503cc6272939">More...</a><br /></td></tr>
+<tr class="memdesc:aeb2b80d1ea897e663737503cc6272939 inherit pub_methods_class_nictk_1_1_widget"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the content of the widget.  <a href="class_nictk_1_1_widget.html#aeb2b80d1ea897e663737503cc6272939">More...</a><br /></td></tr>
 <tr class="separator:aeb2b80d1ea897e663737503cc6272939 inherit pub_methods_class_nictk_1_1_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4f4398c3f210fe4ea6e720401357691 inherit pub_methods_class_nictk_1_1_widget"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nictk_1_1_widget.html#ab4f4398c3f210fe4ea6e720401357691">show</a> (self)</td></tr>
 <tr class="memdesc:ab4f4398c3f210fe4ea6e720401357691 inherit pub_methods_class_nictk_1_1_widget"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shows a previously hidden widget.  <a href="class_nictk_1_1_widget.html#ab4f4398c3f210fe4ea6e720401357691">More...</a><br /></td></tr>
@@ -237,6 +241,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a95c7ee07fed8b0361554afa5757ed1ed inherit pub_methods_class_nictk_1_1_misc"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nictk_1_1_misc.html#a95c7ee07fed8b0361554afa5757ed1ed">winfo_y</a> (self)</td></tr>
 <tr class="memdesc:a95c7ee07fed8b0361554afa5757ed1ed inherit pub_methods_class_nictk_1_1_misc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the y coordinate of the topleft corner of the widget with respect to the parent.  <a href="class_nictk_1_1_misc.html#a95c7ee07fed8b0361554afa5757ed1ed">More...</a><br /></td></tr>
 <tr class="separator:a95c7ee07fed8b0361554afa5757ed1ed inherit pub_methods_class_nictk_1_1_misc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_nictk_1_1_ver_scroll"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_nictk_1_1_ver_scroll')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_nictk_1_1_ver_scroll.html">VerScroll</a></td></tr>
+<tr class="memitem:ad3da8e0dab6bb998122a2a165316b7d4 inherit pub_methods_class_nictk_1_1_ver_scroll"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nictk_1_1_ver_scroll.html#ad3da8e0dab6bb998122a2a165316b7d4">get_scrollbar</a> ()</td></tr>
+<tr class="memdesc:ad3da8e0dab6bb998122a2a165316b7d4 inherit pub_methods_class_nictk_1_1_ver_scroll"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the scrollbar widget.  <a href="class_nictk_1_1_ver_scroll.html#ad3da8e0dab6bb998122a2a165316b7d4">More...</a><br /></td></tr>
+<tr class="separator:ad3da8e0dab6bb998122a2a165316b7d4 inherit pub_methods_class_nictk_1_1_ver_scroll"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -340,7 +348,7 @@ Static Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented from <a class="el" href="class_nictk_1_1_widget.html#a0b1ade65a71aec7fc3038759c5504252">Widget</a>.</p>
+<p>Reimplemented from <a class="el" href="class_nictk_1_1_ver_scroll.html#a3f695b133c61fdbfa4751bce9ad178b2">VerScroll</a>.</p>
 
 </div>
 </div>

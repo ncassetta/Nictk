@@ -1,6 +1,8 @@
 var annotated_dup =
 [
     [ "Nictk", null, [
+      [ "_embedRowFrame", "class_nictk_1_1__embed_row_frame.html", "class_nictk_1_1__embed_row_frame" ],
+      [ "_embedVerFrame", "class_nictk_1_1__embed_ver_frame.html", "class_nictk_1_1__embed_ver_frame" ],
       [ "_framerow", "class_nictk_1_1__framerow.html", "class_nictk_1_1__framerow" ],
       [ "_setitBind", "class_nictk_1_1__setit_bind.html", "class_nictk_1_1__setit_bind" ],
       [ "_setitCommand", "class_nictk_1_1__setit_command.html", "class_nictk_1_1__setit_command" ],
@@ -20,11 +22,14 @@ var annotated_dup =
       [ "Notebook", "class_nictk_1_1_notebook.html", "class_nictk_1_1_notebook" ],
       [ "Radiobutton", "class_nictk_1_1_radiobutton.html", "class_nictk_1_1_radiobutton" ],
       [ "RowFrame", "class_nictk_1_1_row_frame.html", "class_nictk_1_1_row_frame" ],
+      [ "RowScrollFrame", "class_nictk_1_1_row_scroll_frame.html", "class_nictk_1_1_row_scroll_frame" ],
       [ "Scale", "class_nictk_1_1_scale.html", "class_nictk_1_1_scale" ],
       [ "Scrollbar", "class_nictk_1_1_scrollbar.html", "class_nictk_1_1_scrollbar" ],
       [ "Spinbox", "class_nictk_1_1_spinbox.html", "class_nictk_1_1_spinbox" ],
       [ "Text", "class_nictk_1_1_text.html", "class_nictk_1_1_text" ],
       [ "VerFrame", "class_nictk_1_1_ver_frame.html", "class_nictk_1_1_ver_frame" ],
+      [ "VerScroll", "class_nictk_1_1_ver_scroll.html", "class_nictk_1_1_ver_scroll" ],
+      [ "VerScrollFrame", "class_nictk_1_1_ver_scroll_frame.html", "class_nictk_1_1_ver_scroll_frame" ],
       [ "Widget", "class_nictk_1_1_widget.html", "class_nictk_1_1_widget" ],
       [ "Window", "class_nictk_1_1_window.html", "class_nictk_1_1_window" ]
     ] ]

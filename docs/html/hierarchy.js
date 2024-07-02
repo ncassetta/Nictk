@@ -1,5 +1,7 @@
 var hierarchy =
 [
+    [ "_embedRowFrame", "class_nictk_1_1__embed_row_frame.html", null ],
+    [ "_embedVerFrame", "class_nictk_1_1__embed_ver_frame.html", null ],
     [ "_framerow", "class_nictk_1_1__framerow.html", null ],
     [ "_setitBind", "class_nictk_1_1__setit_bind.html", null ],
     [ "_setitCommand", "class_nictk_1_1__setit_command.html", null ],
@@ -9,8 +11,12 @@ var hierarchy =
         [ "Window", "class_nictk_1_1_window.html", null ]
       ] ],
       [ "HorFrame", "class_nictk_1_1_hor_frame.html", null ],
-      [ "RowFrame", "class_nictk_1_1_row_frame.html", null ],
-      [ "VerFrame", "class_nictk_1_1_ver_frame.html", null ]
+      [ "RowFrame", "class_nictk_1_1_row_frame.html", [
+        [ "RowScrollFrame", "class_nictk_1_1_row_scroll_frame.html", null ]
+      ] ],
+      [ "VerFrame", "class_nictk_1_1_ver_frame.html", [
+        [ "VerScrollFrame", "class_nictk_1_1_ver_scroll_frame.html", null ]
+      ] ]
     ] ],
     [ "Misc", "class_nictk_1_1_misc.html", [
       [ "BaseWindow", "class_nictk_1_1_base_window.html", null ],
@@ -33,5 +39,11 @@ var hierarchy =
         [ "VerFrame", "class_nictk_1_1_ver_frame.html", null ]
       ] ]
     ] ],
-    [ "Scrollbar", "class_nictk_1_1_scrollbar.html", null ]
+    [ "Scrollbar", "class_nictk_1_1_scrollbar.html", null ],
+    [ "VerScroll", "class_nictk_1_1_ver_scroll.html", [
+      [ "Listbox", "class_nictk_1_1_listbox.html", null ],
+      [ "RowScrollFrame", "class_nictk_1_1_row_scroll_frame.html", null ],
+      [ "Text", "class_nictk_1_1_text.html", null ],
+      [ "VerScrollFrame", "class_nictk_1_1_ver_scroll_frame.html", null ]
+    ] ]
 ];

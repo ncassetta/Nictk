@@ -189,7 +189,8 @@ class Misc:
         """Returns the list of the four pad amounts (E-N-W-S) of the widget
         with respect to its bounding box."""
         return self._curr_dim[4]
-        
+    
+# TODO: now widgets have also <Map> and <Unmap> events binded. Modify it    
     def bind(self, sequence=None, func=None, add=None):
         """Redefines the tk.Misc.bind() method.
         This allows events bound with the bind() method (and not only with the
@@ -197,13 +198,13 @@ class Misc:
         state"""
         
         if isinstance(self, BaseWindow):
-        # windows have the <Configure> event bounded to resize_children()
+        # windows have the <Configure> event already bounded to _on_resize()
         # callback. This is always executed so doesn't need a _setitBind wrapper
             if sequence == "<Configure>":
                 add=True
             return super()._bind(('bind', self._w), sequence, func, add)
         if isinstance(self, Spinbox) and sequence == "<Key-Return>":
-        # Spinbox has the <Key-Return> event bounded to auto_add()
+        # Spinbox has the <Key-Return> event already bounded to auto_add()
             add=True        
                
         _bindwrap = _setitBind(self, func) if func else func
@@ -266,110 +267,65 @@ class _setitBind:
         self._callback = callback
         
     def __call__(self, event):
-        """The call method.""" 
+        """The call method."""
+        # The first condition prevents the test on the "state" option, which raises
+        # an error if the widget is being destroyed
         if (event.type == EventType.Destroy or self._widget.get_config("state") != DISABLED) and self._callback:
             self._callback(event)
     
 
 class VerScroll:
     """Base class for widgets which have a right vertical scrollbar. It
-    implements the automatic hide and show of the scrollbar. Used only as
-    mixin: you should not use it directly."""
+    implements the automatic hiding and showing of the scrollbar. Classes
+    VerScrollFrame, RowScrollFrame, inherit from this. Used only as mixin:
+    you should not use it directly."""
     
     def __init__(self, scrolled_w):
-        self.scrolled_w = scrolled_w
+        """The constructor.
+        \param scrolled_w the widget which will be scrolled. It can be self in 
+        or the internal frame in other classes."""
+        self._scrolled_w = scrolled_w
         self._vscroll = tk.Scrollbar(self, orient=VERTICAL)
         scrolled_w.config(yscrollcommand=self._vscroll.set)
-        self._vscroll.config(command=self.scrolled_w.yview)
+        self._vscroll.config(command=scrolled_w.yview)
         self._vscroll.pack(side=RIGHT, fill="y", expand= False)
-        if self.scrolled_w != self:
+        if scrolled_w != self:
             scrolled_w.pack(side=RIGHT, fill=BOTH, expand=True)
         
     def get_scrollbar():
         """Return the scrollbar widget."""
         return self._vscroll
     
-    ## OLD VERSION (VerScrollFrame must override it)
-    #def _auto_yscroll(self):
-        #"""Internal function.
-        #Adds or hides a vertical scrollbar if the vertical size of
-        #the widget changes."""
-        ## This test prevents errors when exiting the program: the scrollbar
-        ## could have been already deleted        
-        #if self._vscroll in self.winfo_children():
-            ## update the yview
-            #self.update_idletasks()
-            #offs, size = self.yview()
-            #if size - offs < 1.0 and not self._vscroll.winfo_ismapped():
-                #self._vscroll.pack(side=RIGHT, fill="y", expand=False)
-                #self._vscroll.update()              # needed for drawing the scrollbar
-                #print("scrollbar shown")
-            #elif size - offs == 1.0 and self._vscroll.winfo_ismapped():
-                #self._vscroll.pack_forget()
-                #print("scrollbar hidden")    
-    
     def _auto_yscroll(self):
         """Internal function.
-        Adds or hides a vertical scrollbar if the vertical size of
-        the widget changes."""
+        Adds or hides a vertical scrollbar when the vertical size of the
+        widget changes."""
         # This silly test prevents errors when entering and exiting the program: the
         # scrollbar could be not yet created or already deleted        
         if hasattr(self, "_vscroll") and self._vscroll in self.winfo_children():
+            print ("Entered _auto_yscroll. Widget", self._name)
             # update the yview
             self.update_idletasks()
-            offs, size = self.scrolled_w.yview()
+            offs, size = self._scrolled_w.yview()
             if size - offs < 1.0 and not self._vscroll.winfo_ismapped():
-                if self.scrolled_w == self:            
-                    self._vscroll.pack(side=RIGHT, fill="y", expand=False)
-                    self._vscroll.update()              # needed for drawing the scrollbar
-                else:
-                    self.scrolled_w.pack_forget()
-                    print("Canvas w:", self._canvas.winfo_width())
-                    self._vscroll.pack(side=RIGHT, fill="y", expand=False)
-                    self._vscroll.update()              # needed for drawing the scrollbar
-                    
-                    self.scrolled_w.pack(side=RIGHT, fill=BOTH, expand=True)
-                    self.update_idletasks()
-                    print("Canvas w:", self._canvas.winfo_width())
-                    self._resize_children()                    
                 print("scrollbar shown")
-            elif size - offs == 1.0 and self._vscroll.winfo_ismapped():
-                self._vscroll.pack_forget()
-                if self.scrolled_w != self:
+                if self._scrolled_w == self:            
+                    self._vscroll.pack(side=RIGHT, fill="y", expand=False)
                     self.update_idletasks()
-                    print("Canvas w:", self._canvas.winfo_width())
-                    self._resize_children()                     
-                print("scrollbar hidden")    
-    
-    #def _auto_yscroll(self):
-        #"""Internal function.
-        #Adds or hides a vertical scrollbar if the vertical size of
-        #the widget changes."""
-        ## This test prevents errors when exiting the program: the scrollbar
-        ## could have been already deleted       
-        #if self._vscroll in self.winfo_children():
-            ## update the yview
-            #self.update_idletasks()                
-            #offs, size = self._canvas.yview()
-            #if size - offs < 1.0 and not self._vscroll.winfo_ismapped():
-                #self._canvas.pack_forget()
-                #print("Canvas w:", self._canvas.winfo_width())
-                #self._vscroll.pack(side=RIGHT, fill="y", expand=False)
-                #self._vscroll.update()              # needed for drawing the scrollbar
-                
-                #self._canvas.pack(side=RIGHT, fill=BOTH, expand=True)
-                #self.update_idletasks()
-                #print("Canvas w:", self._canvas.winfo_width())
-                #self._frame._adjust_width()
-                #self._resize_children()
-                #print("scrollbar shown")
-            #elif size - offs == 1.0 and self._vscroll.winfo_ismapped():
-                #self._vscroll.pack_forget()
-                #self.update_idletasks()
-                #self._frame._adjust_width()                
-                #self._resize_children()
-                #print("scrollbar hidden")    
-    
+                else:
+                    self._scrolled_w.pack_forget()
+                    self._vscroll.pack(side=RIGHT, fill="y", expand=False)                    
+                    self._scrolled_w.pack(side=RIGHT, fill=BOTH, expand=True)
+                    self.update_idletasks()
+                    if isinstance(self, Container):
+                        self._resize_children()                    
+            elif size - offs == 1.0 and self._vscroll.winfo_ismapped():
+                print("scrollbar hidden")
+                self._vscroll.pack_forget()
+                if self._scrolled_w != self:
+                    self.update_idletasks()
+                    if isinstance(self, Container):
+                        self._resize_children()                         
         
 
 
@@ -403,13 +359,13 @@ class Container:
             self._cnfchildren[l.index(which)]["options"].update(kw)
         
     def _resize_children(self):
-        """Internal function. Resizes all children when the container is resized."""
+        """Internal function.
+        Resizes all children when the container is resized."""
         print ("_resize_children() called on", self.__repr__(), "children = ", len(self.children.values()))
         for w in self.winfo_children():
             if hasattr(w, "_update_dimensions"):
                 w._update_dimensions()
-                if hasattr(w, "_resize_children"):
-                    print("Recursive call ...")
+                if isinstance(w, Container):
                     w._resize_children()                    
     
 
@@ -422,18 +378,20 @@ class Widget(Misc):
     def __init__(self, parent, x, y, w, h, pad, ctor, **kw):
         """The constructor."""
         self._orig_dim = (x, y, w, h, pad)      # tk.Widget.__init__ does nothing
-        if isinstance(parent, (VerScrollFrame, HorScrollFrame)):
-            parent = parent._frame
+        if isinstance(parent, (VerScrollFrame, RowScrollFrame)):
+        #if isinstance(parent, (VerScrollFrame, HorScrollFrame)):    
+            parent = parent.get_intframe()
         if isinstance(self, Combobox):
             ctor(parent, kw["variable"], kw["values"], kw["command"]) 
         else:
             ctor(self, master=parent, **kw)
         self._calc_dimensions()                 # sets _curr_dim
-        if isinstance(parent, _embedVerFrame):  # HERE!!! Between constructor and _place_widget
+        # HERE!!! Between constructor and _place_widget
+        if isinstance(parent, (_embedVerFrame, _embedRowFrame)):
             self.bind("<Map>", parent._adjust_height)
             self.bind("<Unmap>", parent._adjust_height)          
         self._place_widget()
-        if isinstance(parent, (RowFrame, ColFrame)): 
+        if isinstance(parent, (RowFrame, _embedRowFrame, ColFrame)): 
             parent.get_active().children.append(self)
         
     def hide(self):
@@ -480,15 +438,20 @@ class Widget(Misc):
     def destroy(self):
         """Overrides the BaseWidget method, unmapping the widget if its parent is
         a _embedVerFrame. So it triggers an <Unmap> event resizing the parent."""
-        
-        # TODO: try to avoid errors on callbacks with unbind()
-        if isinstance(self.parent(), _embedVerFrame):
+        if isinstance(self.parent(), (_embedVerFrame, _embedRowFrame)):
             self.place_forget()
+        if isinstance(self.parent(), (RowFrame, _embedRowFrame)):
+            parent = self.parent() if isinstance(self.parent(), RowFrame) else \
+                self.parent().master.master
+            for row in parent._rows:
+                if self in row.children:
+                    row.children.remove(self)
+                    break
         super().destroy()
         
     def init_content(self, content):
         """Sets the content type for the widget. The set_content() and
-        get_content() methods will behave according to the type chosen.
+        get_content() methods will then behave according to the type chosen.
         The warious widget constructors call this, so the user needs to call this only when
         he sets for the first time the widget content (if he didn't already it in the constructor).
         \param content can be a string, a StringVar or an image (BitmapImage,
@@ -534,7 +497,7 @@ class Widget(Misc):
             return ""    
     
     def set_content(self, content):
-        """Set the content of the widget.
+        """Sets the content of the widget.
         \param content you must supply a content compatible
         with that given in init_content()."""
         if self._cont_type in (Widget.STRVAR, Widget.NUMVAR):
@@ -578,7 +541,7 @@ class Widget(Misc):
             raise TypeError
             
         # set some local variables
-        if isinstance(self.parent(), RowFrame):                                                 
+        if isinstance(self.parent(), (RowFrame, _embedRowFrame)):                                                 
             parent = self.parent().get_active()
             offs_x, offs_y = 0, parent.winfo_y()
             offs_border = 2 * self.parent().cget("borderwidth")
@@ -589,7 +552,7 @@ class Widget(Misc):
             offs_x, offs_y = parent.winfo_x(), 0
             offs_border = 2 * self.parent().cget("borderwidth")
             parent_w = parent.winfo_w() - offs_border
-            parent_h = parent.winfo_h() - offs_border       
+            parent_h = parent.winfo_h() - offs_border     
         else:
             parent = self.parent()
             offs_x, offs_y = 0, 0
@@ -604,7 +567,7 @@ class Widget(Misc):
         else:                                   # we are placing a new widget
             last_wdg = brothers[-1] if len(brothers) else None
         last_x, last_y = 0, 0
-        if isinstance(parent, (HorFrame, _embedHorFrame, _framerow)) and last_wdg:
+        if isinstance(parent, (HorFrame, _framerow)) and last_wdg:
             last_x = last_wdg.winfo_bx() + last_wdg.winfo_bw()
         elif isinstance(parent, (VerFrame, _embedVerFrame, _framecol, Main, Window)) and last_wdg:        
             last_y = last_wdg.winfo_by() + last_wdg.winfo_bh() 
@@ -681,7 +644,7 @@ class Widget(Misc):
         Updates the widget dimensions when the parent is resized."""
         #print("_update_dimensions called on", self.winfo_name())
         self._calc_dimensions()
-        if isinstance(self, VerScrollFrame):
+        if isinstance(self, (VerScrollFrame, RowScrollFrame)):
             self._frame._adjust_width()
         if self.winfo_ismapped():
             self._place_widget()         
@@ -796,42 +759,39 @@ class BaseWindow(Misc, Container):
         self.protocol("WM_DELETE_WINDOW", self._commandwrap)
         
     def _on_resize(self, event):
-        """Internal function. Called when the window (or a widget contained in it)
-        is resized. It controls mainly the resizing of children widgets and the auto
-        scrollbar showing/hiding."""
+        """Internal function.
+        Called when the window (or a widget contained in it) is resized. It controls
+        mainly the resizing of children widgets and the auto scrollbar showing/hiding."""
         if self.winfo_ismapped():
             w = event.widget
             if w != self:
-                print ("_on_resize called. widget:", w.__repr__())
+                print ("Entering _on_resize. widget:", w._name, end=" ... ")
+                # TODO: Text widget scrolls without the need for a scrollbar!
                 if isinstance(w, (Listbox, Text)):
                     w._auto_yscroll()
-                elif isinstance(w, _embedVerFrame):
-                    print("_on_resize called by _embedVerFrame ...", end=" ")
+                elif isinstance(w, (_embedVerFrame, _embedRowFrame)):
                     w = w.master.master
                     if not w._resizing:
                         w._resizing = True
-                        print("canvas resized")
+                        print("canvas updated")
                         w._canvas.config(scrollregion=w._canvas.bbox(ALL))
                         w._auto_yscroll()
                         w._resizing = False
                     else:
                         print("aborted")
+                else:
+                    print("nothing to do")
             else:
                 self._curr_dim = (tk.Misc.winfo_x(self), tk.Misc.winfo_y(self), tk.Misc.winfo_width(self),
                                  tk.Misc.winfo_height(self), (0, 0, 0, 0))
                 print("_curr_dim =", self._curr_dim, "_oldw, _oldh =", self._oldw, self._oldh)
                 if self._oldw != self._curr_dim[2] or self._oldh != self._curr_dim[3]:
-                    print ("_on_resize() called on", self.__repr__(), "children = ", len(self.children.values()))
+                    print ("\twidget resized", self.__repr__(), "children = ", len(self.children.values()))
                     self._oldw, self._oldh = self._curr_dim[2], self._curr_dim[3]
                     self._resize_children()
-                #for w in self.winfo_children():
-                    #if hasattr(w, "_update_dimensions"):
-                        #w._update_dimensions()
-                        #if hasattr(w, "_resize_children"):
-                            #print("Recursive call ...")
-                            #w._resize_children(event)                    
-        
-        
+                else:
+                    print("nothing to do")
+        print("Exiting _on_resize()")
             
 
 
@@ -1006,6 +966,10 @@ class _framerow():
         self._orig_h = h
         self._tot_h = 0
         self._calc_dimensions()
+        
+    def __str__(self):
+        return "master: " + self.master.__str__() + " num: " + str(self.num) + " _orig_h: " + \
+    str(self._orig_h) + " _tot_h: " + str(self._tot_h)
     
     def parent(self):
         """Returns the parent RowFrame."""
@@ -1078,19 +1042,6 @@ class _framerow():
         self._tot_h = y + h
         #print(self) 
         
-    def _resize_children(self):
-        """Internal function. Resizes all children when the container is resized."""
-        oldactivenum = self.parent().get_active().num
-        self.parent().set_active(self.num)
-        for w in self.winfo_children():
-            if hasattr(w, "_update_dimensions"):
-                w._update_dimensions()
-            if hasattr(w, "_resize_children"):
-                w._resize_children()
-        self.parent().set_active(oldactivenum)
-
-
-
 class _framecol:
     # TODO: not yet implemented.
     pass
@@ -1127,7 +1078,12 @@ class RowFrame(Widget, Container, tk.LabelFrame):
         Container.__init__(self)
         self.init_content(content)
         self._rows = []
-        self._active = None            
+        self._active = None
+        
+    def print_rows(self):
+        for row in self._rows:
+            print(row)
+        print("active: ", int(self._active))
         
     def add_row(self, h):
         """Adds a row to the frame.
@@ -1138,6 +1094,27 @@ class RowFrame(Widget, Container, tk.LabelFrame):
         see \ref PLACING_WIDGETS for the various options you have"""
         self._rows.append(_framerow(self, h))
         self._active = self._rows[-1].num
+        #self.print_rows()
+            
+    def del_row(self, n):
+        """Deletes a row from the frame. If the row is not the last one
+        subsequent rows are moved up, if it was the active row the previous
+        row becomes active.
+        \param n the number of the row (if it is not in the appropriate
+        range an error is raised)."""
+        row = self._rows[n]
+        for w in row.children.copy():
+            w.destroy()
+        self._rows.remove(row)
+        for row in self._rows[n:]:
+            row.num -= 1
+            row._calc_dimensions() 
+        if len(self._rows) == 0:
+            self._active = None
+        elif self._active >= n:
+            self._active -= 1        
+        self._resize_children()
+        #self.print_rows()
         
     def set_active(self, n):
         """Sets the n-th row as active. Newly created widgets (which have
@@ -1147,19 +1124,32 @@ class RowFrame(Widget, Container, tk.LabelFrame):
         \param n the row number (starting from 0)"""
         if 0 <= n < len(self._rows):
             self._active = n
+        #self.print_rows()
             
     def get_active(self):
         """Returns the number of the active row in the frame."""
         if self._active is None:
-            raise ValueError
+            return None
         return self._rows[self._active]
+    
+    def num_rows(self):
+        """Returns the total number of the rows in the frame."""
+        return len(self._rows)
             
     def _resize_children(self):
-        """Internal function. Resizes all children when the container is resized."""
+        """Internal function.
+        Resizes all children when the container is resized."""
+        oldactive = self._active
         for row in self._rows:
+            self.set_active(row.num)
             row._calc_dimensions()        
-            row._resize_children()
-                    
+            for w in row.winfo_children():
+                if hasattr(w, "_update_dimensions"):
+                    w._update_dimensions()
+                    if isinstance(w, Container):
+                        w._resize_children()
+        self._active = oldactive              
+                          
  
 
 class ColFrame(Widget, Container, tk.LabelFrame):
@@ -1181,56 +1171,56 @@ class ColFrame(Widget, Container, tk.LabelFrame):
         #if 0 <= n < len(self._cols):
             #self._active = n
             
-            
-class HorScrollFrame(Widget, Container, tk.LabelFrame):
-    """A container in which you can stack children widgets horizontally.
-    This is done by using PACK as the x parameter in their constructor. The
+
+# TODO: not yet implemented            
+#class HorScrollFrame(Widget, Container, tk.LabelFrame):
+    #"""A container in which you can stack children widgets horizontally.
+    #This is done by using PACK as the x parameter in their constructor. The
+    #frame is initialized with the same color of its parent and no border,
+    #being so invisible. However you can set a border and also a label to be
+    #shown on it.
+    #\warning setting a border reduces the space inside the frame
+    #\see \ref Listbox.py, \ref Spinbox.py example files"""
+    
+    #def __init__(self, parent, x, y, w, h, pad=0, content=""):
+        #"""The constructor.
+        #\param parent the frame parent
+        #\param x, y, w, h see \ref PLACING_WIDGETS
+        #\param pad this is ignored, you cannot have a padding on frames
+        #\param content a string you can put as label"""        
+        #Widget.__init__(self, parent, x, y, w, h, 0,
+                        #tk.LabelFrame.__init__)         # pad argument is ignored
+        #if not isinstance(parent, Notebook):
+            #self.config(background=parent.cget("background"), relief=FLAT)
+        #Container.__init__(self)
+        #self.init_content(content)
+        
+        
+class VerScrollFrame(VerFrame, VerScroll):
+    """A container in which you can stack children widgets vertically, exceeding
+    its height. If this happens a right scrollbar automatically appears.
+    This is done by using PACK as the y parameter in the widget constructor. The
     frame is initialized with the same color of its parent and no border,
     being so invisible. However you can set a border and also a label to be
     shown on it.
     \warning setting a border reduces the space inside the frame
-    \see \ref Listbox.py, \ref Spinbox.py example files"""
+    \warning if you call winfo_children() on this, it always returns the list of
+    internal Canvas and Scrollbar. If you want to know the list of embedded widgets
+    you must call self.get_intframe().winfo_children()
+    
+    See \ref VerScrollFrame.py example file"""
     
     def __init__(self, parent, x, y, w, h, pad=0, content=""):
         """The constructor.
         \param parent the frame parent
         \param x, y, w, h see \ref PLACING_WIDGETS
         \param pad this is ignored, you cannot have a padding on frames
-        \param content a string you can put as label"""        
-        Widget.__init__(self, parent, x, y, w, h, 0,
-                        tk.LabelFrame.__init__)         # pad argument is ignored
-        if not isinstance(parent, Notebook):
-            self.config(background=parent.cget("background"), relief=FLAT)
-        Container.__init__(self)
-        self.init_content(content)
+        \param content a string you can put as label"""
         
         
-class VerScrollFrame(Widget, Container, VerScroll, tk.LabelFrame):
-    """A container in which you can stack children widgets vertically.
-    This is done by using PACK as the y parameter in their constructor. The
-    frame is initialized with the same color of its parent and no border,
-    being so invisible. However you can set a border and also a label to be
-    shown on it.
-    \warning setting a border reduces the space inside the frame
-    
-    See \ref Listbox.py, \ref RCbuttons.py, \ref Scale.py example files"""
-    
-    def __init__(self, parent, x, y, w, h, pad=0, content=""):
-        """The constructor.
-        \param parent the frame parent
-        \param x, y, w, h see \ref PLACING_WIDGETS
-        \param pad this is ignored, you cannot have a padding on frames
-        \param content a string you can put as label"""                        
-        Widget.__init__(self, parent, x, y, w, h, 0,
-                        tk.LabelFrame.__init__)         # pad argument is ignored
-        if not isinstance(parent, Notebook):
-            self.config(background=parent.cget("background"), relief=FLAT)
-        Container.__init__(self)
-        self.config(background="green")
-        self.init_content(content)
-        
+        VerFrame.__init__(self, parent, x, y, w, h, pad, content)        
         print("VerScrollFrame dims:", (self.winfo_x(), self.winfo_y(), self.winfo_w(), self.winfo_h()))
-        self._canvas = tk.Canvas(self, borderwidth=0, background="yellow")
+        self._canvas = tk.Canvas(self, borderwidth=0)
         VerScroll.__init__(self, self._canvas)
         # update canvas dims
         self.update_idletasks()       
@@ -1242,85 +1232,77 @@ class VerScrollFrame(Widget, Container, VerScroll, tk.LabelFrame):
         # when the frame is resized
         self._resizing = False
         
+    def get_intframe(self):
+        """Returns the internal frame, in which the widgets are stacked.
+        If you want to know the list of the widgets contained in the VerScrollFrame you must
+        call self.get_intframe().winfo_children()."""
+        return self._frame
+        
     def _resize_children(self):
-        """Internal function. Resizes all children when the container is resized."""
+        """Internal function.
+        Resizes all children when the container is resized."""
         print ("VerScrollFrame._resize_children() called - children = ", len(self._frame.children.values()))
-        self._oldw, self._oldh = self.winfo_w(), self.winfo_h()
+        # UNNEEDED ???
+        #self._oldw, self._oldh = self.winfo_w(), self.winfo_h()
         self._frame._adjust_width()
         for w in self._frame.winfo_children():
             if hasattr(w, "_update_dimensions"):
                 w._update_dimensions()
-                if hasattr(w, "_resize_children"):
+                if isinstance(w, Container):
                     w._resize_children()                                      
     
 
-    #def _reset_region(self, event):
-        #"""Internal function. Reset the scroll region to encompass the inner frame
-        #and replace _auto_yscroll, showing or hiding the scrollbar."""
-        ## Using the original Widget._auto_yscroll made a bug, making the scrollbar
-        ## disappear if the VerScrollFrame was narrower than 400 pixel
-        #if not self._resizing:
-            #self._resizing = True
-            #self._canvas.config(scrollregion=self._canvas.bbox(ALL))
-            #print("_reset_region.")
-            #self._auto_yscroll()
-            #self._resizing = False
-        
-    #def _auto_yscroll(self):
-        #"""Internal function.
-        #Adds or hides a vertical scrollbar if the vertical size of
-        #the widget changes."""
-        ## This test prevents an error when exiting the program: the scrollbar could be
-        ## already deleted
-        #if hasattr(self, "_vscroll") and self._vscroll in self.winfo_children():
-            #self.update_idletasks()                 # needed for updating the yview
-            #offs, size = self._canvas.yview()
-            #if size - offs < 1.0 and not self._vscroll.winfo_ismapped():
-                #print("Canvas w:", self._canvas.winfo_width())
-                #self._canvas.pack_forget()
-                #print("Canvas w:", self._canvas.winfo_width())
-                #self._vscroll.pack(side=RIGHT, fill="y", expand=False)
-                #self._vscroll.update()              # needed for drawing the scrollbar
-                
-                #self._canvas.pack(side=RIGHT, fill=BOTH, expand=True)
-                #self.update_idletasks()
-                #print("Canvas w:", self._canvas.winfo_width())
-                #self._resize_children()
-                #print("scrollbar shown")
-            #elif size - offs == 1.0 and self._vscroll.winfo_ismapped():
-                #self._vscroll.pack_forget()
-                #self.update_idletasks()              
-                #self._resize_children()
-                #print("scrollbar hidden")
-
-class _embedHorFrame(HorFrame):
-    """Internal class. An HorFrame embedded in the Canvas of a HorScrollFrame.
-    It inherits from HorFrame only in order to result an instance of it, but has
-    no properties of it"""
+#class _embedHorFrame(tk.Frame):
+    #"""Internal class. An HorFrame embedded in the Canvas of a HorScrollFrame.
+    #The disposition of the widgets in it is managed by the HorScrollFrame
+    #parent."""
     
-    def __init__(self, parent):
-        tk.Frame.__init__(self, parent)
+    #def __init__(self, parent):
+        #tk.Frame.__init__(self, parent)
+        #self.config(background=parent.cget("background"), relief=FLAT)
+        #self._adjust_height()
+        ##print("Frame dims:", self._curr_dim)
         
- 
-# TODO: Inherits from Misc?        
+    #def _adjust_width(self):
+        #last_w = None
+        #for w in self.winfo_children():
+            #if w.winfo_ismapped():
+                #last_w = w
+        #if last_w:
+            #self.config(width=last_w.winfo_bx() + last_w.winfo_bw())
+        #else:
+            #self.config(width=1)       
+
+
+    #def _adjust_height(self, event):
+        #self.config(w=self.master.winfo_height())      # the Canvas (parent) has borderwidth = 0
+        #self._curr_dim = (0, 0, 1, self.winfo_reqheight(), (0, 0, 0, 0))        
+        
+         
 class _embedVerFrame(tk.Frame):
     """Internal class. A VerFrame embedded in the Canvas of a VerScrollFrame.
-    It inherits from VerFrame only in order to result an instance of it, but has
-    no properties of it"""
+    The disposition of the widgets in it is managed by the VerScrollFrame
+    parent."""
     
     def __init__(self, parent):
+        """The constructor."""
         tk.Frame.__init__(self, parent)
-        self.config(background="#ffffff")
-        #self.config(background=parent.cget("background"), relief=FLAT)
+        self.config(background=parent.cget("background"), relief=FLAT)
         self._adjust_width()
-        print("Frame dims:", self._curr_dim)
+        #print("Frame dims:", self._curr_dim)
         
     def _adjust_width(self):
+        """Internal function.
+        Resizes the width of the frame so it fits in its parent Canvas."""
         self.config(w=self.master.winfo_width())      # the Canvas (parent) has borderwidth = 0
         self._curr_dim = (0, 0, self.winfo_reqwidth(), 1, (0, 0, 0, 0))        
         
         
     def _adjust_height(self, event):
+        """Internal function.
+        This is binded to <Map> and <Unmap> events and simulates the auto resizing of
+        the frame when a widget is added or deleted (which is not implemented with the
+        place() geometry manager used by Nictk)."""
         last_w = None
         for w in self.winfo_children():
             if w.winfo_ismapped():
@@ -1329,6 +1311,135 @@ class _embedVerFrame(tk.Frame):
             self.config(height=last_w.winfo_by() + last_w.winfo_bh())
         else:
             self.config(height=1)
+            
+            
+class RowScrollFrame(RowFrame, VerScroll):
+    """A container in which you can stack rows vertically.
+    Each row behaves like a HorFrame, allowing to stack children
+    widgets horizontally (using PACK as the x parameter in their constructor).
+    You can add rows to the frame, obtaining thus a disposition similar
+    to a matrix. When you add widgets you must indicate the RowFrame
+    object (**not** the row) as their parent. The widgets will be added to
+    the active row, which is the last constructed or the one set with the
+    set_active() method.
+    The frame is initialized with the same color of its parent and no border,
+    being so invisible. However you can set a border and also a label to be
+    shown on it.
+    \warning setting a border reduces the space inside the frame
+    \see \ref RowFrame.py, \ref Combobox.py \ref Window.py
+    example files"""    
+    
+    def __init__(self, parent, x, y, w, h, pad=0, content=""):
+        """The constructor. The frame has initially no rows, and you must
+        add them with the add_row() method.
+        \param parent the frame parent
+        \param x, y, w, h see \ref PLACING_WIDGETS
+        \param pad this is ignored, you cannot have a padding on frames
+        \param content a string you can put as label"""
+        RowFrame.__init__(self, parent, x, y, w, h, pad, content)
+        print("VerScrollFrame dims:", (self.winfo_x(), self.winfo_y(), self.winfo_w(), self.winfo_h()))
+        self._canvas = tk.Canvas(self, borderwidth=0)
+        VerScroll.__init__(self, self._canvas)
+        # update canvas dims
+        self.update_idletasks()       
+
+        print("Canvas dims:", (self._canvas.winfo_x(), self._canvas.winfo_y(), self._canvas.winfo_width(), self._canvas.winfo_height()))
+        self._frame = _embedRowFrame(self._canvas)
+        self._frame.config(background="green")
+        self._canvas.create_window((0,0), window=self._frame, anchor=NW, tags="self._frame")
+        self._canvas.config(background="yellow")
+        # This flag prevents an infinite recursion between _resize_children and _auto_yscroll
+        # when the frame is resized
+        self._resizing = False
+        
+    def get_intframe(self):
+        """Returns the internal frame, in which the widgets are stacked.
+        If you want to know the list of the widgets contained in the VerScrollFrame you must
+        call self.get_intframe().winfo_children()."""
+        return self._frame
+    
+    def _resize_children(self):
+        self._frame._adjust_width()
+        super()._resize_children()
+        
+                                             
+
+
+class _embedRowFrame(tk.Frame):
+    """Internal class. A VerFrame embedded in the Canvas of a VerScrollFrame.
+    The disposition of the widgets in it is managed by the VerScrollFrame
+    parent."""
+    
+    def __init__(self, parent):
+        """The constructor."""
+        tk.Frame.__init__(self, parent)
+        self.config(background=parent.cget("background"), relief=FLAT)
+        self._adjust_width()
+        #print("Frame dims:", self._curr_dim)
+        
+    def _adjust_width(self):
+        """Internal function.
+        Resizes the width of the frame so it fits in its parent Canvas."""
+        self.config(w=self.master.winfo_width())      # the Canvas (parent) has borderwidth = 0
+        self._curr_dim = (0, 0, self.winfo_reqwidth(), 1, (0, 0, 0, 0))        
+        
+        
+    def _adjust_height(self, event):
+        """Internal function.
+        This is binded to <Map> and <Unmap> events and simulates the auto resizing of
+        the frame when a widget is added or deleted (which is not implemented with the
+        place() geometry manager used by Nictk)."""
+        last_w = None
+        for w in self.winfo_children():
+            if w.winfo_ismapped():
+                last_w = w
+        if last_w:
+            self.config(height=last_w.winfo_by() + last_w.winfo_bh())
+        else:
+            self.config(height=1)
+
+       
+        
+        
+        
+    #def add_row(self, h):
+        #"""Adds a row to the frame.
+        #Rows are stacked vertically from top to bottom. This also sets
+        #the new row as the active one: newly created widgets (which have
+        #the RowFrame as their parent) will belong to this row.
+        #\param h the height of the row (the width coincides with the frame one);
+        #see \ref PLACING_WIDGETS for the various options you have"""
+        #self._rows.append(_framerow(self, h))
+        #self._active = self._rows[-1].num
+        
+    #def set_active(self, n):
+        #"""Sets the n-th row as active. Newly created widgets (which have
+        #the RowFrame as their parent) will belong to this row. When
+        #you use add_row() the newly created row is automatically set as
+        #active.
+        #\param n the row number (starting from 0)"""
+        #if 0 <= n < len(self._rows):
+            #self._active = n
+            
+    def get_active(self):
+        """Returns the number of the active row in the frame."""
+        return self.master.master.get_active()
+       
+            
+    #def _resize_children(self):
+        #"""Internal function.
+        #Resizes all children when the container is resized."""
+        #oldactivenum = self.get_active().num
+        #for row in self._rows:
+            #self.set_active(row.num)
+            #row._calc_dimensions()        
+            #for w in row.winfo_children():
+                #if hasattr(w, "_update_dimensions"):
+                    #w._update_dimensions()
+                    #if isinstance(w, Container):
+                        #w._resize_children()
+        #self.set_active(oldactivenum)              
+
 
 
 #####################################################################

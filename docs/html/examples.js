@@ -10,11 +10,14 @@ var examples =
     [ "winfo.py", "winfo_8py-example.html", null ],
     [ "Window.py", "_window_8py-example.html", null ],
     [ "RowFrame.py", "_row_frame_8py-example.html", null ],
+    [ "VerScrollFrame.py", "_ver_scroll_frame_8py-example.html", null ],
+    [ "RowScrollFrame.py", "_row_scroll_frame_8py-example.html", null ],
     [ "Combobox.py", "_combobox_8py-example.html", null ],
     [ "Entry.py", "_entry_8py-example.html", null ],
     [ "Listbox.py", "_listbox_8py-example.html", null ],
     [ "Menu.py", "_menu_8py-example.html", null ],
     [ "RCbuttons.py", "_r_cbuttons_8py-example.html", null ],
     [ "Scale.py", "_scale_8py-example.html", null ],
-    [ "Spinbox.py", "_spinbox_8py-example.html", null ]
+    [ "Spinbox.py", "_spinbox_8py-example.html", null ],
+    [ "Text.py", "_text_8py-example.html", null ]
 ];

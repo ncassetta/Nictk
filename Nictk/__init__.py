@@ -282,8 +282,9 @@ class VerScroll:
     
     def __init__(self, scrolled_w):
         """The constructor.
-        \param scrolled_w the widget which will be scrolled. It can be self in 
-        or the internal frame in other classes."""
+        \param scrolled_w the widget which will be scrolled. It can be the
+        widget itself (as in the Listbox) or an internal frame (as in the
+        VerScrollFrame and RowScrollFrame)."""
         self._scrolled_w = scrolled_w
         self._vscroll = tk.Scrollbar(self, orient=VERTICAL)
         scrolled_w.config(yscrollcommand=self._vscroll.set)
@@ -303,12 +304,12 @@ class VerScroll:
         # This silly test prevents errors when entering and exiting the program: the
         # scrollbar could be not yet created or already deleted        
         if hasattr(self, "_vscroll") and self._vscroll in self.winfo_children():
-            print ("Entered _auto_yscroll. Widget", self._name)
+            #print ("Entered _auto_yscroll. Widget", self._name)
             # update the yview
             self.update_idletasks()
             offs, size = self._scrolled_w.yview()
             if size - offs < 1.0 and not self._vscroll.winfo_ismapped():
-                print("scrollbar shown")
+                #print("scrollbar shown")
                 if self._scrolled_w == self:            
                     self._vscroll.pack(side=RIGHT, fill="y", expand=False)
                     self.update_idletasks()
@@ -320,7 +321,7 @@ class VerScroll:
                     if isinstance(self, Container):
                         self._resize_children()                    
             elif size - offs == 1.0 and self._vscroll.winfo_ismapped():
-                print("scrollbar hidden")
+                #print("scrollbar hidden")
                 self._vscroll.pack_forget()
                 if self._scrolled_w != self:
                     self.update_idletasks()
@@ -361,7 +362,7 @@ class Container:
     def _resize_children(self):
         """Internal function.
         Resizes all children when the container is resized."""
-        print ("_resize_children() called on", self.__repr__(), "children = ", len(self.children.values()))
+        #print ("_resize_children() called on", self.__repr__(), "children = ", len(self.children.values()))
         for w in self.winfo_children():
             if hasattr(w, "_update_dimensions"):
                 w._update_dimensions()
@@ -968,6 +969,7 @@ class _framerow():
         self._calc_dimensions()
         
     def __str__(self):
+        """Prints a description of the _framerow for debugging purposes."""
         return "master: " + self.master.__str__() + " num: " + str(self.num) + " _orig_h: " + \
     str(self._orig_h) + " _tot_h: " + str(self._tot_h)
     
@@ -1080,10 +1082,10 @@ class RowFrame(Widget, Container, tk.LabelFrame):
         self._rows = []
         self._active = None
         
-    def print_rows(self):
-        for row in self._rows:
-            print(row)
-        print("active: ", int(self._active))
+    #def print_rows(self):
+        #for row in self._rows:
+            #print(row)
+        #print("active: ", int(self._active))
         
     def add_row(self, h):
         """Adds a row to the frame.
@@ -1207,8 +1209,7 @@ class VerScrollFrame(VerFrame, VerScroll):
     \warning if you call winfo_children() on this, it always returns the list of
     internal Canvas and Scrollbar. If you want to know the list of embedded widgets
     you must call self.get_intframe().winfo_children()
-    
-    See \ref VerScrollFrame.py example file"""
+    \see \ref VerScrollFrame.py example file"""
     
     def __init__(self, parent, x, y, w, h, pad=0, content=""):
         """The constructor.
@@ -1219,13 +1220,13 @@ class VerScrollFrame(VerFrame, VerScroll):
         
         
         VerFrame.__init__(self, parent, x, y, w, h, pad, content)        
-        print("VerScrollFrame dims:", (self.winfo_x(), self.winfo_y(), self.winfo_w(), self.winfo_h()))
+        #print("VerScrollFrame dims:", (self.winfo_x(), self.winfo_y(), self.winfo_w(), self.winfo_h()))
         self._canvas = tk.Canvas(self, borderwidth=0)
         VerScroll.__init__(self, self._canvas)
         # update canvas dims
         self.update_idletasks()       
 
-        print("Canvas dims:", (self._canvas.winfo_x(), self._canvas.winfo_y(), self._canvas.winfo_width(), self._canvas.winfo_height()))
+        #print("Canvas dims:", (self._canvas.winfo_x(), self._canvas.winfo_y(), self._canvas.winfo_width(), self._canvas.winfo_height()))
         self._frame = _embedVerFrame(self._canvas)
         self._canvas.create_window((0,0), window=self._frame, anchor=NW, tags="self._frame")
         # This flag prevents an infinite recursion between _resize_children and _auto_yscroll
@@ -1314,7 +1315,8 @@ class _embedVerFrame(tk.Frame):
             
             
 class RowScrollFrame(RowFrame, VerScroll):
-    """A container in which you can stack rows vertically.
+    """A container in which you can stack rows vertically, exceeding
+    its height. If this happens a right scrollbar automatically appears.
     Each row behaves like a HorFrame, allowing to stack children
     widgets horizontally (using PACK as the x parameter in their constructor).
     You can add rows to the frame, obtaining thus a disposition similar
@@ -1326,8 +1328,7 @@ class RowScrollFrame(RowFrame, VerScroll):
     being so invisible. However you can set a border and also a label to be
     shown on it.
     \warning setting a border reduces the space inside the frame
-    \see \ref RowFrame.py, \ref Combobox.py \ref Window.py
-    example files"""    
+    \see \ref RowScrollFrame.py example file"""    
     
     def __init__(self, parent, x, y, w, h, pad=0, content=""):
         """The constructor. The frame has initially no rows, and you must
@@ -1337,17 +1338,15 @@ class RowScrollFrame(RowFrame, VerScroll):
         \param pad this is ignored, you cannot have a padding on frames
         \param content a string you can put as label"""
         RowFrame.__init__(self, parent, x, y, w, h, pad, content)
-        print("VerScrollFrame dims:", (self.winfo_x(), self.winfo_y(), self.winfo_w(), self.winfo_h()))
+        #print("VerScrollFrame dims:", (self.winfo_x(), self.winfo_y(), self.winfo_w(), self.winfo_h()))
         self._canvas = tk.Canvas(self, borderwidth=0)
         VerScroll.__init__(self, self._canvas)
         # update canvas dims
         self.update_idletasks()       
 
-        print("Canvas dims:", (self._canvas.winfo_x(), self._canvas.winfo_y(), self._canvas.winfo_width(), self._canvas.winfo_height()))
+        #print("Canvas dims:", (self._canvas.winfo_x(), self._canvas.winfo_y(), self._canvas.winfo_width(), self._canvas.winfo_height()))
         self._frame = _embedRowFrame(self._canvas)
-        self._frame.config(background="green")
         self._canvas.create_window((0,0), window=self._frame, anchor=NW, tags="self._frame")
-        self._canvas.config(background="yellow")
         # This flag prevents an infinite recursion between _resize_children and _auto_yscroll
         # when the frame is resized
         self._resizing = False
@@ -1359,6 +1358,8 @@ class RowScrollFrame(RowFrame, VerScroll):
         return self._frame
     
     def _resize_children(self):
+        """Internal function.
+        Resizes all children when the container is resized."""        
         self._frame._adjust_width()
         super()._resize_children()
         
@@ -2488,7 +2489,7 @@ class Scale(Widget, tk.Scale):
           sliderrelief, tickinterval, to 
           
     see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/scale.html">anzeljg reference</a>
-    for th class **tkinter.scale**
+    for the class **tkinter.scale**
     \see \ref Scale.py example file"""
     
 
@@ -2668,7 +2669,7 @@ class Spinbox(Widget, tk.Spinbox):
     
     def mode(self, mode, wrap=None, validate=None):
         """Sets the spinbox mode to one of these three:
-        - "normal2 you can get the content by clicking the arrow keys or
+        - "normal" you can get the content by clicking the arrow keys or
           typing in the texr field
         - "readonly": you can only click the arrow key
         - "autoadd": (only if values are string) as normal, but inserts

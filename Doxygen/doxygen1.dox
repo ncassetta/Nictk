@@ -1,14 +1,15 @@
 /// \mainpage
 /// Nictk (formerly Ntk) is a wrapper for **tkinter** written by Nicola Cassetta with the aim of simplifying its use for building graphical interfaces with Python.
 ///
-/// As is known, tkinter is the Python standard library already included in the language distribution; it derives from **Tcl/Tk** and maintains its nomenclature and conventions in names and parameters of the functions, so they are often difficult to remember. It also has three different geometry managers (_pack_, _grid_ and _place_) for placing widgets, which can be confusing. One of the most popular features is its ability to easily resize widgets when the main window is resized, but this often leads to strange behavior. For example, the standard behavior of an Entry object (the text field widget) is to grow larger as we type text into it. If we packed other widgets to its right all of them will move. Another problem arises for widget dimensions, which are in pixel for some of them (for example Button, Canvas) and in charachters for other (Label, Entry).
+/// As is known, **tkinter** is the Python standard library already included in the language distribution; it derives from **Tcl/Tk** and maintains its nomenclature and conventions in names and parameters of the functions, so they are often difficult to remember. It also has three different geometry managers (_pack_, _grid_ and _place_) for placing widgets, which can be confusing. One of the most popular features is its ability to easily resize widgets when the main window is resized, but this often leads to strange behavior. For example, the standard behavior of an Entry object (the text field widget) is to grow larger as we type text into it. If we packed other widgets to its right all of them will move. Another problem arises for widget dimensions, which are in pixel for some of them (for example Button, Canvas) and in charachters for other (Label, Entry).
 ///
-/// These things make tkinter not very easy to learn for people starting out in designing graphical interfaces with Python. So I tried to simplify these problems by adopting some general principles: 
-/// - All widgets have a similar constructor, which enable the user to easily position them, with sizes always specified in pixels (as in tkinter, widgets can change their position and size when the main window is resized).
+/// These things make **tkinter** not very easy to learn for people starting out in designing graphical interfaces with Python. So I tried to simplify these problems by adopting some general principles: 
+/// - All widgets have a similar constructor, which enable the user to easily position them, with sizes always specified in pixels (as in **tkinter**, widgets can change their position and size when the main window is resized).
 /// - Many options for the widget **config()** method have been renamed in a way that is easier to remember, and some of them have been replaced by dedicated methods. Also the almost infinite series of **winfo_...** methods have been packed into the unique **get_winfo()** method, with a string parameter.
 /// - I renamed also some functions, trying to mantain the _xxxx_yyyy_ scheme recommended in PEP 8 (this, however, is not complete).
 /// - I simplified the binding of events to callback functions, introducing in many widgets a _command_ parameter in the constructor and standardizing the callback paradigm.
 /// - I simplified also the use of IntVar, StringVar, etc.
+/// - From ver 2.2.0 I introduced scrolling frames, containers in which you can scroll the internal area.
 ///
 /// You can start learning Nictk by reading the \ref OVERVIEW section.
 ///
@@ -33,7 +34,7 @@
 
 /// \page INSTALL How to install
 ///
-/// Nictk consist only of the two files __init__.py and constants.py in the folder /Nictk. If you want to try it without installing you can:
+/// Nictk consist only of the two files \__init__.py and constants.py in the folder /Nictk. If you want to try it without installing you can:
 /// + create your own folder
 /// + copy in it (as subfolders) the /Nictk and /Examples folders
 /// + create your own files in your folder (files in /Example folder import a _setup module which sets the path for import)
@@ -92,7 +93,7 @@
 /// + **pad** is a padding parameter which allows to leave some space between widgets
 /// + ** **kw** are other keyword parameters specific for the widget
 ///
-/// The constructor allows to create and place the widget with a single instruction. There are no separate instructions for creating and placing (and no different geometry managers) like in tkinter. Parameters **x**, **y**, **w**, **h** are always relative to the parent widget, and (when numeric) expressed in pixels. You have however many options to indicate the position and the size: you can set them to absolute or relative values, or pack the widget with respect to previously constructed. These options will determine also if the widget dimension are updated when the parent is resized. For details see \ref PLACING_WIDGETS.
+/// The constructor allows to create and place the widget with a single instruction. There are no separate instructions for creating and placing (and no different geometry managers) like in **tkinter**. Parameters **x**, **y**, **w**, **h** are always relative to the parent widget, and (when numeric) expressed in pixels. You have however many options to indicate the position and the size: you can set them to absolute or relative values, or pack the widget with respect to previously constructed. These options will determine also if the widget dimension are updated when the parent is resized. For details see \ref PLACING_WIDGETS.
 ///
 /// The constructor, on the other hand, generally allows you to set only a few fundamental properties of the widget. The setting of the various attributes (such as color, font, etc.) is generally left to the Nictk.Widget.config() method (but this can be abbreviated for containers with the Nictk.Container.config_children() method which acts on all children when they are constructed). This will be explained in detail in the \ref ATTRIBUTES section.
 ///
@@ -106,18 +107,18 @@
 ///
 /// ## Windows ##
 ///
-/// In your app you must create a unique main window (i.e. a **Main** object), then you can create and destroy any number of **Window** objects (the Toplevel object in tkinter).
+/// In your app you must create a unique main window (i.e. a **Main** object), then you can create and destroy any number of **Window** objects (the Toplevel object in **tkinter**).
 ///
 /// <table>
 ///   <tr>
 ///     <th>**Object**</th>
-///     <th></th>
+///     <th>Notes</th>
 ///   </tr><tr>
-///     <td>class Nictk.Main(Nictk.BaseWindow, tk.Tk)</td>
-///     <td>The main window of the app (derived from the tkinter **Tk** class)</td>
+///     <td>class Nictk.Main</td>
+///     <td>The main window of the app (derived from the **tkinter** **Tk** class)</td>
 ///   </tr><tr>
-///     <td>class Nictk.Window(Nictk.BaseWindow, tk.Toplevel)</td>
-///     <td>A common window (derived from the tkinter **Toplevel** class). It can be a normal, modal or persistent window</td>
+///     <td>class Nictk.Window</td>
+///     <td>A common window (derived from the **tkinter** **Toplevel** class). It can be a normal, modal or persistent window</td>
 ///   </tr>    
 /// </table>
 ///
@@ -125,22 +126,30 @@
 ///
 /// ## Frames ##
 ///
-/// Frames are another type of container. They are initialized with no border and the same color of their parent, so they are invisible and you can use them for layout purposes (grouping children widgets horizontally or vertically). However, as they are derived from the tkinter LabelFrame widget, you can set a border and a label for them (this reduces the available space in the frame). In their constructors the pad parameter is present but is ignored (it is always fixed to 0 in all directions).
+/// Frames are another type of container. They are initialized with no border and the same color of their parent, so they are invisible and you can use them for layout purposes (grouping children widgets horizontally or vertically). However, as they are derived from the **tkinter** **LabelFrame** widget, you can set a border and a label for them (this reduces the available space in the frame). In their constructors the pad parameter is present but is ignored (it is always fixed to 0 in all directions).
+///
+/// From version 2.2.0 I introduced scrollable frames, in which you can add internal widgets exceeding the frame height: if you do this a scrollbar appears automatically.
 ///
 /// <table>
 ///   <tr>
 ///     <th>**Object**</th>
-///     <th></th>
+///     <th>Notes</th>
 ///   </tr><tr>
-///     <td>class Nictk.HorFrame(Nictk.Widget, Nictk.Container, tk.LabelFrame)</td>
+///     <td>class Nictk.HorFrame</td>
 ///     <td>A frame in which you can stack children widgets horizontally</td>
 ///   </tr><tr>
-///     <td>class Nictk.VerFrame(Nictk.Widget, Nictk.Container, tk.LabelFrame)</td>
+///     <td>class Nictk.VerFrame</td>
 ///     <td>A frame in which you can stack children widgets vertically</td>
 ///   </tr><tr>
-///     <td>class Nictk.RowFrame(Nictk.Widget, Nictk.Container, tk.LabelFrame)</td>
+///     <td>class Nictk.RowFrame</td>
 ///     <td>A frame which you can divide in rows vertically. Each row behaves like a HorFrame, allowing to stack children widgets horizontally. This allows to place widgets as in a matrix.</td>
-///   </tr> 
+///   </tr><tr>
+///     <td>class Nictk.VerScrollFrame</td>
+///     <td>Similar to the VerFrame. You can stack widgets exceeding the height of the internal area, in this case a vertical scrollbar appears automatically.</td>
+///   </tr><tr>
+///     <td>class Nictk.RowScrollFrame</td>
+///     <td>Similar to the RowFrame. You can stack widgets exceeding the height of the internal area, in this case a vertical scrollbar appears automatically.</td>
+///   </tr>
 /// </table>
 ///        
 /// 
@@ -152,49 +161,49 @@
 /// <table>
 ///   <tr>
 ///     <th>**Object**</th>
-///     <th></th>
+///     <th>Notes</th>
 ///   </tr><tr>
-///     <td>class Nictk.Button(Nictk.Widget, tk.Button)</td>
+///     <td>class Nictk.Button</td>
 ///     <td>Button widget</td>
 ///   </tr><tr>
-///     <td>class Nictk.Canvas(Nictk.Widget, tk.Canvas)</td>
+///     <td>class Nictk.Canvas</td>
 ///     <td>Canvas widget to display graphical elements like lines or text</td>
 ///   </tr><tr>
-///     <td>class Nictk.Checkbutton(Nictk.Widget, tk.Checkbutton)</td>
+///     <td>class Nictk.Checkbutton</td>
 ///     <td>Checkbutton widget which is either in on or off state</td>
 ///   </tr><tr>
-///     <td>class Nictk.Combobox(Nictk.Widget, tk.OptionMenu)</td>
-///     <td>Combobox which allows the user to select a value from a menu. It is the equivalent (renamed) of the OptionMenu class in tkinter</td>
+///     <td>class Nictk.Combobox</td>
+///     <td>Combobox which allows the user to select a value from a menu. It is the equivalent (renamed) of the OptionMenu class in **tkinter**</td>
 ///   </tr><tr>
-///     <td>class Nictk.Entry(Nictk.Widget, tk.Entry)</td>
+///     <td>class Nictk.Entry</td>
 ///     <td>Entry widget which allows editing and displaying simple text</td>
 ///   </tr><tr>
-///     <td>class Nictk.Label(Nictk.Widget, tk.Label)</td>
+///     <td>class Nictk.Label</td>
 ///     <td>Label widget which can display text and bitmaps</td>
 ///   </tr><tr>
-///     <td>class Nictk.Listbox(Nictk.Widget, tk.Listbox)</td>
+///     <td>class Nictk.Listbox</td>
 ///     <td>Listbox widget which can display a list of strings, allowing simple and multiple selection</td>
 ///   </tr><tr>
-///     <td>class Nictk.Menu(tk.Menu)</td>
+///     <td>class Nictk.Menu</td>
 ///     <td>Menu widget which allows displaying menu bars, pull-down menus and pop-up menus</td>
 ///   </tr><tr>
-///     <td>class Nictk.Radiobutton(Nictk.Widget, tk.Radiobutton)</td>
+///     <td>class Nictk.Radiobutton</td>
 ///     <td>Radiobutton widget which can be grouped, showing only one of several buttons in on state</td>
 ///   </tr><tr>
-///     <td>class Nictk.Scale(Nictk.Widget, tk.Scale)</td>
+///     <td>class Nictk.Scale</td>
 ///     <td>Scale widget which can display a cursor sliding on a numerical scale</td>
 ///   </tr><tr>
-///     <td>class Nictk.Scrollbar(tk.Scrollbar)</td>
+///     <td>class Nictk.Scrollbar</td>
 ///     <td>Scrollbar widget</td>
 ///   </tr><tr>
-///     <td>class Nictk.Spinbox(Nictk.Widget, tk.Spinbox)</td>
+///     <td>class Nictk.Spinbox</td>
 ///     <td>Spinbox widget which allows selecting one of various options by mean of arrow keys or inserting a new one</td>
 ///   </tr><tr>
-///     <td>class Nictk.Text(Nictk.Widget, tk.Text)</td>
+///     <td>class Nictk.Text</td>
 ///     <td>Text widget which can edit and display formatted text</td>
 ///   </tr><tr>
-///     <td>class Nictk.Notebook(Nictk.Widget, ttk.Notebook)</td>
-///     <td>Notebook widget which manages a collection of windows and displays a single one at a time.</td>
+///     <td>class Nictk.Notebook</td>
+///     <td>Notebook widget which manages a collection of windows and displays a single one at a time. It derives from the ttk.Notebook widget</td>
 ///   </tr>
 ///  </table>
 ///
@@ -306,6 +315,7 @@
 /// Here are some examples
 /// \code{.py}
 /// import Nictk as Ntk
+///from Nictk.constants import *
 ///
 ///  .  .  .
 ///
@@ -330,7 +340,7 @@
 ///
 /// <a name="packuse">The meaning of the "pack" parameter (aliased by PACK) differs depending on the type of container in which the widget will be placed.
 ///
-/// In an Nictk.VerFrame, Nictk.Main, or Nictk.Window the widgets are stacked from top to bottom and the parent keeps track of the last widget placed on the stack. So PACK is effective only for the y coordinate, while for the x you will always get a widget positioned to the left (i.e. with x coordinate = 0). Conversely, in an Nictk.HorFrame or in a row of an Nictk.RowFrame the widgets are stacked from left to right, so you can use the PACK for the x, while for the y you will get a widget positioned at the top (y = 0).
+/// In an Nictk.VerFrame, Nictk.VerScrollFrame, Nictk.Main, or Nictk.Window the widgets are stacked from top to bottom and the parent keeps track of the last widget placed on the stack. So PACK is effective only for the y coordinate, while for the x you will always get a widget positioned to the left (i.e. with x coordinate = 0). Conversely, in an Nictk.HorFrame or in a row of an Nictk.RowFrame, Nictk.RowScrollFrame the widgets are stacked from left to right, so you can use the PACK for the x, while for the y you will get a widget positioned at the top (y = 0).
 /// Here are two example you can try:
 ///
 /// \code{.py}

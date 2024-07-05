@@ -36,7 +36,7 @@
 ///
 /// A common tedious situation is the need to repeat the same settings on a large number of widgets (this led to the introduction of **ttk** with its  themed widgets). In Nictk I introduced the Nictk.Container.config_children() method. When creating a container (a window or a frame) you can call this method before adding child widgets, and all of them will inherit the options set in the method. Examples of the use of this method are in many example files.
 ///
-/// This is an (incomplete) list of the most useful options, however in the tkinter docstrings there is always a list of **all** accepted options.
+/// This is an (incomplete) list of the most useful options, however in the **tkinter** docstrings there is always a list of **all** accepted options.
 ///
 /// \note All Nictk constants in capital letters correspond to the same string in lowercase; so, for example, CENTER = "center" etc. You may want to put a \code from Nictk.constants import * \endcode statement to type them without the module prefix.
 /// 
@@ -141,12 +141,12 @@
 ///   </tr><tr>
 ///     <td>cursor</td>
 ///     <td></td>
-///     <td>The cursor shape when the mouse is over the widget. For a list of shapes see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/cursors.html" target="_blank">here</a></td>
+///     <td>The cursor shape when the mouse is over the widget. See <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/cursors.html" target="_blank">here</a> for a list of shapes</td>
 ///     <td>All widgets</td>
 ///   </tr><tr>
 ///     <td>font</td>
 ///     <td></td>
-///     <td>You can indicate a font for widget text. See <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/fonts.html" target="_blank" here for a complete reference about fonts </td>
+///     <td>You can indicate a font for widget text. See <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/fonts.html" target="_blank">here</a> for a complete reference about fonts </td>
 ///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Entry, Nictk.Label, Nictk.Listbox, Nictk.Menu, Nictk.Radiobutton, Nictk.Scale, Nictk.Spinbox, Nictk.Text</td>
 ///   </tr><tr>
 ///     <td>justify</td>
@@ -156,7 +156,7 @@
 ///   </tr><tr>
 ///     <td>relief</td>
 ///     <td></td>
-///     <td>The border shape of the widget. You can choose between **SUNKEN, FLAT, RAISED, GROOVE, RIDGE, SOLID** </td>
+///     <td>The border shape of the widget. You can choose between **SUNKEN, FLAT, RAISED, GROOVE, RIDGE, SOLID** (see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/relief.html">here</a>)</td>
 ///     <td>All widgets</td>
 ///   </tr><tr>
 ///     <td>takefocus</td>
@@ -190,11 +190,11 @@
 ///     <td></td>
 ///   </tr><tr>
 ///     <td>command</td>
-///     <td>This associates some widget event (as clicking a button or pressing RETURN in an entry) with a callback. In %Nictk it has been enhanced and you can also associate a value to this; moreover you can do this in the constructor and so you need to use this option only if you want to change the callback. For details see \ref EVENTS.</td>
+///     <td>This associates some widget event (as clicking a button or pressing RETURN in an entry) with a callback. In %Nictk it has been enhanced and you can also associate a value to this; moreover you can do this in the constructor and so you need to use this option only if you want to set the callback after the widget creation. For details see \ref EVENTS.</td>
 ///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Combobox, Nictk.Entry, Nictk.Listbox, Nictk.Menu, Nictk.Radiobutton, Nictk.Scale, Nictk.Spinbox</td>
 ///   </tr><tr>
 ///     <td>state</td>
-///     <td>This can switch between <b>"normal"</b> and <b>"disabled"</b> state. In %Nictk is simpler to use Nictk.Widget.activate() and Nictk.Widget.deactivate() methods. The Nictk.Spinbox widget has a third option <b>"readonly"</b>, which you can set with the Nictk.Spinbox.set_state() method</td>
+///     <td>This can switch between <b>"normal"</b> and <b>"disabled"</b> state. In %Nictk is simpler to use Nictk.Widget.activate() and Nictk.Widget.deactivate() methods. The Nictk.Spinbox widget has a third option <b>"readonly"</b>, which you can set with the Nictk.Spinbox.mode() method</td>
 ///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Combobox, Nictk.Entry, Nictk.Label, Nictk.Listbox, Nictk.Menu, Nictk.Radiobutton, Nictk.Scale, Nictk.Spinbox</td>
 ///   </tr><tr>
 ///     <td>text</td>
@@ -202,7 +202,7 @@
 ///     <td>Nictk.Button, Nictk.Checkbutton, Nictk.Label, Nictk.Radiobutton</td>
 ///   </tr><tr>
 ///     <td>variable</td>
-///     <td>In many widgets you can associate a tk.Variable object to the widget directly in the constructor. If you want to change the variable after the widget has been created you can use the Nictk.Widget.set_variable() method</td>
+///     <td>In many widgets you can associate a tk.Variable object to the widget directly in the constructor. If you want to change the variable after the widget has been created you can use the Nictk.Checkbutton.set_variable() and Nictk.Radiobutton.set_variable() methods</td>
 ///     <td>Nictk.Checkbutton, Nictk.Radiobutton</td>
 ///   </tr><tr>
 ///     <td>wraplength</td>
@@ -216,7 +216,7 @@
 ///
 /// Some widget (as Nictk.Entry) can hold a text as their content, other (as Nictk.Label) can hold a text or an image. Moreover, many of them allows the user to associate a tkinter.Variable object (see \ref VARIABLES). This is done in **tkinter** by mean of the properties _text_, _image_, _textvariable_ and _variable_.
 ///
-/// In Nictk I tried to simplify widget content management in this way: in many widget constructors there is a _content_ option in which the user can specify different content types (a string, a tkinter.StringVar, an image ...). The constructor sets it, and then you can use the Widget.set_content() and Nictk.Widget.get_content() methods, which simplify setting and getting these options and usually make it unnecessary to use config() for them. There is also a Widget.init_content() method: this is automatically called by the constructor when you specify the _content_ option, and is needed only if you want to change the widget content type (i.e. to change, for example, from a string to an image).
+/// In Nictk I tried to simplify widget content management in this way: in many widget constructors there is a _content_ option in which the user can specify different content types (a string, a tkinter.StringVar, an image ...). The constructor sets it, and then you can use the Nictk.Widget.set_content() and Nictk.Widget.get_content() methods, which simplify setting and getting these options and usually make it unnecessary to use config() for them. There is also a Nictk.Widget.init_content() method: this is automatically called by the constructor when you specify the _content_ option, and is needed only if you want to change the widget content type (i.e. to change, for example, from a string to an image).
 
 
 
@@ -227,7 +227,7 @@
 /// ## The get_winfo() method ##
 ///
 /// For other properties **tkinter** has a long list of _winfo_... methods (one for every property we want to know). I reorganized them in one method Nictk.Misc.get_winfo() which, similarly to Nictk.Misc.get_config(), accepts the property as a string. For a list of all accepted options see the example file \ref winfo.py.
-/// For the meaning of various tkinter winfo_... methods you can see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/universal.html" target="_blank">this page</a>, which elencates all tkinter general methods common to all widgets.
+/// For the meaning of various **tkinter** winfo_... methods you can see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/universal.html" target="_blank">this page</a>, which elencates all **tkinter** general methods common to all widgets.
 ///
 /// \anchor dimensions
 ///  ## Retrieving widgets dimensions ##
@@ -290,16 +290,16 @@
 
 /// \page EVENTS Events and callbacks
 ///
-/// In tkinter we have two ways to connect a callback to a widget event:
+/// In **tkinter** we have two ways to connect a callback to a widget event:
 /// + The **bind()** method, which allows the user to freely bind an event generated by the widget to a callback function. 
 /// + The **command** option of the config() method which allows to bind a predefined event (the click for a button, the return for an Entry, ecc) to a callback function This can be used also in the widget constructor.
 ///
-/// The two methods differ: with _bind()_ the callback gets a **tkinter.Event** as parameter, i.e. an object with various informations on what is happened, while with _command_ the callback gets no parameter. So **tkinter** suggest to write for the callbacks the signature:
+/// The two methods differ: with _bind()_ the callback gets a tkinter.Event as parameter, i.e. an object with various informations on what is happened, while with _command_ the callback gets no parameter. So **tkinter** suggest to write for the callbacks the signature:
 /// \code{.py}
 /// def callback(event=None):
 /// \endcode
 ///
-/// If you are not familiar with tkinter events, I suggest the following documentation:
+/// If you are not familiar with **tkinter** events, I suggest the following documentation:
 /// + <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/event-types.html" target="_blank">Event types</a>
 /// + <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/event-handlers.html" target="_blank">Event class attributes</a>
 /// + <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/binding-levels.html" target="_blank">The **bind()**, **bind_class()** and **bind_all()** methods</a>
@@ -341,7 +341,7 @@
 ///
 /// ## Events and disabled widgets ##
 ///
-/// Another strange behavior of tkinter is the following: when you bind an event to a widget and disable the widget the event will be ignored only if it was bound with the _command_ option, while if it was bound with the _bind()_ method the disabled widget will continue to respond to the event.
+/// Another strange behavior of **tkinter** is the following: when you bind an event to a widget and disable the widget the event will be ignored only if it was bound with the _command_ option, while if it was bound with the _bind()_ method the disabled widget will continue to respond to the event.
 /// In Nictk I changed this (since version 2.1.0), so that disabled widgets don't respond to events regardless of the method with which they were bound.
 
 
@@ -507,7 +507,7 @@
 ///   </tr><tr>
 ///     <td>Nictk.askcolor</td>
 ///     <td>Opens a color chooser file dialog.</td>
-///     <td>A duple, with in the first element three integers R, G, B, in the second a tkinter Color object, or (None, None) if you press "Cancel"</td>
+///     <td>A duple, with in the first element three integers R, G, B, in the second a **tkinter** Color object, or (None, None) if you press "Cancel"</td>
 ///   </tr>
 /// </table>
 ///

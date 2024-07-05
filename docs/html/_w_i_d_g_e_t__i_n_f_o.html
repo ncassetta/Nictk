@@ -30,7 +30,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Nictk<span id="projectnumber">&#160;2.1.1</span>
+   <div id="projectname">Nictk<span id="projectnumber">&#160;2.2.0</span>
    </div>
    <div id="projectbrief">An easy to use pyton GUI</div>
   </td>
@@ -97,7 +97,7 @@ $(document).ready(function(){initNavTree('_w_i_d_g_e_t__i_n_f_o.html',''); initR
 <div class="contents">
 <div class="textblock"><p >As said in the previous section, you can query many widget properties with the <a class="el" href="class_nictk_1_1_misc.html#a382114f739269373aed682dd5b88035e" title="Returns the value for the key resource.">Nictk.Misc.get_config()</a> method.</p>
 <h2>The get_winfo() method</h2>
-<p >For other properties <b>tkinter</b> has a long list of <em>winfo</em>... methods (one for every property we want to know). I reorganized them in one method <a class="el" href="class_nictk_1_1_misc.html#acf88dac7c2ee8783174fa53399c8fab9" title="Returns the widget info for the item key.">Nictk.Misc.get_winfo()</a> which, similarly to <a class="el" href="class_nictk_1_1_misc.html#a382114f739269373aed682dd5b88035e" title="Returns the value for the key resource.">Nictk.Misc.get_config()</a>, accepts the property as a string. For a list of all accepted options see the example file <a class="el" href="winfo_8py-example.html">winfo.py</a>. For the meaning of various tkinter winfo_... methods you can see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/universal.html" target="_blank">this page</a>, which elencates all tkinter general methods common to all widgets.</p>
+<p >For other properties <b>tkinter</b> has a long list of <em>winfo</em>... methods (one for every property we want to know). I reorganized them in one method <a class="el" href="class_nictk_1_1_misc.html#acf88dac7c2ee8783174fa53399c8fab9" title="Returns the widget info for the item key.">Nictk.Misc.get_winfo()</a> which, similarly to <a class="el" href="class_nictk_1_1_misc.html#a382114f739269373aed682dd5b88035e" title="Returns the value for the key resource.">Nictk.Misc.get_config()</a>, accepts the property as a string. For a list of all accepted options see the example file <a class="el" href="winfo_8py-example.html">winfo.py</a>. For the meaning of various <b>tkinter</b> winfo_... methods you can see <a href="https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/universal.html" target="_blank">this page</a>, which elencates all <b>tkinter</b> general methods common to all widgets.</p>
 <p ><a class="anchor" id="dimensions"></a></p><h2>Retrieving widgets dimensions</h2>
 <p >In <b>tkinter</b> we can use the functions winfo_x (), winfo_y () etc. to find the dimensions of a widget, but these often create confusion, because they return the correct values only when the widget has been placed by the geometry manager.</p>
 <p >In Nictk I left the general <em>winfo</em>... pattern only for methods getting widget dimensions, adding some new methods. These have been rewritten to always report the exact value, expressed in pixels. These are the methods (they all belong to the clas <a class="el" href="class_nictk_1_1_misc.html" title="Base class for windows and widgets.">Nictk.Misc</a>, inerithed by windows and internal widgets):</p>

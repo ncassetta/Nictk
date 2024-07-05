@@ -1,6 +1,7 @@
 var class_nictk_1_1__framerow =
 [
     [ "__init__", "class_nictk_1_1__framerow.html#a131d06b58e97f2e3d6975d3524986e1f", null ],
+    [ "__str__", "class_nictk_1_1__framerow.html#a23e8041ce1015febe4fdace3225714f9", null ],
     [ "parent", "class_nictk_1_1__framerow.html#a35061dd226fbf32b76578ca1f0759ce1", null ],
     [ "winfo_children", "class_nictk_1_1__framerow.html#a2d6a84e31d3aa2978fc874de03bad2a5", null ],
     [ "winfo_h", "class_nictk_1_1__framerow.html#a92313504bf1fd76433c95e7e842cb843", null ],

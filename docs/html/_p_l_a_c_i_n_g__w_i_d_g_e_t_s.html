@@ -30,7 +30,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Nictk<span id="projectnumber">&#160;2.1.1</span>
+   <div id="projectname">Nictk<span id="projectnumber">&#160;2.2.0</span>
    </div>
    <div id="projectbrief">An easy to use pyton GUI</div>
   </td>
@@ -146,6 +146,7 @@ $(document).ready(function(){initNavTree('_p_l_a_c_i_n_g__w_i_d_g_e_t_s.html',''
 <td><b>A quadruple of positive int</b> </td><td>Different padding for the four directions </td><td>The provided numbers are the amounts respectively for left, up, right, down directions.  </td></tr>
 </table>
 <p >Here are some examples </p><div class="fragment"><div class="line"> <span class="keyword">import</span> Nictk <span class="keyword">as</span> Ntk</div>
+<div class="line"><span class="keyword">from</span> <a class="code hl_namespace" href="namespace_nictk_1_1constants.html">Nictk.constants</a> <span class="keyword">import</span> *</div>
 <div class="line"> </div>
 <div class="line">  .  .  .</div>
 <div class="line"> </div>
@@ -162,9 +163,10 @@ $(document).ready(function(){initNavTree('_p_l_a_c_i_n_g__w_i_d_g_e_t_s.html',''
 <div class="line"><span class="comment"># height fills the parent, different pad for each directions</span></div>
 <div class="line"><span class="comment"># left = 5, up = 10, right = 0, down = 5)</span></div>
 <div class="line">w = Ntk.Entry(parent, CENTER, 0, 80, FILL, pad=(5, 10, 0, 5))</div>
+<div class="ttc" id="anamespace_nictk_1_1constants_html"><div class="ttname"><a href="namespace_nictk_1_1constants.html">Nictk.constants</a></div><div class="ttdef"><b>Definition:</b> constants.py:1</div></div>
 </div><!-- fragment --><h2>Note on the use of PACK </h2>
 <p ><a class="anchor" id="packuse"></a>The meaning of the "pack" parameter (aliased by PACK) differs depending on the type of container in which the widget will be placed.</p>
-<p >In an <a class="el" href="class_nictk_1_1_ver_frame.html" title="A container in which you can stack children widgets vertically.">Nictk.VerFrame</a>, <a class="el" href="class_nictk_1_1_main.html" title="The main window of the app.">Nictk.Main</a>, or <a class="el" href="class_nictk_1_1_window.html" title="A common window (derived from the tkinter Toplevel class) which is directly managed by the windows ma...">Nictk.Window</a> the widgets are stacked from top to bottom and the parent keeps track of the last widget placed on the stack. So PACK is effective only for the y coordinate, while for the x you will always get a widget positioned to the left (i.e. with x coordinate = 0). Conversely, in an <a class="el" href="class_nictk_1_1_hor_frame.html" title="A container in which you can stack children widgets horizontally.">Nictk.HorFrame</a> or in a row of an <a class="el" href="class_nictk_1_1_row_frame.html" title="A container in which you can stack rows vertically.">Nictk.RowFrame</a> the widgets are stacked from left to right, so you can use the PACK for the x, while for the y you will get a widget positioned at the top (y = 0). Here are two example you can try:</p>
+<p >In an <a class="el" href="class_nictk_1_1_ver_frame.html" title="A container in which you can stack children widgets vertically.">Nictk.VerFrame</a>, <a class="el" href="class_nictk_1_1_ver_scroll_frame.html" title="A container in which you can stack children widgets vertically, exceeding its height.">Nictk.VerScrollFrame</a>, <a class="el" href="class_nictk_1_1_main.html" title="The main window of the app.">Nictk.Main</a>, or <a class="el" href="class_nictk_1_1_window.html" title="A common window (derived from the tkinter Toplevel class) which is directly managed by the windows ma...">Nictk.Window</a> the widgets are stacked from top to bottom and the parent keeps track of the last widget placed on the stack. So PACK is effective only for the y coordinate, while for the x you will always get a widget positioned to the left (i.e. with x coordinate = 0). Conversely, in an <a class="el" href="class_nictk_1_1_hor_frame.html" title="A container in which you can stack children widgets horizontally.">Nictk.HorFrame</a> or in a row of an <a class="el" href="class_nictk_1_1_row_frame.html" title="A container in which you can stack rows vertically.">Nictk.RowFrame</a>, <a class="el" href="class_nictk_1_1_row_scroll_frame.html" title="A container in which you can stack rows vertically.">Nictk.RowScrollFrame</a> the widgets are stacked from left to right, so you can use the PACK for the x, while for the y you will get a widget positioned at the top (y = 0). Here are two example you can try:</p>
 <div class="fragment"><div class="line"><span class="keyword">import</span> Nictk <span class="keyword">as</span> Ntk</div>
 <div class="line"><span class="keyword">from</span> <a class="code hl_namespace" href="namespace_nictk_1_1constants.html">Nictk.constants</a> <span class="keyword">import</span> *</div>
 <div class="line"> </div>
@@ -180,7 +182,6 @@ $(document).ready(function(){initNavTree('_p_l_a_c_i_n_g__w_i_d_g_e_t_s.html',''
 <div class="line">ent4 = Ntk.Entry(40, PACK, 90, 40, pad=5)</div>
 <div class="line"> </div>
 <div class="line">Ntk.mainloop()</div>
-<div class="ttc" id="anamespace_nictk_1_1constants_html"><div class="ttname"><a href="namespace_nictk_1_1constants.html">Nictk.constants</a></div><div class="ttdef"><b>Definition:</b> constants.py:1</div></div>
 </div><!-- fragment --><p >Second example</p>
 <div class="fragment"><div class="line"><span class="keyword">import</span> Nictk <span class="keyword">as</span> Ntk</div>
 <div class="line"><span class="keyword">from</span> <a class="code hl_namespace" href="namespace_nictk_1_1constants.html">Nictk.constants</a> <span class="keyword">import</span> *</div>

@@ -26,7 +26,13 @@
 /// An example wich creates a Nictk.Window, shows and hides it and can change its mode (normal, modal or persistent).
 ///
 /// \example RowFrame.py
-/// An example of the use of the Nictk.RowFrame container. You can add to it rows (with the add_row() method) which behave as horizontal frames (i.e. you can pack widget horizontally). You can set rows height as absolute, relative (percentual) or "absolute from bottom" values.
+/// An example of the use of the Nictk.RowFrame container. It demonstrates the use of the add_row() method for adding to it rows which behave as horizontal frames (i.e. you can pack widget horizontally into them). You can set rows height as absolute, relative (percentual) or "absolute from bottom" values.
+///
+/// \example VerScrollFrame.py
+/// An example of the use of the Nictk.VerScrollFrame container.
+///
+/// \example RowScrollFrame.py
+/// An example of the use of the Nictk.RowScrollFrame container. The file uses the add_row() and del_row() methods) for adding and deleting rows which behave as horizontal frames (i.e. you can pack widget horizontally into them). When the height of the rows stack exceeds the frame height a vertical scrollbar appears on the right.
 ///
 /// \example Combobox.py
 /// Example of various operations on the Nictk.Combobox widget.
@@ -47,6 +53,8 @@
 /// Example of the use of Nictk.Scale widget.
 /// \example Spinbox.py
 /// Example of the use of Nictk.Spinbox widget: you can set the mode (normal, readonly and autoadd) and the wrap property.
-
+///
+/// \example Text.py
+/// An example of the use of the class Text.py 
 
 

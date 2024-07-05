@@ -21,8 +21,11 @@ Examples/Listbox.py
 Examples/Menu.py
 Examples/RCbuttons.py
 Examples/RowFrame.py
+Examples/RowScrollFrame.py
 Examples/Scale.py
 Examples/Spinbox.py
+Examples/Text.py
+Examples/VerScrollFrame.py
 Examples/WidgetOptions.py
 Examples/WidgetPosition.py
 Examples/WidgetStates.py

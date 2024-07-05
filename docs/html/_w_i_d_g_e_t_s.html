@@ -99,8 +99,8 @@ $(document).ready(function(){initNavTree('_w_i_d_g_e_t_s.html',''); initResizabl
 <h2>Windows</h2>
 <p >In your app you must create a unique main window (i.e. a <b>Main</b> object), then you can create and destroy any number of <b>Window</b> objects (the Toplevel object in <b>tkinter</b>).</p>
 <table class="doxtable">
-<tr width="100%">
-<th><b>Object</b> </th><th></th></tr>
+<tr>
+<th><b>Object</b> </th><th>Notes </th></tr>
 <tr>
 <td>class <a class="el" href="class_nictk_1_1_main.html" title="The main window of the app.">Nictk.Main</a> </td><td>The main window of the app (derived from the <b>tkinter</b> <b>Tk</b> class) </td></tr>
 <tr>
@@ -109,9 +109,10 @@ $(document).ready(function(){initNavTree('_w_i_d_g_e_t_s.html',''); initResizabl
 </table>
 <h2>Frames</h2>
 <p >Frames are another type of container. They are initialized with no border and the same color of their parent, so they are invisible and you can use them for layout purposes (grouping children widgets horizontally or vertically). However, as they are derived from the <b>tkinter</b> <b>LabelFrame</b> widget, you can set a border and a label for them (this reduces the available space in the frame). In their constructors the pad parameter is present but is ignored (it is always fixed to 0 in all directions).</p>
+<p >From version 2.2.0 I introduced scrollable frames, in which you can add internal widgets exceeding the frame height: if you do this a scrollbar appears automatically.</p>
 <table class="doxtable">
 <tr>
-<th><b>Object</b> </th><th></th></tr>
+<th><b>Object</b> </th><th>Notes </th></tr>
 <tr>
 <td>class <a class="el" href="class_nictk_1_1_hor_frame.html" title="A container in which you can stack children widgets horizontally.">Nictk.HorFrame</a> </td><td>A frame in which you can stack children widgets horizontally </td></tr>
 <tr>
@@ -121,13 +122,13 @@ $(document).ready(function(){initNavTree('_w_i_d_g_e_t_s.html',''); initResizabl
 <tr>
 <td>class <a class="el" href="class_nictk_1_1_ver_scroll_frame.html" title="A container in which you can stack children widgets vertically, exceeding its height.">Nictk.VerScrollFrame</a> </td><td>Similar to the VerFrame. You can stack widgets exceeding the height of the internal area, in this case a vertical scrollbar appears automatically. </td></tr>
 <tr>
-<td>class <a class="el" href="class_nictk_1_1_row_scroll_frame.html" title="A container in which you can stack rows vertically.">Nictk.RowScrollFrame</a> </td><td>Similar to the RowFrame. You can stack widgets exceeding the height of the internal area, in this case a vertical scrollbar appears automatically.  </td></tr>
+<td>class <a class="el" href="class_nictk_1_1_row_scroll_frame.html" title="A container in which you can stack rows vertically, exceeding its height.">Nictk.RowScrollFrame</a> </td><td>Similar to the RowFrame. You can stack widgets exceeding the height of the internal area, in this case a vertical scrollbar appears automatically.  </td></tr>
 </table>
 <h2>Widgets</h2>
 <p >These are the other widgets defined in Nictk.</p>
 <table class="doxtable">
 <tr>
-<th><b>Object</b> </th><th></th></tr>
+<th><b>Object</b> </th><th>Notes </th></tr>
 <tr>
 <td>class <a class="el" href="class_nictk_1_1_button.html" title="Button widget.">Nictk.Button</a> </td><td>Button widget </td></tr>
 <tr>

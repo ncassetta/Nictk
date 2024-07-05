@@ -108,7 +108,7 @@ Inheritance diagram for VerScroll:</div>
   <img src="class_nictk_1_1_ver_scroll.png" usemap="#VerScroll_map" alt=""/>
   <map id="VerScroll_map" name="VerScroll_map">
 <area href="class_nictk_1_1_listbox.html" title="Listbox widget which can display a list of strings." alt="Listbox" shape="rect" coords="0,56,105,80"/>
-<area href="class_nictk_1_1_row_scroll_frame.html" title="A container in which you can stack rows vertically." alt="RowScrollFrame" shape="rect" coords="115,56,220,80"/>
+<area href="class_nictk_1_1_row_scroll_frame.html" title="A container in which you can stack rows vertically, exceeding its height." alt="RowScrollFrame" shape="rect" coords="115,56,220,80"/>
 <area href="class_nictk_1_1_text.html" title="Text widget which can display formatted text." alt="Text" shape="rect" coords="230,56,335,80"/>
 <area href="class_nictk_1_1_ver_scroll_frame.html" title="A container in which you can stack children widgets vertically, exceeding its height." alt="VerScrollFrame" shape="rect" coords="345,56,450,80"/>
   </map>
@@ -125,7 +125,7 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Base class for widgets which have a right vertical scrollbar. </p>
-<p >It implements the automatic hiding and showing of the scrollbar. Classes <a class="el" href="class_nictk_1_1_ver_scroll_frame.html" title="A container in which you can stack children widgets vertically, exceeding its height.">VerScrollFrame</a>, <a class="el" href="class_nictk_1_1_row_scroll_frame.html" title="A container in which you can stack rows vertically.">RowScrollFrame</a>, inherit from this. Used only as mixin: you should not use it directly. </p>
+<p >It implements the automatic hiding and showing of the scrollbar. Classes <a class="el" href="class_nictk_1_1_ver_scroll_frame.html" title="A container in which you can stack children widgets vertically, exceeding its height.">VerScrollFrame</a>, <a class="el" href="class_nictk_1_1_row_scroll_frame.html" title="A container in which you can stack rows vertically, exceeding its height.">RowScrollFrame</a>, inherit from this. Used only as mixin: you should not use it directly. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3f695b133c61fdbfa4751bce9ad178b2" name="a3f695b133c61fdbfa4751bce9ad178b2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3f695b133c61fdbfa4751bce9ad178b2">&#9670;&nbsp;</a></span>__init__()</h2>
@@ -156,7 +156,7 @@ Public Member Functions</h2></td></tr>
 <p>The constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">scrolled_w</td><td>the widget which will be scrolled. It can be self in or the internal frame in other classes. </td></tr>
+    <tr><td class="paramname">scrolled_w</td><td>the widget which will be scrolled. It can be the widget itself (as in the <a class="el" href="class_nictk_1_1_listbox.html" title="Listbox widget which can display a list of strings.">Listbox</a>) or an internal frame (as in the <a class="el" href="class_nictk_1_1_ver_scroll_frame.html" title="A container in which you can stack children widgets vertically, exceeding its height.">VerScrollFrame</a> and <a class="el" href="class_nictk_1_1_row_scroll_frame.html" title="A container in which you can stack rows vertically, exceeding its height.">RowScrollFrame</a>). </td></tr>
   </table>
   </dd>
 </dl>

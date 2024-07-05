@@ -43,7 +43,7 @@ else:
     from .constants import *
     
 
-__version__ = "2.1.1"
+__version__ = "2.2.0"
 __version_year__ = 2024
 
 
@@ -441,6 +441,9 @@ class Widget(Misc):
         a _embedVerFrame. So it triggers an <Unmap> event resizing the parent."""
         if isinstance(self.parent(), (_embedVerFrame, _embedRowFrame)):
             self.place_forget()
+        # widgets in a _framerow don't remember their parent row (as their real parent
+        # is the RowFrame or _embedRowFrame container). So they must search their row
+        # and delete themselves from its children
         if isinstance(self.parent(), (RowFrame, _embedRowFrame)):
             parent = self.parent() if isinstance(self.parent(), RowFrame) else \
                 self.parent().master.master
@@ -749,8 +752,7 @@ class BaseWindow(Misc, Container):
         self.title(title)
         # used for onclose()
         self._commandwrap = None
-        
-            
+                 
     def onclose(self, command):
         """Defines a callback to call when the window is closed.
         \param command a function of the type func(Event). See
@@ -759,6 +761,43 @@ class BaseWindow(Misc, Container):
         self._commandwrap = _setitCommand(self, cback, value)
         self.protocol("WM_DELETE_WINDOW", self._commandwrap)
         
+        
+    # DEBUG VERSION WHICH PRINTS MANY LOGS    
+    #def _on_resize(self, event):
+        #"""Internal function.
+        #Called when the window (or a widget contained in it) is resized. It controls
+        #mainly the resizing of children widgets and the auto scrollbar showing/hiding."""
+        #if self.winfo_ismapped():
+            #w = event.widget
+            #if w != self:
+                #print ("Entering _on_resize. widget:", w._name, end=" ... ")
+                ## TODO: Text widget scrolls without the need for a scrollbar!
+                #if isinstance(w, (Listbox, Text)):
+                    #w._auto_yscroll()
+                #elif isinstance(w, (_embedVerFrame, _embedRowFrame)):
+                    #w = w.master.master
+                    #if not w._resizing:
+                        #w._resizing = True
+                        #print("canvas updated")
+                        #w._canvas.config(scrollregion=w._canvas.bbox(ALL))
+                        #w._auto_yscroll()
+                        #w._resizing = False
+                    #else:
+                        #print("aborted")
+                #else:
+                    #print("nothing to do")
+            #else:
+                #self._curr_dim = (tk.Misc.winfo_x(self), tk.Misc.winfo_y(self), tk.Misc.winfo_width(self),
+                                 #tk.Misc.winfo_height(self), (0, 0, 0, 0))
+                #print("_curr_dim =", self._curr_dim, "_oldw, _oldh =", self._oldw, self._oldh)
+                #if self._oldw != self._curr_dim[2] or self._oldh != self._curr_dim[3]:
+                    #print ("\twidget resized", self.__repr__(), "children = ", len(self.children.values()))
+                    #self._oldw, self._oldh = self._curr_dim[2], self._curr_dim[3]
+                    #self._resize_children()
+                #else:
+                    #print("nothing to do")
+        #print("Exiting _on_resize()")
+        
     def _on_resize(self, event):
         """Internal function.
         Called when the window (or a widget contained in it) is resized. It controls
@@ -766,7 +805,6 @@ class BaseWindow(Misc, Container):
         if self.winfo_ismapped():
             w = event.widget
             if w != self:
-                print ("Entering _on_resize. widget:", w._name, end=" ... ")
                 # TODO: Text widget scrolls without the need for a scrollbar!
                 if isinstance(w, (Listbox, Text)):
                     w._auto_yscroll()
@@ -774,26 +812,16 @@ class BaseWindow(Misc, Container):
                     w = w.master.master
                     if not w._resizing:
                         w._resizing = True
-                        print("canvas updated")
                         w._canvas.config(scrollregion=w._canvas.bbox(ALL))
                         w._auto_yscroll()
                         w._resizing = False
-                    else:
-                        print("aborted")
-                else:
-                    print("nothing to do")
             else:
                 self._curr_dim = (tk.Misc.winfo_x(self), tk.Misc.winfo_y(self), tk.Misc.winfo_width(self),
                                  tk.Misc.winfo_height(self), (0, 0, 0, 0))
-                print("_curr_dim =", self._curr_dim, "_oldw, _oldh =", self._oldw, self._oldh)
                 if self._oldw != self._curr_dim[2] or self._oldh != self._curr_dim[3]:
-                    print ("\twidget resized", self.__repr__(), "children = ", len(self.children.values()))
                     self._oldw, self._oldh = self._curr_dim[2], self._curr_dim[3]
                     self._resize_children()
-                else:
-                    print("nothing to do")
-        print("Exiting _on_resize()")
-            
+    
 
 
 class Main(BaseWindow, tk.Tk):
@@ -1426,22 +1454,6 @@ class _embedRowFrame(tk.Frame):
         """Returns the number of the active row in the frame."""
         return self.master.master.get_active()
        
-            
-    #def _resize_children(self):
-        #"""Internal function.
-        #Resizes all children when the container is resized."""
-        #oldactivenum = self.get_active().num
-        #for row in self._rows:
-            #self.set_active(row.num)
-            #row._calc_dimensions()        
-            #for w in row.winfo_children():
-                #if hasattr(w, "_update_dimensions"):
-                    #w._update_dimensions()
-                    #if isinstance(w, Container):
-                        #w._resize_children()
-        #self.set_active(oldactivenum)              
-
-
 
 #####################################################################
 ############       tkinter WIDGETS SUPERCLASSES

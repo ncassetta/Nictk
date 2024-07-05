@@ -172,6 +172,37 @@ $(document).ready(function(){initNavTree('group___c_h_a_n_g_e_l_o_g.html',''); i
 </ul>
 <p ><b>Documentation</b></p><ul>
 <li>Updated the Dialog boxes page</li>
+<li>Various typos corrected <br  />
+ <br  />
+ <h2>Version 2.2.0 (Jul 5, 2024)</h2>
+</li>
+</ul>
+<p >Introduced the classes VerScrollFrame, RowScrollFrame</p>
+<p ><b>Internal</b></p><ul>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L47) Added the <b>version_year</b> constant</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L220 L751 L801-823) Restructured the binding of the &lt;Configure&gt; event, which now calls the newly added BaseWindow._on_resize() method instead of _resize_children() <br  />
+</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L277-329 L2018 L2715) Added the new class VerScroll as base class for vertical scrolling widgets, moved the _auto_yscroll() method here. Now classes VerScrollFrame, RowScrollFrame, Listbox, Text inherit by this</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L362-370 L1169-1181) Restructured the method Container._resize_children which is no more called as callback (the method is inherited by many subclasses of Container, it has been deleted from the class _framerow which is not a Container)</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L439-454) Added the Widget.destroy() method which overrides the tkinter one. This is needed for resizing the VerScrollFrame and RowScrollFrame internal frames</li>
+</ul>
+<p ><b>Bugfix</b></p><ul>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L273) Corrected: destroying a widget raises an error</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1162) Corrected: now the RowFrame.get_active() method returns None if no row is active (instead of raising an exception). This is possible if the method is called before adding rows</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1725 L1935 L2537 L2673) Corrected: substituted the deprecated TextVar.trace_add() with TextVar.trace()</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1836-1837 L1842-1845) Corrected: deleting items in a Combobox doesn't execute the callback</li>
+</ul>
+<p ><b>New features</b></p><ul>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L999-1002) Added the _framerow.__str__() method (useful for debugging)</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1129-1147 L1165-1167) Added the RowFrame.del_row() and RowFrame.num_rows() methods</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1229-1342) Added the new class VerScrollFrame with its internal class _embedVerFrame</li>
+<li>(<a class="el" href="____init_____8py.html" title="The main file of the library.">__init__.py</a> L1345-1455) Added the new class RowScrollFrame with its internal class _embedRowFrame</li>
+</ul>
+<p ><b>Examples</b></p><ul>
+<li>Added the example files VerScrollFrame.py, RowScrollFrame.py, Text.py</li>
+</ul>
+<p ><b>Documentation</b></p><ul>
+<li>Added documentation for the new classes</li>
 <li>Various typos corrected </li>
 </ul>
 </div><!-- contents -->

@@ -86,4 +86,35 @@
 /// **Documentation**
 /// + Updated the Dialog boxes page
 /// + Various typos corrected
+/// <br>
+/// <br>
+/// ## Version 2.2.0 (Jul 5, 2024) ##
+///
+/// Introduced the classes VerScrollFrame, RowScrollFrame
+///
+/// **Internal**
+/// + (\_\_init__.py L47) Added the __version_year__ constant
+/// + (\_\_init__.py L220 L751 L801-823) Restructured the binding of the <Configure> event, which now calls the newly added BaseWindow._on_resize() method instead of _resize_children()  
+/// + (\_\_init__.py L277-329 L2018 L2715) Added the new class VerScroll as base class for vertical scrolling widgets, moved the _auto_yscroll() method here. Now classes VerScrollFrame, RowScrollFrame, Listbox, Text inherit by this 
+/// + (\_\_init__.py L362-370 L1169-1181) Restructured the method Container._resize_children which is no more called as callback (the method is inherited by many subclasses of Container, it has been deleted from the class _framerow which is not a Container)
+/// + (\_\_init__.py L439-454) Added the Widget.destroy() method which overrides the tkinter one. This is needed for resizing the VerScrollFrame and RowScrollFrame internal frames
+///
+/// **Bugfix** 
+/// + (\_\_init__.py L273) Corrected: destroying a widget raises an error
+/// + (\_\_init__.py L1162) Corrected: now the RowFrame.get_active() method returns None if no row is active (instead of raising an exception). This is possible if the method is called before adding rows
+/// + (\_\_init__.py L1725 L1935 L2537 L2673) Corrected: substituted the deprecated TextVar.trace_add() with TextVar.trace()
+/// + (\_\_init__.py L1836-1837 L1842-1845) Corrected: deleting items in a Combobox doesn't execute the callback
+///
+/// **New features**
+/// + (\_\_init__.py L999-1002) Added the _framerow.__str__() method (useful for debugging)
+/// + (\_\_init__.py L1129-1147 L1165-1167) Added the RowFrame.del_row() and RowFrame.num_rows() methods
+/// + (\_\_init__.py L1229-1342) Added the new class VerScrollFrame with its internal class _embedVerFrame
+/// + (\_\_init__.py L1345-1455) Added the new class RowScrollFrame with its internal class _embedRowFrame
+///
+/// **Examples**
+/// + Added the example files VerScrollFrame.py, RowScrollFrame.py, Text.py
+///
+/// **Documentation**
+/// + Added documentation for the new classes
+/// + Various typos corrected
 /// @}

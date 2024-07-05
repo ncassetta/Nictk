@@ -99,7 +99,7 @@ $(document).ready(function(){initNavTree('class_nictk_1_1_row_scroll_frame.html'
 </div><!--header-->
 <div class="contents">
 
-<p>A container in which you can stack rows vertically.  
+<p>A container in which you can stack rows vertically, exceeding its height.  
  <a href="class_nictk_1_1_row_scroll_frame.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for RowScrollFrame:</div>
@@ -245,9 +245,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:ae3a46db71e223e2e5e6fabca25ae91f8 inherit pub_static_attribs_class_nictk_1_1_misc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >A container in which you can stack rows vertically. </p>
-<p >Each row behaves like a <a class="el" href="class_nictk_1_1_hor_frame.html" title="A container in which you can stack children widgets horizontally.">HorFrame</a>, allowing to stack children widgets horizontally (using PACK as the x parameter in their constructor). You can add rows to the frame, obtaining thus a disposition similar to a matrix. When you add widgets you must indicate the <a class="el" href="class_nictk_1_1_row_frame.html" title="A container in which you can stack rows vertically.">RowFrame</a> object (<b>not</b> the row) as their parent. The widgets will be added to the active row, which is the last constructed or the one set with the <a class="el" href="class_nictk_1_1_row_frame.html#a6c05d50d2e44eb9f371ebb65e989b2ae" title="Sets the n-th row as active.">set_active()</a> method. The frame is initialized with the same color of its parent and no border, being so invisible. However you can set a border and also a label to be shown on it. </p><dl class="section warning"><dt>Warning</dt><dd>setting a border reduces the space inside the frame </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="_row_frame_8py-example.html">RowFrame.py</a>, <a class="el" href="_combobox_8py-example.html">Combobox.py</a> <a class="el" href="_window_8py-example.html">Window.py</a> example files </dd></dl>
+<div class="textblock"><p >A container in which you can stack rows vertically, exceeding its height. </p>
+<p >If this happens a right scrollbar automatically appears. Each row behaves like a <a class="el" href="class_nictk_1_1_hor_frame.html" title="A container in which you can stack children widgets horizontally.">HorFrame</a>, allowing to stack children widgets horizontally (using PACK as the x parameter in their constructor). You can add rows to the frame, obtaining thus a disposition similar to a matrix. When you add widgets you must indicate the <a class="el" href="class_nictk_1_1_row_frame.html" title="A container in which you can stack rows vertically.">RowFrame</a> object (<b>not</b> the row) as their parent. The widgets will be added to the active row, which is the last constructed or the one set with the <a class="el" href="class_nictk_1_1_row_frame.html#a6c05d50d2e44eb9f371ebb65e989b2ae" title="Sets the n-th row as active.">set_active()</a> method. The frame is initialized with the same color of its parent and no border, being so invisible. However you can set a border and also a label to be shown on it. </p><dl class="section warning"><dt>Warning</dt><dd>setting a border reduces the space inside the frame </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="_row_scroll_frame_8py-example.html">RowScrollFrame.py</a> example file </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8a4953b333f2d6dcf4e98a7c5bd8a30b" name="a8a4953b333f2d6dcf4e98a7c5bd8a30b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8a4953b333f2d6dcf4e98a7c5bd8a30b">&#9670;&nbsp;</a></span>__init__()</h2>

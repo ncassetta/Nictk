@@ -14,6 +14,9 @@ These things are not a problem for experienced developers, but can confuse peopl
  - As in tkinter, widgets can change their position and size when the main window is resized.
  - Some tkinter options for widget **config()** method have been renamed in a more coherent manner, so it is easier to remember them. Also the almost infinite series of **winfo_...** methods have been packed into the unique **get_winfo()** method, with a string parameter.
  - I renamed also some functions, trying to mantain the <em>xxxx_yyyy</em> scheme recommended in PEP 8 (this, however, is not complete)
+ 
+**Note:** since version 2.2.0 I have introduced (as native classes) scrollable frames, i.e. frames to which you can add as many widgets as you want, with a scrollbar that appears automatically.
+This is a difficult feature to achieve in tkinter, and is still under development.
 
 This is the <a href="https://ncassetta.github.io/Nictk/docs/html">link to the documentation</a>.
 

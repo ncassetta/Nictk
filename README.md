@@ -8,7 +8,7 @@ Nictk is a wrapper for **tkinter** written by Nicola Cassetta with the aim of si
 
 As is known, tkinter is the Python standard library already included in the language distribution; it derives from **Tcl/Tk** and maintains its nomenclature and conventions in names and parameters of the functions, so they are often difficult to remember. It also has three different geometry managers (_pack_, _grid_ and _place_) for placing widgets, which can be confusing. One of the most popular features is its ability to easily resize widgets when the main window is resized, but this often leads to strange behavior. For example, the standard behavior of an Entry object (the text field widget) is to grow larger as we type text into it. If we packed other widgets to its right all of them will move. Another problem arises for widget dimensions, which are in pixel for some of them (for example Button, Canvas) and in charachters for other (Label, Entry).
 
-These things are not a problem for experienced developers, but can confuse people approaching the design of a GUI using tkinter. So I tried to simplify these problems by adopting some general principles: 
+These things can confuse people approaching the design of a GUI using tkinter. So I tried to simplify these problems by adopting some general principles: 
 
  - All widgets have a similar constructor, which enable the user to easily position them, with sizes always specified in pixels.
  - As in tkinter, widgets can change their position and size when the main window is resized.

@@ -1,5 +1,5 @@
 [project]
-name = "Nictk"
+name = "ncassetta-Nictk"
 version = "2.2.0"
 authors = [
   { name="Nicola Cassetta", email="ncassetta@tiscali.it" }

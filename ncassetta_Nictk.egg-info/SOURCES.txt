@@ -34,7 +34,7 @@ Examples/_setup.py
 Examples/winfo.py
 Nictk/__init__.py
 Nictk/constants.py
-Nictk.egg-info/PKG-INFO
-Nictk.egg-info/SOURCES.txt
-Nictk.egg-info/dependency_links.txt
-Nictk.egg-info/top_level.txt
+ncassetta_Nictk.egg-info/PKG-INFO
+ncassetta_Nictk.egg-info/SOURCES.txt
+ncassetta_Nictk.egg-info/dependency_links.txt
+ncassetta_Nictk.egg-info/top_level.txt
